@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Shieldon\Psr7;
 
 use Psr\Http\Message\ResponseInterface;
+use Shieldon\Psr7\Message;
 
 /*
  * Representation of an outgoing, server-side response.
@@ -195,7 +196,7 @@ class Response extends Message implements ResponseInterface
     protected function assertStatus($code)
     {
         if (! is_integer($code)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf(
                     'Status code should be an integer value, but %s provied.',
                     gettype($code)
@@ -204,7 +205,7 @@ class Response extends Message implements ResponseInterface
         }
 
         if ($code > 599) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf(
                     'Status code should be in a range of 100-599, but %s provied.',
                     $code
@@ -225,9 +226,9 @@ class Response extends Message implements ResponseInterface
     protected function assertReasonPhrase($reasonPhrase)
     {
         if (! is_string($reasonPhrase)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf(
-                    'Reason phrase must be an string, but %s provied.',
+                    'Reason phrase must be a string, but %s provied.',
                     gettype($reasonPhrase)
                 )
             );

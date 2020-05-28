@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace Shieldon\Psr7;
 
-use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
 use Shieldon\Psr7\Message;
 use Shieldon\Psr7\Uri;
+use InvalidArgumentException;
 
 use function in_array;
 use function is_string;
