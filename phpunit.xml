@@ -6,6 +6,11 @@
             <directory>tests/Psr7/</directory>
         </testsuite>
     </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src/Psr7/</directory>
+        </whitelist>
+    </filter>
     <php>
         <ini name="date.timezone" value="UTC"/>
         <const name="PHPUNIT_TEST" value="TRUE"/>
