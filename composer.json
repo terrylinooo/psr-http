@@ -1,0 +1,41 @@
+{
+    "name": "shieldon/psr7",
+    "description": "Implementing PSR-7 on Shieldon 2.x",
+    "keywords": ["php", "psr7"],
+    "homepage": "https://github.com/terrylinooo/psr7",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Terry Lin",
+            "email": "contact@terryl.in",
+            "homepage": "https://terryl.in",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.1.0",
+        "psr/http-factory": "^1.0",
+        "psr/http-message": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Shieldon\\Psr7\\": "src/Psr7"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Shieldon\\Psr7\\Tests\\": "tests/Psr7"
+        }
+    },
+    "config": {
+        "process-timeout": 0,
+        "sort-packages": true
+    },
+    "scripts": {
+        "test": "php vendor/phpunit/phpunit/phpunit"
+    }
+}
