@@ -135,12 +135,12 @@ class Request extends Message implements RequestInterface
             }
         }
 
-        if (! empty($headers)) {
-            $this->setHeaders($headers);
-        }
-
         if (! empty($body)) {
             $this->setBody($body);
+        }
+
+        if (! empty($headers)) {
+            $this->setHeaders($headers);
         }
 
         $this->protocolVersion = $version;
