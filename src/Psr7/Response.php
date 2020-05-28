@@ -198,7 +198,7 @@ class Response extends Message implements ResponseInterface
         if (! is_integer($code)) {
             throw new InvalidArgumentException(
                 sprintf(
-                    'Status code should be an integer value, but %s provied.',
+                    'Status code should be an integer value, but %s provided.',
                     gettype($code)
                 )
             );
@@ -207,7 +207,7 @@ class Response extends Message implements ResponseInterface
         if ($code > 599) {
             throw new InvalidArgumentException(
                 sprintf(
-                    'Status code should be in a range of 100-599, but %s provied.',
+                    'Status code should be in a range of 100-599, but %s provided.',
                     $code
                 )
             );
@@ -228,7 +228,7 @@ class Response extends Message implements ResponseInterface
         if (! is_string($reasonPhrase)) {
             throw new InvalidArgumentException(
                 sprintf(
-                    'Reason phrase must be a string, but %s provied.',
+                    'Reason phrase must be a string, but %s provided.',
                     gettype($reasonPhrase)
                 )
             );

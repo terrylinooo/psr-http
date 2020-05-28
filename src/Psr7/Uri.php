@@ -98,6 +98,8 @@ class Uri implements UriInterface
     {
         if ($uri !== '') {
             $this->assetValidUri($uri);
+
+            // Todo
         }
     }
 
@@ -377,7 +379,7 @@ class Uri implements UriInterface
         if (! is_string($value)) {
             throw new InvalidArgumentException(
                 sprintf(
-                    ucfirst($name) . ' must be a string, but %s provied.',
+                    ucfirst($name) . ' must be a string, but %s provided.',
                     gettype($value)
                 )
             );
@@ -454,7 +456,7 @@ class Uri implements UriInterface
         ) {
             throw new InvalidArgumentException(
                 sprintf(
-                    'Port must be an integer or a null value, but %s provied.',
+                    'Port must be an integer or a null value, but %s provided.',
                     gettype($port)
                 )
             );
@@ -463,7 +465,7 @@ class Uri implements UriInterface
         if (! ($port < 65535 && $port > 0)) {
             throw new InvalidArgumentException(
                 sprintf(
-                    'Port number should be in a range of 0-65535, but %s provied.',
+                    'Port number should be in a range of 0-65535, but %s provided.',
                     $port
                 )
             );

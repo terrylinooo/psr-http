@@ -456,7 +456,7 @@ class ServerRequest extends Request implements ServerRequestInterface
         ) {
             throw new InvalidArgumentException(
                 sprintf(
-                    'Only accepts array, object and null, but %s provied.',
+                    'Only accepts array, object and null, but %s provided.',
                     gettype($data)
                 )
             );

@@ -236,7 +236,7 @@ class Message implements MessageInterface
             if ($items === false) {
                 throw new InvalidArgumentException(
                     sprintf(
-                        'The second argument only accepts string and array, but %s provied.',
+                        'The second argument only accepts string and array, but %s provided.',
                         gettype($value)
                     )
                 );
@@ -253,7 +253,7 @@ class Message implements MessageInterface
                 if (! is_scalar($item) || is_bool($item)) {
                     throw new InvalidArgumentException(
                         sprintf(
-                            'The header values only accept string and number, but %s provied.',
+                            'The header values only accept string and number, but %s provided.',
                             gettype($value)
                         )
                     );
