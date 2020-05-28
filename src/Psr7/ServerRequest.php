@@ -15,6 +15,8 @@ namespace Shieldon\Psr7;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Shieldon\Psr7\UploadedFile;
+use Shieldon\Psr7\Request;
+use InvalidArgumentException;
 
 use function array_merge_recursive;
 use function rtrim;

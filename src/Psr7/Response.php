@@ -14,6 +14,12 @@ namespace Shieldon\Psr7;
 
 use Psr\Http\Message\ResponseInterface;
 use Shieldon\Psr7\Message;
+use InvalidArgumentException;
+
+use function gettype;
+use function is_integer;
+use function is_string;
+use function sprintf;
 
 /*
  * Representation of an outgoing, server-side response.

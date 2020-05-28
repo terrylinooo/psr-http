@@ -13,6 +13,16 @@ declare(strict_types=1);
 namespace Shieldon\Psr7;
 
 use Psr\Http\Message\UriInterface;
+use InvalidArgumentException;
+
+use function filter_var;
+use function gettype;
+use function is_integer;
+use function is_null;
+use function is_string;
+use function ltrim;
+use function rawurlencode;
+use function sprintf;
 
 /*
  * Value object representing a URI.
