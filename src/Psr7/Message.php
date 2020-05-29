@@ -174,8 +174,6 @@ class Message implements MessageInterface
      */
     public function withBody(StreamInterface $body)
     {
-        $this->assertBody($body);
-
         $clone = clone $this;
         $clone->body = $body;
 
@@ -269,19 +267,5 @@ class Message implements MessageInterface
                 }
             }
         }
-    }
-
-    /**
-     * Throw exception when the body is not valid.
-     * 
-     * @param StreamInterface $body An instance of StreamInterface.
-     * 
-     * @return void
-     * 
-     * @throws InvalidArgumentException
-     */
-    protected function assertBody(StreamInterface $body)
-    {
-        // Todo
     }
 }

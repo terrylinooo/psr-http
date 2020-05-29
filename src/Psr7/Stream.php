@@ -16,6 +16,22 @@ use Psr\Http\Message\StreamInterface;
 use InvalidArgumentException;
 use RuntimeException;
 
+use function fclose;
+use function fread;
+use function fseek;
+use function fstat;
+use function ftell;
+use function fwrite;
+use function gettype;
+use function is_resource;
+use function sprintf;
+use function stream_get_contents;
+use function stream_get_meta_data;
+
+use const SEEK_CUR;
+use const SEEK_END;
+use const SEEK_SET;
+
 /*
  * Describes a data stream.
  */
@@ -178,7 +194,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function eof()
+    public function eof(): bool
     {
         return $this->stream ? feof($this->stream) : true;
     }
@@ -236,7 +252,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->seek(0);
     }
@@ -244,7 +260,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function write($string)
+    public function write($string): int
     {
         if (! isset($this->stream) || ! $this->stream) {
             throw new RuntimeException(
@@ -273,7 +289,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function read($length)
+    public function read($length): string
     {
         if (! isset($this->stream) || ! $this->stream) {
             throw new RuntimeException(
@@ -299,7 +315,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function getContents()
+    public function getContents(): string
     {
         if (! isset($this->stream) || ! $this->stream) {
             throw new RuntimeException(
@@ -345,7 +361,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function __toString()
+    public function __toString(): string
     {
         if ($this->isSeekable()) {
             $this->rewind();
