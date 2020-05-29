@@ -36,7 +36,7 @@ class Uri implements UriInterface
      * 
      * @var string
      */
-    protected $scheme = '';
+    protected $scheme;
 
     /**
      * The user component of the URI.
@@ -45,7 +45,7 @@ class Uri implements UriInterface
      *
      * @var string
      */
-    protected $user = '';
+    protected $user;
 
     /**
      * The password component of the URI.
@@ -54,7 +54,7 @@ class Uri implements UriInterface
      *
      * @var string
      */
-    protected $password = '';
+    protected $pass;
 
     /**
      * The host component of the URI.
@@ -63,14 +63,14 @@ class Uri implements UriInterface
      *
      * @var string
      */
-    protected $host = '';
+    protected $host;
 
     /**
      * The port component of the URI.
      * For example, https://terryl.in:443
      * In this case, "443" is the port.
      * 
-     * @var null|int
+     * @var int|null
      */
     protected $port;
 
@@ -81,7 +81,7 @@ class Uri implements UriInterface
      *
      * @var string
      */
-    protected $path = '';
+    protected $path;
 
     /**
      * The query component of the URI.
@@ -90,7 +90,7 @@ class Uri implements UriInterface
      *
      * @var string
      */
-    protected $query = '';
+    protected $query;
 
     /**
      * The fragment component of the URI.
@@ -99,24 +99,27 @@ class Uri implements UriInterface
      *
      * @var string
      */
-    protected $fragment = '';
+    protected $fragment;
 
     /**
      * Uri constructor.
+     * 
+     * @param string $uri The URI.
      */
     public function __construct($uri = '')
     {
+        $this->init();
+
         if ($uri !== '') {
             $this->assetValidUri($uri);
-
-            // Todo
+            $this->init(parse_url($uri));
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getScheme()
+    public function getScheme(): string
     {
         return $this->scheme;
     }
@@ -124,7 +127,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function getAuthority()
+    public function getAuthority(): string
     {
         $authority = $this->host;
 
@@ -142,12 +145,12 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function getUserInfo()
+    public function getUserInfo(): string
     {
         $userInfo = $this->user;
 
-        if (! empty($this->password)) {
-            $userInfo .= ':' . $this->password;
+        if (! empty($this->pass)) {
+            $userInfo .= ':' . $this->pass;
         }
 
         return $userInfo;
@@ -156,7 +159,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function getHost()
+    public function getHost(): string
     {
         return $this->host;
     }
@@ -172,7 +175,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
@@ -180,7 +183,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function getQuery()
+    public function getQuery(): string
     {
         return $this->query;
     }
@@ -188,7 +191,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function getFragment()
+    public function getFragment(): string
     {
         return $this->fragment;
     }
@@ -210,17 +213,17 @@ class Uri implements UriInterface
      */
     public function withUserInfo($user, $password = null)
     {
-        $password = (string) $password;
+        $pass = (string) $password;
 
         $this->assertString($user, 'user');
-        $this->assertString($password, 'password');
+        $this->assertString($pass, 'password');
 
         $clone = clone $this;
         $clone->user = $user;
-        $clone->password = $password;
+        $clone->pass = $pass;
 
         if ($user === '') {
-            $clone->password = '';
+            $clone->pass = '';
         }
 
         return $clone;
@@ -332,6 +335,33 @@ class Uri implements UriInterface
     */
 
     /**
+     * Initialize.
+     *
+     * @param array $data Parsed URL data.
+     *
+     * @return void
+     */
+    protected function init(array $data = []): void
+    {
+        $components = [
+            'scheme', 
+            'user', 
+            'host',
+            'port',
+            'path', 
+            'query', 
+            'fragment'
+        ];
+
+        foreach($components as $v) {
+            $this->{$v} = $data[$v] ?? '';
+        }
+
+        // According to PSR-7, return null or int for the URI port.
+        $this->port = $data['port'] ? (int) $data['port'] : null;
+    }
+
+    /**
      * Throw exception for the invalid scheme.
      *
      * @param string $scheme The scheme string of a URI.
@@ -340,7 +370,7 @@ class Uri implements UriInterface
      * 
      * @throws InvalidArgumentException
      */
-    protected function assertScheme($scheme)
+    protected function assertScheme($scheme): void
     {
         $this->assertString($scheme, 'scheme');
 
@@ -369,7 +399,7 @@ class Uri implements UriInterface
      * 
      * @throws InvalidArgumentException
      */
-    protected function assertQuery($query)
+    protected function assertQuery($query): void
     {
         $this->assertString($query, 'query');
     }
@@ -384,7 +414,7 @@ class Uri implements UriInterface
      * 
      * @throws InvalidArgumentException
      */
-    protected function assertString($value, string $name = 'it')
+    protected function assertString($value, string $name = 'it'): void
     {
         if (! is_string($value)) {
             throw new InvalidArgumentException(
@@ -405,7 +435,7 @@ class Uri implements UriInterface
      * 
      * @throws InvalidArgumentException
      */
-    protected function assertValidUri($uri)
+    protected function assertValidUri($uri): void
     {
         $this->assertString($uri, 'uri');
 
@@ -428,7 +458,7 @@ class Uri implements UriInterface
      * 
      * @throws InvalidArgumentException
      */
-    protected function assertHost($host)
+    protected function assertHost($host): void
     {
         $this->assertString($host);
 
@@ -448,7 +478,6 @@ class Uri implements UriInterface
         }
     }
 
-
     /**
      * Throw exception for the invalid port.
      *
@@ -458,7 +487,7 @@ class Uri implements UriInterface
      *
      * @throws InvalidArgumentException
      */
-    protected function assertPort($port)
+    protected function assertPort($port): void
     {
         if (
             ! is_null($port) || 
@@ -472,7 +501,7 @@ class Uri implements UriInterface
             );
         }
 
-        if (! ($port < 65535 && $port > 0)) {
+        if (! ($port > 0 && $port < 65535)) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Port number should be in a range of 0-65535, but %s provided.',

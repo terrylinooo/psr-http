@@ -20,7 +20,7 @@ use function gettype;
 use function is_integer;
 use function is_string;
 use function sprintf;
-
+use function str_replace;
 /*
  * Representation of an outgoing, server-side response.
  */
@@ -168,7 +168,11 @@ class Response extends Message implements ResponseInterface
     {
         $this->assertStatus($code);
         $this->assertReasonPhrase($reasonPhrase);
-        
+
+        if ($reasonPhrase === '' && isset($this->statusCode[$code])) {
+            $reasonPhrase = $this->statusCode[$code];
+        }
+
         $clone = clone $this;
         $clone->status = $code;
         $clone->reasonPhrase = $reasonPhrase;
@@ -210,7 +214,7 @@ class Response extends Message implements ResponseInterface
             );
         }
 
-        if ($code > 599) {
+        if (! ($code > 100 && $code < 599)) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Status code should be in a range of 100-599, but %s provided.',
@@ -231,6 +235,10 @@ class Response extends Message implements ResponseInterface
      */
     protected function assertReasonPhrase($reasonPhrase)
     {
+        if ($reasonPhrase === '') {
+            return;
+        }
+
         if (! is_string($reasonPhrase)) {
             throw new InvalidArgumentException(
                 sprintf(
@@ -245,14 +253,18 @@ class Response extends Message implements ResponseInterface
             "\f", "\r", "\n", "\t", "\v", "\0", "[\b]", "\s", "\S", "\w", "\W", "\d", "\D", "\b", "\B", "\cX", "\xhh", "\uhhhh"
         ];
 
-        foreach ($escapesCharacters as $escape) {
-            if (strpos($reasonPhrase, $escape) !== false) {
-                throw new InvalidArgumentException(
-                    sprintf(
-                        'Reason phrase contains "%s" that is considered as a prohibited character.',
-                        $escape
-                    )
-                );
+        $filteredPhrase = str_replace($escapesCharacters, '', $reasonPhrase);
+
+        if ($reasonPhrase !== $filteredPhrase) {
+            foreach ($escapesCharacters as $escape) {
+                if (strpos($reasonPhrase, $escape) !== false) {
+                    throw new InvalidArgumentException(
+                        sprintf(
+                            'Reason phrase contains "%s" that is considered as a prohibited character.',
+                            $escape
+                        )
+                    );
+                }
             }
         }
     }
