@@ -111,7 +111,7 @@ class Uri implements UriInterface
         $this->init();
 
         if ($uri !== '') {
-            $this->assetValidUri($uri);
+            $this->assertValidUri($uri);
             $this->init(parse_url($uri));
         }
     }
@@ -358,7 +358,7 @@ class Uri implements UriInterface
         }
 
         // According to PSR-7, return null or int for the URI port.
-        $this->port = $data['port'] ? (int) $data['port'] : null;
+        $this->port = isset($data['port']) ? (int) $data['port'] : null;
     }
 
     /**
