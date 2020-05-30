@@ -21,6 +21,7 @@ use function is_integer;
 use function is_null;
 use function is_string;
 use function ltrim;
+use function parse_url;
 use function rawurlencode;
 use function sprintf;
 
