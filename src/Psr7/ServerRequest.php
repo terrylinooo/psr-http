@@ -78,7 +78,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      *
      * @var array
      */
-    protected $attributes = [];
+    protected $attributes;
 
     /**
      * ServerRequest constructor.
@@ -112,6 +112,11 @@ class ServerRequest extends Request implements ServerRequestInterface
         $this->cookieParams = $cookieParams;
         $this->parsedBody   = $postParams;
         $this->queryParams  = $getParams;
+        $this->attributes   = [];
+
+        // This property will be assigned to a parsed array that contains 
+        // the UploadedFile instance(s) as the $filesParams is given.
+        $this->uploadedFiles = [];
 
         if (! empty($filesParams)) {
             $this->uploadedFiles = self::uploadedFileSpecsConvert(
