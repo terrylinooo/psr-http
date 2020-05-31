@@ -513,7 +513,7 @@ class Uri implements UriInterface
     {
         $this->assertString($uri, 'uri');
 
-        if (! filter_var($uri, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)) {
+        if (! filter_var($uri, FILTER_VALIDATE_URL)) {
             throw new InvalidArgumentException(
                 sprintf(
                     '"%s" is not a valid URI',
