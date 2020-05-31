@@ -223,22 +223,19 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withUserInfo($user, $password = null)
+    public function withUserInfo($user, $pass = null)
     {
-        $pass = (string) $password;
-
         $this->assertString($user, 'user');
         $user = $this->filter('user', $user);
+
+        if ($pass) {
+            $this->assertString($pass, 'pass');
+            $pass = $this->filter('pass', $pass);
+        }
 
         $clone = clone $this;
         $clone->user = $user;
         $clone->pass = $pass;
-
-        if ($password) {
-            $this->assertString($pass, 'pass');
-            $pass = $this->filter('user', $pass);
-            $clone->pass = $pass;
-        }
 
         return $clone;
     }

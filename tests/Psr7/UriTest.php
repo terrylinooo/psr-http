@@ -23,11 +23,7 @@ class UriTest extends TestCase
     {
         $uri = new Uri('http://jack:1234@example.com/demo/?test=5678&test2=90#section-1');
 
-        if ($uri instanceof UriInterface) {
-            $this->assertTrue(true);
-        } else {
-            $this->assertTrue(false);
-        }
+        $this->assertTrue(($uri instanceof UriInterface));
     }
 
     function test__toString()

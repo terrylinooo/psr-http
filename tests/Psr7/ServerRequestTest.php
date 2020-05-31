@@ -13,9 +13,31 @@ namespace Shieldon\Psr7;
 use PHPUnit\Framework\TestCase;
 use Shieldon\Psr7\ServerRequest;
 use Shieldon\Psr7\UploadedFile;
+use InvalidArgumentException;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\MessageInterface;
+use ReflectionObject;
 
 class ServerRequestTest extends TestCase
 {
+    function test__construct()
+    {
+        $_FILES['files1'] = [
+            'name' => 'example1.jpg',
+            'type' => 'image/jpeg',
+            'tmp_name' => '/tmp/php200A.tmp',
+            'error' => 0,
+            'size' => 100000,
+        ];
+
+        $serverRequest = new ServerRequest('GET', '', '', [], '1.1', [], [], [], [], $_FILES);
+
+        $this->assertTrue(($serverRequest instanceof RequestInterface));
+        $this->assertTrue(($serverRequest instanceof MessageInterface));
+        $this->assertTrue(($serverRequest instanceof ServerRequestInterface));
+    }
+
     function testParseUploadedFiles()
     {
         $files = [
@@ -168,6 +190,156 @@ class ServerRequestTest extends TestCase
 
         $results = ServerRequest::uploadedFileParse($files);
 
-        $this->assertSame($results, $expectedFiles);
+        $this->assertEquals($results, $expectedFiles);
+    }
+
+    function testUploadedFileSpecsConvert()
+    {
+        $formattedFiles = [
+            'files1' => [
+                'name' => 'example1.jpg',
+                'type' => 'image/jpeg',
+                'tmp_name' => '/tmp/php200A.tmp',
+                'error' => 0,
+                'size' => 100000,
+            ],
+            'files2' => [
+                'a' => [
+                    'tmp_name' => '/tmp/php343C.tmp',
+                    'name' => 'example21.jpg',
+                    'type' => 'image/jpeg',
+                    'error' => 0,
+                    'size' => 125100,
+                ],
+                'b' => [
+                    'tmp_name' => '/tmp/php343D.tmp',
+                    'name' => 'example22.jpg',
+                    'type' => 'image/jpeg',
+                    'error' => 0,
+                    'size' => 145000,
+                ],
+            ],
+            'files3' => [
+                0 => [
+                    'tmp_name' => '/tmp/php310C.tmp',
+                    'name' => 'example31.jpg',
+                    'type' => 'image/jpeg',
+                    'error' => 0,
+                    'size' => 200000,
+                ],
+                1 => [
+                    'tmp_name' => '/tmp/php313D.tmp',
+                    'name' => 'example32.jpg',
+                    'type' => 'image/jpeg',
+                    'error' => 0,
+                    'size' => 300000,
+                ],
+            ],
+            'files4' => [
+                'details' => [
+                    'avatar' => [
+                        'tmp_name' => '/tmp/phpmFLrzD',
+                        'name' => 'my-avatar.png',
+                        'type' => 'image/png',
+                        'error' => 0,
+                        'size' => 90996,
+                    ],
+                ],
+            ],
+        ];
+
+        $expectedFiles = [
+            'files1' => new UploadedFile(
+                '/tmp/php200A.tmp',
+                'example1.jpg',
+                'image/jpeg',
+                100000,
+                0
+            ),
+            'files2' => [
+                'a' => new UploadedFile(
+                    '/tmp/php343C.tmp',
+                    'example21.jpg',
+                    'image/jpeg',
+                    125100,
+                    0
+                ),
+                'b' => new UploadedFile(
+                    '/tmp/php343D.tmp',
+                    'example22.jpg',
+                    'image/jpeg',
+                    145000,
+                    0
+                )
+            ],
+            'files3' => [
+                0 => new UploadedFile(
+                    '/tmp/php310C.tmp',
+                    'example31.jpg',
+                    'image/jpeg',
+                    200000,
+                    0
+                ),
+                1 => new UploadedFile(
+                    '/tmp/php313D.tmp',
+                    'example32.jpg',
+                    'image/jpeg',
+                    300000,
+                    0
+                )
+                ],
+            'files4' => [
+                'details' => [
+                    'avatar' => new UploadedFile(
+                        '/tmp/phpmFLrzD',
+                        'my-avatar.png',
+                        'image/png',
+                        90996,
+                        0
+                    )
+                ],
+            ],
+        ];
+
+        $results = ServerRequest::uploadedFileSpecsConvert($formattedFiles);
+
+        $this->assertEquals($results, $expectedFiles);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Exceptions
+    |--------------------------------------------------------------------------
+    */
+
+    function testAssertUploadedFiles()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $serverRequest = new ServerRequest('GET', 'https://example.com');
+
+        $reflection = new ReflectionObject($serverRequest);
+        $assertUploadedFiles = $reflection->getMethod('assertUploadedFiles');
+        $assertUploadedFiles->setAccessible(true);
+        $assertUploadedFiles->invokeArgs($serverRequest, [
+            [
+                ['files' => '']
+            ]
+        ]);
+    }
+
+    function testAsertParsedBody()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $serverRequest = new ServerRequest('GET', 'https://example.com');
+
+        $reflection = new ReflectionObject($serverRequest);
+        $assertParsedBody = $reflection->getMethod('assertParsedBody');
+        $assertParsedBody->setAccessible(true);
+        $assertParsedBody->invokeArgs($serverRequest, ['invalid string body']);
+
+        // Just for code coverage.
+        $assertParsedBody->invokeArgs($serverRequest, [[]]);
     }
 }

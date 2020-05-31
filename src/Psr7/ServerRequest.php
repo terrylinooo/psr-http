@@ -38,14 +38,14 @@ class ServerRequest extends Request implements ServerRequestInterface
      * 
      * @var array
      */
-    protected $serverParams = [];
+    protected $serverParams;
 
     /**
      * Typically derived from PHP's $_COOKIE superglobal.
      * 
      * @var array
      */
-    protected $cookieParams = [];
+    protected $cookieParams;
 
     /**
      * Typically derived from PHP's $_POST superglobal.
@@ -59,7 +59,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      * 
      * @var array
      */
-    protected $queryParams = [];
+    protected $queryParams;
 
     /**
      * Typically derived from PHP's $_FILES superglobal.
@@ -67,7 +67,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      * 
      * @var array
      */
-    protected $uploadedFiles = [];
+    protected $uploadedFiles;
 
     /**
      * The request "attributes" may be used to allow injection of any
@@ -271,8 +271,8 @@ class ServerRequest extends Request implements ServerRequestInterface
             0 => 'tmp_name',
             1 => 'name',
             2 => 'type',
-            3 => 'error',
-            4 => 'size',
+            3 => 'size',
+            4 => 'error',
         ];
 
         foreach ($files as $fileKey => $fileValue) {
@@ -290,10 +290,10 @@ class ServerRequest extends Request implements ServerRequestInterface
                     $tmp[0], // tmp_name
                     $tmp[1], // name
                     $tmp[2], // type
-                    $tmp[3], // error
-                    $tmp[4]  // size
+                    $tmp[3], // size
+                    $tmp[4]  // error
                 );
-
+  
                 $specTree[$fileKey] = $parsedTree;
                 unset($tmp, $parsedTree);
             }
@@ -405,8 +405,8 @@ class ServerRequest extends Request implements ServerRequestInterface
                         $values['tmp_name'],
                         $values['name'],
                         $values['type'],
-                        $values['error'],
-                        $values['size']
+                        $values['size'],
+                        $values['error']
                     );
                 }
             }
@@ -418,13 +418,13 @@ class ServerRequest extends Request implements ServerRequestInterface
     /**
      * Check out whether an array is compatible to PSR-7 file structure.
      * 
-     * @param object|array $values The array to check.
+     * @param array $values The array to check.
      *
      * @return void
      *
      * @throws InvalidArgumentException
      */
-    protected function assertUploadedFiles($values): void
+    protected function assertUploadedFiles(array $values): void
     {
         if (is_array($values)) {
             foreach ($values as $value) {
