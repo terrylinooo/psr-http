@@ -40,9 +40,37 @@ class UploadedFileTest extends TestCase
         $resource = fopen(BOOTSTRAP_DIR . '/sample/shieldon_logo.png', 'r+');
         $stream = new Stream($resource);
         $uploadedFile = new UploadedFile($stream);
-        $stream2 = $uploadedFile->getStream();
+        $stream2 = $uploadedFile->getStream(); // Test `getStream()`
 
         $this->assertEquals($stream, $stream2);
+    }
+
+    public function testMoveTo()
+    {
+        $sourceFile = BOOTSTRAP_DIR . '/sample/shieldon_logo.png';
+        $cloneFile = save_testing_file('shieldon_logo_clone.png');
+
+        // Clone a sample file for testing MoveTo method.
+        if (! copy($sourceFile, $cloneFile)) {
+            $this->assertTrue(false);
+        }
+
+        $uploadedFile = new UploadedFile(
+            $cloneFile,
+            'shieldon_logo.png',
+            'image/png',
+            100000,
+            0
+        );
+
+        $targetPath = save_testing_file('shieldon_logo_moved_from_file.png');
+        $uploadedFile->moveTo($targetPath);
+
+        if (file_exists($targetPath)) {
+            $this->assertTrue(true);
+        }
+
+        unlink($targetPath);
     }
 
     /*

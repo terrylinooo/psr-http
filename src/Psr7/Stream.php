@@ -86,9 +86,25 @@ class Stream implements StreamInterface
 
         $meta = $this->getMetadata();
 
+        // The mode parameter specifies the type of access you require to 
+        // the stream. @see https://www.php.net/manual/en/function.fopen.php
+        if (strpos($meta['mode'], '+') !== false) {
+            $this->readable = true;
+            $this->writable = true;
+
+        } elseif (strpos($meta['mode'], 'r') !== false) {
+            $this->readable = true;
+
+        } elseif (
+            strpos($meta['mode'], 'w') !== false ||
+            strpos($meta['mode'], 'a') !== false ||
+            strpos($meta['mode'], 'x') !== false ||
+            strpos($meta['mode'], 'c') !== false
+        ) {
+            $this->writable = true;
+        }
+        
         $this->seekable = $meta['seekable'];
-        $this->readable = (bool) preg_match('/r|a\+|ab\+|w\+|wb\+|x\+|xb\+|c\+|cb\+/', $meta['mode']);
-        $this->writable = (bool) preg_match('/a|w|r\+|rb\+|rw|x|c/', $meta['mode']);
     }
 
     /**
