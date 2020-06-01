@@ -53,7 +53,7 @@ class Stream implements StreamInterface
     protected $seekable;
 
     /**
-     * Undocumented variable
+     * The size of the stream.
      *
      * @var int|null
      */
@@ -83,6 +83,12 @@ class Stream implements StreamInterface
     {
         $this->assertStream($stream);
         $this->stream = $stream;
+
+        $meta = $this->getMetadata();
+
+        $this->seekable = $meta['seekable'];
+        $this->readable = (bool) preg_match('/r|a\+|ab\+|w\+|wb\+|x\+|xb\+|c\+|cb\+/', $meta['mode']);
+        $this->writable = (bool) preg_match('/a|w|r\+|rb\+|rw|x|c/', $meta['mode']);
     }
 
     /**

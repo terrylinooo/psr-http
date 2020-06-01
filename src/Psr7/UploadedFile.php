@@ -31,6 +31,7 @@ use const UPLOAD_ERR_NO_FILE;
 use const UPLOAD_ERR_NO_TMP_DIR;
 use const UPLOAD_ERR_OK;
 use const UPLOAD_ERR_PARTIAL;
+use const LOCK_EX;
 
 /*
  * Describes a data stream.
@@ -47,7 +48,7 @@ class UploadedFile implements UploadedFileInterface
     /**
      * A stream representing the uploaded file.
      *
-     * @var StreamInterface
+     * @var StreamInterface|null
      */
     protected $stream;
 
@@ -127,13 +128,13 @@ class UploadedFile implements UploadedFileInterface
     public function getStream(): StreamInterface
     {
         if ($this->isMoved) {
-            throw new RuntimeExcpetion(
-                'The uploaded file has been moved,'
+            throw new RuntimeException(
+                'The uploaded file has been moved.'
             );
         }
 
         if (! $this->stream) {
-            throw new RuntimeExcpetion(
+            throw new RuntimeException(
                 'No stream is available or can be created.'
             );
         }
@@ -194,8 +195,19 @@ class UploadedFile implements UploadedFileInterface
         }
 
         if ($this->isStream()) {
+            $content = $this->stream->getContents();
+            file_put_contents($targetPath, $content, LOCK_EX);
 
-            // Todo
+            if (! file_exists($targetPath)) {
+                throw new RuntimeException(
+                    sprintf(
+                        'Could not move the stream to the target path "%s".',
+                        $targetPath
+                    )
+                );
+            }
+
+            unset($content, $this->stream);
         }
 
         $this->isMoved = true;
