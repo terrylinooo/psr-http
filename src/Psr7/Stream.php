@@ -227,9 +227,7 @@ class Stream implements StreamInterface
     public function seek($offset, $whence = SEEK_SET): void
     {
         if (! isset($this->stream) || ! $this->stream) {
-            throw new RuntimeException(
-                'Stream does not exist.'
-            );
+            throw new RuntimeException('Stream does not exist.');
         }
 
         if (! $this->seekable()) {
@@ -302,7 +300,7 @@ class Stream implements StreamInterface
             );
         }
 
-        // Make sure that `getSize()`will count the correct size again after writting anything.
+        // Make sure that `getSize()`will count the correct size again after writing anything.
         $this->size = null;
 
         return $size;
@@ -392,6 +390,11 @@ class Stream implements StreamInterface
         return $this->getContents();
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Non PSR-7 Methods.
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Throw exception if stream is not a valid PHP resource.
@@ -408,7 +411,7 @@ class Stream implements StreamInterface
             throw new InvalidArgumentException(
                 sprintf(
                     'Stream should be a resource, but %s provided.',
-                    gettype(stream)
+                    gettype($stream)
                 )
             );
         }
