@@ -88,6 +88,15 @@ class UploadedFile implements UploadedFileInterface
     protected $isMoved = false;
 
     /**
+     * The type of interface between web server and PHP.
+     * This value is typically from `php_sapi_name`, might be changed ony for
+     * unit testing purpose.
+     *
+     * @var string
+     */
+    protected $sapi;
+
+    /**
      * UploadedFile constructor.
      * 
      * @param string|StreamInterface $source The full path of a file or stream.
@@ -95,13 +104,15 @@ class UploadedFile implements UploadedFileInterface
      * @param string|null            $type   The file media type.
      * @param int|null               $size   The file size in bytes.
      * @param int                    $error  The status code of the upload.
+     * @param string|null            $sapi   Only assign for unit testing purpose.
      */
     public function __construct(
                 $source       ,
         ?string $name   = null,
         ?string $type   = null,
         ?int    $size   = null,
-        int     $error  = 0
+        int     $error  = 0,
+        ?string $sapi   = null
     ) {
 
         if (is_string($source)) {
@@ -120,6 +131,11 @@ class UploadedFile implements UploadedFileInterface
         $this->type  = $type;
         $this->size  = $size;
         $this->error = $error;
+        $this->sapi  = php_sapi_name();
+
+        if ($sapi) {
+            $this->sapi = $sapi;
+        }
     }
 
     /**
