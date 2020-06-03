@@ -51,7 +51,7 @@ class UriTest extends TestCase
         $this->assertSame('http://example.com:8888/demo/#section-1', $output);
     }
 
-    public function testProperties()
+    public function test_Properties()
     {
         $uri = new Uri('http://jack:1234@example.com:8080/demo/?test=5678&test2=90#section-1');
 
@@ -85,7 +85,7 @@ class UriTest extends TestCase
         $this->assertSame($fragment, 'section-1');
     }
 
-    public function testGetSeriesMethods()
+    public function test_GetMethods()
     {
         // Test 1
 
@@ -112,7 +112,7 @@ class UriTest extends TestCase
         $this->assertSame($uri->getFragment(), ''); // string
     }
 
-    public function testWithSeriesMethods()
+    public function test_WithMethods()
     {
         $uri = new Uri('https://www.example.com');
 
@@ -161,7 +161,7 @@ class UriTest extends TestCase
     |--------------------------------------------------------------------------
     */
 
-    public function testAssertScheme()
+    public function test_Exception_AssertScheme()
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -173,7 +173,7 @@ class UriTest extends TestCase
         $assertScheme->invokeArgs($uri, ['telnet']);
     }
 
-    public function testAssertString()
+    public function test_Exception_AssertString()
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -185,7 +185,7 @@ class UriTest extends TestCase
         $assertString->invokeArgs($uri, [1234]);
     }
 
-    public function testAssertValidUri()
+    public function test_Exception_AssertValidUri()
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -197,7 +197,7 @@ class UriTest extends TestCase
         $assertValidUri->invokeArgs($uri, ['https://www.example_test.com']);
     }
 
-    public function testAssertHost()
+    public function test_Exception_AssertHost()
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -209,7 +209,7 @@ class UriTest extends TestCase
         $assertHost->invokeArgs($uri, ['example_test.com']);
     }
 
-    public function testAssertHostReturnVoid()
+    public function test_Exception_AssertHost_ReturnVoid()
     {
         $uri = new Uri();
 
@@ -221,7 +221,7 @@ class UriTest extends TestCase
         $this->assertSame($result, null);
     }
 
-    public function testAssertPortInvalidVariableType()
+    public function test_Exception_AssertPort_InvalidVariableType()
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -233,7 +233,7 @@ class UriTest extends TestCase
         $assertPort->invokeArgs($uri, ['8080']);
     }
 
-    public function testAssertPortInvalidRangeNumer()
+    public function test_Exception_AssertPort_InvalidRangeNumer()
     {
         $this->expectException(InvalidArgumentException::class);
 

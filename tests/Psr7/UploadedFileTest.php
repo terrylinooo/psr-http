@@ -43,9 +43,67 @@ class UploadedFileTest extends TestCase
         $stream2 = $uploadedFile->getStream(); // Test `getStream()`
 
         $this->assertEquals($stream, $stream2);
+        $this->assertEquals($stream, $stream2);
     }
 
-    public function testMoveTo()
+    public function test_MoveTo_SapiCli()
+    {
+        $sourceFile = BOOTSTRAP_DIR . '/sample/shieldon_logo.png';
+        $cloneFile = save_testing_file('shieldon_logo_clone.png');
+        $targetPath = save_testing_file('shieldon_logo_moved_from_file.png');
+
+        // Clone a sample file for testing MoveTo method.
+        if (! copy($sourceFile, $cloneFile)) {
+            $this->assertTrue(false);
+        }
+
+        $uploadedFile = new UploadedFile(
+            $cloneFile,
+            'shieldon_logo.png',
+            'image/png',
+            100000,
+            0
+        );
+
+        $uploadedFile->moveTo($targetPath);
+
+        if (file_exists($targetPath)) {
+            $this->assertTrue(true);
+        }
+
+        unlink($targetPath);
+    }
+
+    public function test_MoveTo_SapiFpmFcgi()
+    {
+        $sourceFile = BOOTSTRAP_DIR . '/sample/shieldon_logo.png';
+        $cloneFile = save_testing_file('shieldon_logo_clone.png');
+        $targetPath = save_testing_file('shieldon_logo_moved_from_file.png');
+
+        // Clone a sample file for testing MoveTo method.
+        if (! copy($sourceFile, $cloneFile)) {
+            $this->assertTrue(false);
+        }
+
+        $uploadedFile = new UploadedFile(
+            $cloneFile,
+            'shieldon_logo.png',
+            'image/png',
+            100000,
+            0,
+            'mock-fpm-fcgi'
+        );
+
+        $uploadedFile->moveTo($targetPath);
+
+        if (file_exists($targetPath)) {
+            $this->assertTrue(true);
+        }
+
+        unlink($targetPath);
+    }
+
+    public function test_GetMethods()
     {
         $sourceFile = BOOTSTRAP_DIR . '/sample/shieldon_logo.png';
         $cloneFile = save_testing_file('shieldon_logo_clone.png');
@@ -63,14 +121,11 @@ class UploadedFileTest extends TestCase
             0
         );
 
-        $targetPath = save_testing_file('shieldon_logo_moved_from_file.png');
-        $uploadedFile->moveTo($targetPath);
-
-        if (file_exists($targetPath)) {
-            $this->assertTrue(true);
-        }
-
-        unlink($targetPath);
+        $this->assertSame($uploadedFile->getSize(), 100000);
+        $this->assertSame($uploadedFile->getError(), 0);
+        $this->assertSame($uploadedFile->getClientFilename(), 'shieldon_logo.png');
+        $this->assertSame($uploadedFile->getClientMediaType(), 'image/png');
+        $this->assertSame($uploadedFile->getErrorMessage(), 'There is no error, the file uploaded with success.');
     }
 
     /*
@@ -79,14 +134,16 @@ class UploadedFileTest extends TestCase
     |--------------------------------------------------------------------------
     */
 
-    public function testExceptionInvalidSource()
+    public function test_Exception_ArgumentIsInvalidSource()
     {
         $this->expectException(InvalidArgumentException::class);
 
+        // Exception:
+        // => First argument accepts only a string or StreamInterface instance.
         $uploadedFile = new UploadedFile([]);
     }
 
-    public function testExceptionGetStreamTest1()
+    public function test_Exception_GetStream_StreamIsNotAvailable()
     {
         $this->expectException(RuntimeException::class);
 
@@ -100,14 +157,16 @@ class UploadedFileTest extends TestCase
             0                   // error
         );
 
+        // Exception:
+        // => No stream is available or can be created.
         $stream = $uploadedFile->getStream();
     }
 
-    public function testExceptionGetStreamTest2()
+    public function test_Exception_GetStream_StreamIsMoved()
     {
         $this->expectException(RuntimeException::class);
 
-        // Test 2: Stream has been moved.
+        // Test 2: Stream has been moved, so can't find it using getStream().
 
         $resource = fopen(BOOTSTRAP_DIR . '/sample/shieldon_logo.png', 'r+');
         $stream = new Stream($resource);
@@ -123,7 +182,33 @@ class UploadedFileTest extends TestCase
 
         unlink($targetPath);
 
-        // Should throw an Exception.
+        // Exception:
+        // => The stream has been moved
         $stream = $uploadedFile->getStream();
+    }
+
+
+    public function test_Exception_MoveTo_FileIsMoved()
+    {
+        $this->expectException(RuntimeException::class);
+
+        $uploadedFile = new UploadedFile(
+            '/tmp/php200A.tmp',
+            'shieldon_logo.png',
+            'image/png',
+            100000,
+            0
+        );
+
+        $reflection = new ReflectionObject($uploadedFile);
+        $isMoved = $reflection->getProperty('isMoved');
+        $isMoved->setAccessible(true);
+        $isMoved->setValue($uploadedFile, true);
+
+        $targetPath = save_testing_file('shieldon_logo_moved_from_stream.png');
+
+        // Exception: 
+        // => The uploaded file has been moved.
+        $uploadedFile->moveTo($targetPath);
     }
 }

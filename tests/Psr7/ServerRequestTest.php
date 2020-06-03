@@ -30,7 +30,7 @@ class ServerRequestTest extends TestCase
         $this->assertTrue(($serverRequest instanceof ServerRequestInterface));
     }
 
-    public function testProperties()
+    public function test_Properties()
     {
         $serverRequest = self::getServerRequest();
 
@@ -60,7 +60,7 @@ class ServerRequestTest extends TestCase
         $this->assertSame($attributes, []);;
     }
 
-    public function testGetSeriesMethods()
+    public function test_GetMethods()
     {
         // Test 1
 
@@ -101,7 +101,7 @@ class ServerRequestTest extends TestCase
         ]);
     }
 
-    public function testWithSeriesMethods()
+    public function test_WithMethods()
     {
         $serverRequest = self::getServerRequest();
 
@@ -136,7 +136,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals($new2->getAttribute('foo8'), null);
     }
 
-    public function testParseUploadedFiles()
+    public function test_ParseUploadedFiles()
     {
         $files = [
             
@@ -291,7 +291,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals($results, $expectedFiles);
     }
 
-    public function testUploadedFileSpecsConvert()
+    public function test_UploadedFileSpecsConvert()
     {
         $formattedFiles = [
             'files1' => [
@@ -410,7 +410,7 @@ class ServerRequestTest extends TestCase
     |--------------------------------------------------------------------------
     */
 
-    public function testAssertUploadedFiles()
+    public function test_Exception_AssertUploadedFiles()
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -426,7 +426,7 @@ class ServerRequestTest extends TestCase
         ]);
     }
 
-    function testAsertParsedBody()
+    public function test_Exception_AsertParsedBody()
     {
         $this->expectException(InvalidArgumentException::class);
 

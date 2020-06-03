@@ -19,6 +19,7 @@ use RuntimeException;
 
 use function is_string;
 use function is_writable;
+use function is_uploaded_file;
 use function move_uploaded_file;
 use function php_sapi_name;
 use function rename;
@@ -78,7 +79,7 @@ class UploadedFile implements UploadedFileInterface
      *
      * @var int
      */
-    protected $error = 0;
+    protected $error;
 
     /**
      * Check if the uploaded file has been moved or not.
@@ -94,7 +95,7 @@ class UploadedFile implements UploadedFileInterface
      *
      * @var string
      */
-    protected $sapi;
+    private $sapi;
 
     /**
      * UploadedFile constructor.
@@ -111,7 +112,7 @@ class UploadedFile implements UploadedFileInterface
         ?string $name   = null,
         ?string $type   = null,
         ?int    $size   = null,
-        int     $error  = 0,
+        int     $error  = 0   ,
         ?string $sapi   = null
     ) {
 
@@ -123,7 +124,7 @@ class UploadedFile implements UploadedFileInterface
 
         } else {
             throw new InvalidArgumentException(
-                'First argument accepts only a string or a stream instance.'
+                'First argument accepts only a string or StreamInterface instance.'
             );
         }
 
@@ -145,7 +146,7 @@ class UploadedFile implements UploadedFileInterface
     {
         if ($this->isMoved) {
             throw new RuntimeException(
-                'The uploaded file has been moved.'
+                'The stream has been moved.'
             );
         }
 
@@ -178,7 +179,7 @@ class UploadedFile implements UploadedFileInterface
                 );
             }
 
-            if (php_sapi_name() === 'cli') {
+            if ($this->sapi === 'cli') {
 
                 if (! rename($this->file, $targetPath)) {
                     throw new RuntimeException(
@@ -190,7 +191,7 @@ class UploadedFile implements UploadedFileInterface
                 }
             } else {
 
-                if (! is_uploaded_file($this->file)) {
+                if (! $this->isUploadedFile($this->file)) {
                     throw new RuntimeException(
                         sprintf(
                             '"%s" is invalid uploaded file.',
@@ -199,7 +200,7 @@ class UploadedFile implements UploadedFileInterface
                     );
                 }
 
-                if (! move_uploaded_file($this->file, $targetPath)) {
+                if (! $this->moveUploadedFile($this->file, $targetPath)) {
                     throw new RuntimeException(
                         sprintf(
                             'Could not move the file to the target path "%s".',
@@ -272,7 +273,7 @@ class UploadedFile implements UploadedFileInterface
      *
      * @return string
      */
-    protected function getErrorMessage(): string
+    public function getErrorMessage(): string
     {
         switch ($this->error) {
 
@@ -334,5 +335,40 @@ class UploadedFile implements UploadedFileInterface
     protected function isFile(): bool
     {
         return (is_string($this->file) && ! empty($this->file));
+    }
+
+    /**
+     * A wrapper for PHP native function `is_uploaded_file`
+     * For unit testing purpose.
+     *
+     * @param string $file
+     *
+     * @return bool
+     */
+    private function isUploadedFile(string $file): bool
+    {
+        if ($this->sapi === 'mock-fpm-fcgi') {
+            return true;
+        }
+    
+        return is_uploaded_file($file);
+    }
+
+    /**
+     * A wrapper for PHP native function `move_uploaded_file`
+     * For unit testing purpose.
+     *
+     * @param string $file
+     * @param string $targetPath
+     *
+     * @return bool
+     */
+    private function moveUploadedFile(string $file, string $targetPath): bool
+    {
+        if ($this->sapi === 'mock-fpm-fcgi') {
+            return rename($file, $targetPath);
+        }
+
+        return move_uploaded_file($file, $targetPath);
     }
 }
