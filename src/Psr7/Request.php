@@ -129,14 +129,17 @@ class Request extends Message implements RequestInterface
 
         if ($uri instanceof UriInterface) {
             $this->uri = $uri;
-        } else  {
-            if (is_string($uri)) {
-                $this->uri = new Uri($uri);
-            } else {
-                throw new InvalidArgumentException(
-                    'URI should be a string or an instance of UriInterface.'
-                );
-            }
+
+        } elseif (is_string($uri)) {
+            $this->uri = new Uri($uri);
+
+        } else {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'URI should be a string or an instance of UriInterface, but %s provided.',
+                    gettype($uri)
+                )
+            );
         }
 
         $this->setBody($body);
@@ -179,7 +182,7 @@ class Request extends Message implements RequestInterface
 
         if (preg_match('/\s/', $requestTarget)) {
             throw new InvalidArgumentException(
-                'A request target cannot contain whitespace.'
+                'A request target cannot contain any whitespace.'
             );
         }
 
@@ -264,7 +267,7 @@ class Request extends Message implements RequestInterface
      *                   not "r+", you should create a Stream instance by 
      *                   yourself.
      *
-     * @param StreamInterface|string $body Request body
+     * @param string|StreamInterface $body Request body
      *
      * @return void
      */

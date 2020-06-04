@@ -12,12 +12,11 @@ namespace Shieldon\Psr7;
 
 use PHPUnit\Framework\TestCase;
 
-use Psr\Http\Message\MessageInterface;
-
-use Shieldon\Psr7\Stream;
-use Shieldon\Psr7\Message;
 use InvalidArgumentException;
+use Psr\Http\Message\MessageInterface;
 use ReflectionObject;
+use Shieldon\Psr7\Message;
+use Shieldon\Psr7\Stream;
 use stdClass;
 
 class MessageTest extends TestCase
