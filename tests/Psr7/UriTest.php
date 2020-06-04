@@ -85,7 +85,7 @@ class UriTest extends TestCase
         $this->assertSame($fragment, 'section-1');
     }
 
-    public function test_GetMethods()
+    public function test_GetPrefixMethods()
     {
         // Test 1
 
@@ -112,7 +112,7 @@ class UriTest extends TestCase
         $this->assertSame($uri->getFragment(), ''); // string
     }
 
-    public function test_WithMethods()
+    public function test_WithPrefixMethods()
     {
         $uri = new Uri('https://www.example.com');
 

@@ -118,9 +118,11 @@ class Message implements MessageInterface
      */
     public function withHeader($name, $value)
     {
-        $this->assertHeader($name, $value);
+        $name = $this->normalizeHeaderFieldName($name);
+        $value = $this->normalizeHeaderFieldValue($value);
 
-        $name = strtolower($name);
+        $this->assertHeaderFieldName($name);
+        $this->assertHeaderFieldValue($value);
 
         $clone = clone $this;
         $clone->headers[$name] = $value;
@@ -133,9 +135,11 @@ class Message implements MessageInterface
      */
     public function withAddedHeader($name, $value)
     {
-        $this->assertHeader($name, $value);
+        $name = $this->normalizeHeaderFieldName($name);
+        $value = $this->normalizeHeaderFieldValue($value);
 
-        $name = strtolower($name);
+        $this->assertHeaderFieldName($name);
+        $this->assertHeaderFieldValue($value);
 
         $clone = clone $this;
 
@@ -195,24 +199,106 @@ class Message implements MessageInterface
      */
     protected function setHeaders(array $headers): void
     {
+        $arr = [];
+
         foreach ($headers as $name => $value) {
-            assertHeader($name, $value);
+            $name = $this->normalizeHeaderFieldName($name);
+            $value = $this->normalizeHeaderFieldValue($value);
+
+            $this->assertHeaderFieldName($name);
+            $this->assertHeaderFieldValue($value);
+            
+            $arr[$name] = $value;
         }
 
-        $this->headers = $headers;
+        $this->headers = $arr;
+    }
+
+    /**
+     * Parse raw header text into an associated array.
+     *
+     * @param string $message Raw header text.
+     *
+     * @return array
+     */
+    public static function parseRawHeader(string $message): array
+    {
+        preg_match_all('/^([^:\n]*): ?(.*)$/m', $message, $headers, PREG_SET_ORDER);
+
+        $num = count($headers);
+
+        if ($num > 1) {
+            $headers = array_merge(...array_map(function ($line) {
+                $name = trim($line[1]);
+                $field = trim($line[2]);
+                return [$name => $field];
+            }, $headers));
+
+            return $headers;
+
+        } elseif ($num === 1) {
+            $name = trim($headers[0][1]);
+            $field = trim($headers[0][2]);
+            return [$name => $field];
+        }
+
+        return [];
+    }
+
+    /**
+     * Normalize the header field name.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    protected function normalizeHeaderFieldName(string $name): string
+    {
+        return trim(strtolower($name));
+    }
+
+    /**
+     * Normalize the header field value.
+     *
+     * @param mixed $value
+     * 
+     * @return mixed
+     */
+    protected function normalizeHeaderFieldValue($value)
+    {
+        $result = false;
+
+        if (is_string($value)) {
+            $result = [trim($value)];
+
+        } elseif (is_array($value)) {
+            foreach ($value as $k => $v) {
+                if (is_string($v)) {
+                    $value[$k] = trim($v);
+                }
+            }
+            $result = $value;
+
+        } elseif (is_float($value) || is_integer($value)) {
+            $result = [(string) $value];
+
+        } else {
+            $this->assertHeaderFieldValue($value);
+        }
+
+        return $result;
     }
 
     /**
      * Throw exception if the header is not compatible with RFC 7230.
      * 
-     * @param string            $name  The header name.
-     * @param string|array|null $value Check when it is an array or string.
+     * @param string $name The header name.
      *
      * @return void
      * 
      * @throws InvalidArgumentException
      */
-    protected function assertHeader(string $name, $value = null): void
+    protected function assertHeaderFieldName(string $name): void
     {
         // see https://tools.ietf.org/html/rfc7230#section-3.2.6
         // alpha  => a-zA-Z
@@ -227,45 +313,57 @@ class Message implements MessageInterface
                 )
             );
         }
+    }
 
-        if (! is_null($value)) {
-            $items = is_array($value) ? $value : (is_string($value) ? [$value] : false);
-
-            if ($items === false) {
-                throw new InvalidArgumentException(
-                    sprintf(
-                        'The second argument only accepts string and array, but %s provided.',
-                        gettype($value)
-                    )
-                );
-            }
-
-            if (empty($items)) {
-                throw new InvalidArgumentException(
-                    'A header value can not be empty.'
-                );
-            }
-
-            foreach ($items as $item) {
-
+    /**
+     * Throw exception if the header is not compatible with RFC 7230.
+     * 
+     * @param array|null $value The header value.
+     *
+     * @return void
+     * 
+     * @throws InvalidArgumentException
+     */
+    protected function assertHeaderFieldValue($value = null): void
+    {
+        if (is_array($value)) {
+            foreach ($value as $item) {
                 if (! is_scalar($item) || is_bool($item)) {
                     throw new InvalidArgumentException(
                         sprintf(
                             'The header values only accept string and number, but %s provided.',
-                            gettype($value)
+                            gettype($item)
                         )
                     );
                 }
 
-                if (! preg_match('/^[ \t\x21-\x7E\x80-\xFF]+$/', $value)) {
+                // https://www.rfc-editor.org/rfc/rfc7230.txt (page.25)
+                // field-content = field-vchar [ 1*( SP / HTAB ) field-vchar ]
+                // field-vchar   = VCHAR / obs-text
+                // obs-text      = %x80-FF
+                // SP            = space
+                // HTAB          = horizontal tab
+                // VCHAR         = any visible [USASCII] character. (x21-x7e)
+                // %x80-FF       = character range outside ASCII.
+
+                // I THINK THAT obs-text SHOULD N0T BE USED.
+                // OR EVEN I CAN PASS CHINESE CHARACTERS, THAT'S WEIRD.
+                if (! preg_match('/^[ \t\x21-\x7e]+$/', $item)) {
                     throw new InvalidArgumentException(
                         sprintf(
-                            '"%s" is not valid header value, it must be an RFC 7230 compatible string.',
-                            $value
+                            '"%s" is not valid header value, it must contains visible ASCII characters only.',
+                            $item
                         )
                     );
                 }
             }
+        } else {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'The header field value only accepts string and array, but %s provided.',
+                    gettype($value)
+                )
+            );
         }
     }
 }

@@ -60,7 +60,7 @@ class ServerRequestTest extends TestCase
         $this->assertSame($attributes, []);;
     }
 
-    public function test_GetMethods()
+    public function test_GetPrefixMethods()
     {
         // Test 1
 
@@ -101,7 +101,7 @@ class ServerRequestTest extends TestCase
         ]);
     }
 
-    public function test_WithMethods()
+    public function test_WithPrefixMethods()
     {
         $serverRequest = self::getServerRequest();
 

@@ -84,8 +84,8 @@ class ServerRequest extends Request implements ServerRequestInterface
      * ServerRequest constructor.
      *
      * @param string                 $method       Request HTTP method
-     * @param UriInterface|string    $uri          Request URI object URI or URL
-     * @param StreamInterface|string $body         Request body
+     * @param string|UriInterface    $uri          Request URI object URI or URL
+     * @param string|StreamInterface $body         Request body
      * @param array                  $headers      Request headers
      * @param string                 $version      Request protocol version
      * @param array                  $serverParams Typically $_SERVER superglobal

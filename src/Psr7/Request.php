@@ -17,6 +17,7 @@ use Psr\Http\Message\UriInterface;
 use Shieldon\Psr7\Message;
 use Shieldon\Psr7\Uri;
 use InvalidArgumentException;
+use Psr\Http\Message\StreamInterface;
 
 use function in_array;
 use function is_string;
@@ -107,11 +108,11 @@ class Request extends Message implements RequestInterface
     /**
      * Request constructor.
      *
-     * @param string                 $method   Request HTTP method
-     * @param UriInterface|string    $uri      Request URI object URI or URL
-     * @param StreamInterface|string $body     Request body
-     * @param array                  $headers  Request headers
-     * @param string                 $version  Request protocol version
+     * @param string                 $method  Request HTTP method
+     * @param string|UriInterface    $uri     Request URI
+     * @param string|StreamInterface $body    Request body - see setBody()
+     * @param array                  $headers Request headers
+     * @param string                 $version Request protocol version
      */
     public function __construct(
         string $method  = 'GET',
@@ -121,7 +122,10 @@ class Request extends Message implements RequestInterface
         string $version = '1.1'
     ) {
         $this->assertMethod($method);
+        $this->method = $method;
+
         $this->assertProtocolVersion($version);
+        $this->protocolVersion = $version;
 
         if ($uri instanceof UriInterface) {
             $this->uri = $uri;
@@ -135,15 +139,8 @@ class Request extends Message implements RequestInterface
             }
         }
 
-        if (! empty($body)) {
-            $this->setBody($body);
-        }
-
-        if (! empty($headers)) {
-            $this->setHeaders($headers);
-        }
-
-        $this->protocolVersion = $version;
+        $this->setBody($body);
+        $this->setHeaders($headers);
     }
 
     /**
@@ -256,6 +253,37 @@ class Request extends Message implements RequestInterface
     | Non PSR-7 Methods.
     |--------------------------------------------------------------------------
     */
+
+    /**
+     * Set the request body.
+     *
+     * This method only provides two types of input, string and StreamInterface
+     *
+     * String          - As a simplest way to initialize a stream resource.
+     * StreamInterface - If you would like to use stream resource its mode is
+     *                   not "r+", you should create a Stream instance by 
+     *                   yourself.
+     *
+     * @param StreamInterface|string $body Request body
+     *
+     * @return void
+     */
+    protected function setBody($body): void
+    {
+        if ($body instanceof StreamInterface) {
+            $this->body = $body;
+
+        } elseif (is_string($body)) {
+            $resource = fopen('php://temp', 'r+');
+
+            if ($body !== '') {
+                fwrite($resource, $body);
+                fseek($resource, 0);
+            }
+
+            $this->body = new Stream($resource);
+        }
+    }
 
     /**
      * Check out whether a method defined in RFC 7231 request methods.

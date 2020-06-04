@@ -103,7 +103,7 @@ class UploadedFileTest extends TestCase
         unlink($targetPath);
     }
 
-    public function test_GetMethods()
+    public function test_GetPrefixMethods()
     {
         $sourceFile = BOOTSTRAP_DIR . '/sample/shieldon_logo.png';
         $cloneFile = save_testing_file('shieldon_logo_clone.png');
