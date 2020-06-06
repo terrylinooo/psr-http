@@ -95,17 +95,6 @@ class Request extends Message implements RequestInterface
     ];
 
     /**
-     * Valid HTTP version numbers.
-     *
-     * @var array
-     */
-    protected $validProtocolVersions = [
-        '1.1',
-        '2.0',
-        '3.0',
-    ];
-
-    /**
      * Request constructor.
      *
      * @param string                 $method  Request HTTP method
@@ -258,37 +247,6 @@ class Request extends Message implements RequestInterface
     */
 
     /**
-     * Set the request body.
-     *
-     * This method only provides two types of input, string and StreamInterface
-     *
-     * String          - As a simplest way to initialize a stream resource.
-     * StreamInterface - If you would like to use stream resource its mode is
-     *                   not "r+", you should create a Stream instance by 
-     *                   yourself.
-     *
-     * @param string|StreamInterface $body Request body
-     *
-     * @return void
-     */
-    protected function setBody($body): void
-    {
-        if ($body instanceof StreamInterface) {
-            $this->body = $body;
-
-        } elseif (is_string($body)) {
-            $resource = fopen('php://temp', 'r+');
-
-            if ($body !== '') {
-                fwrite($resource, $body);
-                fseek($resource, 0);
-            }
-
-            $this->body = new Stream($resource);
-        }
-    }
-
-    /**
      * Check out whether a method defined in RFC 7231 request methods.
      *
      * @param string $method Http methods
@@ -306,27 +264,6 @@ class Request extends Message implements RequestInterface
                 sprintf(
                     'Unsupported HTTP method. It must be compatible with RFC-7231 request method, but %s provided.',
                     $method
-                )
-            );
-        }
-    }
-
-    /**
-     * Check out whether a protocol version number is supported.
-     *
-     * @param string $version HTTP protocol version.
-     * 
-     * @return void
-     * 
-     * @throws InvalidArgumentException
-     */
-    protected function assertProtocolVersion(string $version): void
-    {
-        if (! in_array($version, $this->validProtocolVersions)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Unsupported HTTP protocol version number. %s provided.',
-                    $version
                 )
             );
         }

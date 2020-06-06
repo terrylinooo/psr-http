@@ -171,7 +171,7 @@ class UploadedFile implements UploadedFileInterface
         if ($this->isFile()) {
 
             if (! is_writable(dirname($targetPath))) {
-                throw new InvalidArgumentException(
+                throw new RuntimeException(
                     sprintf(
                         'The target path "%s" is not writable.',
                         $targetPath
@@ -181,7 +181,7 @@ class UploadedFile implements UploadedFileInterface
 
             if ($this->sapi === 'cli') {
 
-                if (! rename($this->file, $targetPath)) {
+                if (! $this->rename($this->file, $targetPath)) {
                     throw new RuntimeException(
                         sprintf(
                             'Could not rename the file to the target path "%s".',
@@ -347,7 +347,7 @@ class UploadedFile implements UploadedFileInterface
      */
     private function isUploadedFile(string $file): bool
     {
-        if ($this->sapi === 'mock-fpm-fcgi') {
+        if ($this->sapi === 'mock:is_uploaded_file:true') {
             return true;
         }
     
@@ -365,10 +365,31 @@ class UploadedFile implements UploadedFileInterface
      */
     private function moveUploadedFile(string $file, string $targetPath): bool
     {
-        if ($this->sapi === 'mock-fpm-fcgi') {
+        if ($this->sapi === 'mock:is_uploaded_file:true') {
             return rename($file, $targetPath);
+
+        } elseif ($this->sapi === 'mock:move_uploaded_file:true') {
+            return true;
         }
 
         return move_uploaded_file($file, $targetPath);
+    }
+
+    /**
+     * A wrapper for PHP native function `rename`
+     * For unit testing purpose.
+     *
+     * @param string $file
+     * @param string $targetPath
+     *
+     * @return bool
+     */
+    private function rename(string $file, string $targetPath): bool
+    {
+        if ($this->sapi === 'mock:rename:false') {
+            return false;
+        }
+
+        return rename($file, $targetPath);
     }
 }

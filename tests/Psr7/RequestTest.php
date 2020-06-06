@@ -90,7 +90,7 @@ class RequestTest extends TestCase
         $this->assertEquals(sprintf('%s', $request->getBody()->getContents()), 'test stream');
     }
 
-    /*sprintf("There are %u million cars in %s.",$number,$str)
+    /*
     |--------------------------------------------------------------------------
     | Exceptions
     |--------------------------------------------------------------------------

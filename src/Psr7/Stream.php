@@ -94,13 +94,16 @@ class Stream implements StreamInterface
 
         } elseif (strpos($meta['mode'], 'r') !== false) {
             $this->readable = true;
+            $this->writable = false;
 
         } elseif (
+            // It probably contains t or b flag, so using "strpos" here.
             strpos($meta['mode'], 'w') !== false ||
             strpos($meta['mode'], 'a') !== false ||
             strpos($meta['mode'], 'x') !== false ||
             strpos($meta['mode'], 'c') !== false
         ) {
+            $this->readable = false;
             $this->writable = true;
         }
         

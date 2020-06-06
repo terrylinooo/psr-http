@@ -41,5 +41,11 @@ class StreamTest extends TestCase
         $meta = $stream->getMetadata();
 
         $this->assertEquals($expectedMeta['mode'], $meta['mode']);
+
+        $this->assertTrue($stream->isWritable());
+        $this->assertTrue($stream->isReadable());
+        $this->assertTrue($stream->isSeekable());
+
+        $this->assertEquals($resource, $stream->detach());
     }
 }

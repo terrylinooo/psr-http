@@ -46,7 +46,7 @@ class UploadedFileTest extends TestCase
         $this->assertEquals($stream, $stream2);
     }
 
-    public function test_MoveTo_SapiCli()
+    public function test_MoveTo_Sapi_Cli()
     {
         $sourceFile = BOOTSTRAP_DIR . '/sample/shieldon_logo.png';
         $cloneFile = save_testing_file('shieldon_logo_clone.png');
@@ -74,7 +74,7 @@ class UploadedFileTest extends TestCase
         unlink($targetPath);
     }
 
-    public function test_MoveTo_SapiFpmFcgi()
+    public function test_MoveTo_Mock_Sapi_Fpm()
     {
         $sourceFile = BOOTSTRAP_DIR . '/sample/shieldon_logo.png';
         $cloneFile = save_testing_file('shieldon_logo_clone.png');
@@ -91,7 +91,7 @@ class UploadedFileTest extends TestCase
             'image/png',
             100000,
             0,
-            'mock-fpm-fcgi'
+            'mock:is_uploaded_file:true'
         );
 
         $uploadedFile->moveTo($targetPath);
@@ -187,7 +187,6 @@ class UploadedFileTest extends TestCase
         $stream = $uploadedFile->getStream();
     }
 
-
     public function test_Exception_MoveTo_FileIsMoved()
     {
         $this->expectException(RuntimeException::class);
@@ -209,6 +208,39 @@ class UploadedFileTest extends TestCase
 
         // Exception: 
         // => The uploaded file has been moved.
+        $uploadedFile->moveTo($targetPath);
+    }
+
+    public function test_Exception_MoveTo_TargetIsNotWritable()
+    {
+        $this->expectException(RuntimeException::class);
+
+        $uploadedFile = new UploadedFile(
+            BOOTSTRAP_DIR . '/sample/shieldon_logo.png',
+            'shieldon_logo.png',
+            'image/png',
+            100000,
+            0
+        );
+
+        $uploadedFile->moveTo(BOOTSTRAP_DIR . '/tmp/folder-not-exists/test.png');
+    }
+
+    public function test_Exception_MoveTo_FileCannotRename()
+    {
+        $this->expectException(RuntimeException::class);
+
+        $uploadedFile = new UploadedFile(
+            BOOTSTRAP_DIR . '/sample/shieldon_logo.png',
+            'shieldon_logo.png',
+            'image/png',
+            100000,
+            0,
+            'mock-cannot-rename'
+        );
+
+        $targetPath = save_testing_file('shieldon_logo_moved_from_stream.png');
+
         $uploadedFile->moveTo($targetPath);
     }
 }

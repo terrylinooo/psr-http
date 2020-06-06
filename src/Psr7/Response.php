@@ -27,6 +27,20 @@ use function str_replace;
 class Response extends Message implements ResponseInterface
 {
     /**
+     * HTTP status number.
+     *
+     * @var int
+     */
+    protected $status;
+
+    /**
+     * HTTP status reason phrase.
+     *
+     * @var string
+     */
+    protected $reasonPhrase;
+
+    /**
      * HTTP status codes.
      *
      * @see https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
@@ -116,41 +130,31 @@ class Response extends Message implements ResponseInterface
     ];
 
     /**
-     * HTTP status reason phrase.
-     *
-     * @var string
-     */
-    protected $reasonPhrase = 'OK';
-
-    /**
-     * HTTP status number.
-     *
-     * @var int
-     */
-    protected $status = 200;
-
-    /**
      * Response Constructor.
      *
-     * @param StreamInterface|string $body    Request body
-     * @param array                  $headers Request headers
-     * @param string                 $version Request protocol version
+     * @param int                    $status  Response HTTP status code.
+     * @param array                  $headers Response headers.
+     * @param StreamInterface|string $body    Response body.
+     * @param string                 $version Response protocol version.
+     * @param string                 $reason  Reaspnse HTTP reason phrase.
      */
     public function __construct(
-               $body    = ''   ,
+        int    $status  = 200  ,
         array  $headers = []   ,
-        string $version = '1.1'
+               $body    = ''   ,
+        string $version = '1.1',
+        string $reason  = 'OK'
     ) {
+        $this->assertStatus($status);
+        $this->assertReasonPhrase($reason);
+        $this->assertProtocolVersion($version);
 
-        if (! empty($body)) {
-            $this->setBody($body);
-        }
+        $this->setHeaders($headers);
+        $this->setBody($body);
 
-        if (! empty($headers)) {
-            $this->setHeaders($headers);
-        }
-
+        $this->status = $status;
         $this->protocolVersion = $version;
+        $this->reasonPhrase = $reason;
     }
 
     /**
@@ -169,8 +173,8 @@ class Response extends Message implements ResponseInterface
         $this->assertStatus($code);
         $this->assertReasonPhrase($reasonPhrase);
 
-        if ($reasonPhrase === '' && isset($this->statusCode[$code])) {
-            $reasonPhrase = $this->statusCode[$code];
+        if ($reasonPhrase === '' && isset(self::$statusCode[$code])) {
+            $reasonPhrase = self::$statusCode[$code];
         }
 
         $clone = clone $this;
@@ -249,14 +253,14 @@ class Response extends Message implements ResponseInterface
         }
 
         // Special characters, such as "line breaks", "tab" and others...
-        $escapesCharacters = [
-            "\f", "\r", "\n", "\t", "\v", "\0", "[\b]", "\s", "\S", "\w", "\W", "\d", "\D", "\b", "\B", "\cX", "\xhh", "\uhhhh"
+        $escapeCharacters = [
+            '\f', '\r', '\n', '\t', '\v', '\0', '[\b]', '\s', '\S', '\w', '\W', '\d', '\D', '\b', '\B', '\cX', '\xhh', '\uhhhh'
         ];
 
-        $filteredPhrase = str_replace($escapesCharacters, '', $reasonPhrase);
+        $filteredPhrase = str_replace($escapeCharacters, '', $reasonPhrase);
 
         if ($reasonPhrase !== $filteredPhrase) {
-            foreach ($escapesCharacters as $escape) {
+            foreach ($escapeCharacters as $escape) {
                 if (strpos($reasonPhrase, $escape) !== false) {
                     throw new InvalidArgumentException(
                         sprintf(
