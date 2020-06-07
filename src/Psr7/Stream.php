@@ -209,9 +209,14 @@ class Stream implements StreamInterface
         }
 
         if ($pointer === false) {
+
+            // @codeCoverageIgnoreStart
+
             throw new RuntimeException(
                 'Unable to get the position of the file pointer in stream.'
             );
+
+            // @codeCoverageIgnoreEnd
         }
 
         return $pointer;
@@ -249,6 +254,8 @@ class Stream implements StreamInterface
                 $message = 'Set position equal to offset bytes.';
                 break;
 
+            // @codeCoverageIgnoreStart
+
             case SEEK_CUR:
                 $message = 'Set position to current location plus offset.';
                 break;
@@ -260,6 +267,8 @@ class Stream implements StreamInterface
             default:
                 $message = 'Unknown error.';
                 break;
+
+            // @codeCoverageIgnoreEnd
         }
 
         if (fseek($this->stream, $offset, $whence) === -1) {
@@ -299,9 +308,14 @@ class Stream implements StreamInterface
         }
 
         if ($size === false) {
+
+            // @codeCoverageIgnoreStart
+
             throw new RuntimeException(
                 'Unable to write to stream.'
             );
+
+            // @codeCoverageIgnoreEnd
         }
 
         // Make sure that `getSize()`will count the correct size again after writing anything.
@@ -328,9 +342,14 @@ class Stream implements StreamInterface
         }
 
         if ($string === false) {
+
+            // @codeCoverageIgnoreStart
+
             throw new RuntimeException(
                 'Unable to read from stream.'
             );
+
+            // @codeCoverageIgnoreEnd
         }
 
         return $string;
@@ -367,7 +386,7 @@ class Stream implements StreamInterface
      */
     public function getMetadata($key = null)
     {
-        if ($this->stream) {
+        if (! empty($this->stream)) {
             $this->meta = stream_get_meta_data($this->stream);
             
             if (! $key) {
