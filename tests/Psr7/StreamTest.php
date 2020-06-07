@@ -46,6 +46,63 @@ class StreamTest extends TestCase
         $this->assertTrue($stream->isReadable());
         $this->assertTrue($stream->isSeekable());
 
+        $this->assertTrue(
+            is_integer($stream->getSize())
+        );
+
+        $this->assertTrue(
+            is_bool($stream->eof())
+        );
+
+        $this->assertTrue(
+            is_integer($stream->tell())
+        );
+
+        // close.
         $this->assertEquals($resource, $stream->detach());
+
+        $this->assertTrue(
+            is_null($stream->getSize())
+        );
+
+        $this->assertTrue(
+            is_null($stream->detach())
+        );
+    }
+
+    public function test__getSize()
+    {
+        $resource = fopen(BOOTSTRAP_DIR . '/sample/shieldon_logo.png', 'r+');
+        $stream = new Stream($resource);
+        $this->assertSame($stream->getSize(), 15166);
+
+        $stream->close();
+    }
+
+    public function test__seekAndRewind()
+    {
+        $resource = fopen(BOOTSTRAP_DIR . '/sample/shieldon_logo.png', 'r+');
+        $stream = new Stream($resource);
+
+        $stream->seek(10);
+        $this->assertSame($stream->tell(), 10);
+
+        $stream->rewind();
+        $this->assertSame($stream->tell(), 0);
+
+        $stream->close();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Exceptions
+    |--------------------------------------------------------------------------
+    */
+
+    public function test_Exception_assertStream()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $stream = new Stream('string');
     }
 }

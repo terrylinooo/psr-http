@@ -213,7 +213,9 @@ class UploadedFile implements UploadedFileInterface
 
         if ($this->isStream()) {
             $content = $this->stream->getContents();
-            file_put_contents($targetPath, $content, LOCK_EX);
+            @file_put_contents($targetPath, $content, LOCK_EX);
+
+            // @codeCoverageIgnoreStart
 
             if (! file_exists($targetPath)) {
                 throw new RuntimeException(
@@ -223,6 +225,8 @@ class UploadedFile implements UploadedFileInterface
                     )
                 );
             }
+
+            // @codeCoverageIgnoreEnd
 
             unset($content, $this->stream);
         }
@@ -347,7 +351,10 @@ class UploadedFile implements UploadedFileInterface
      */
     private function isUploadedFile(string $file): bool
     {
-        if ($this->sapi === 'mock:is_uploaded_file:true') {
+        if (
+            $this->sapi === 'mock-is-uploaded-file-true' ||
+            $this->sapi === 'mock-move-uploaded-file'
+        ) {
             return true;
         }
     
@@ -365,11 +372,8 @@ class UploadedFile implements UploadedFileInterface
      */
     private function moveUploadedFile(string $file, string $targetPath): bool
     {
-        if ($this->sapi === 'mock:is_uploaded_file:true') {
+        if ($this->sapi === 'mock-is-uploaded-file-true') {
             return rename($file, $targetPath);
-
-        } elseif ($this->sapi === 'mock:move_uploaded_file:true') {
-            return true;
         }
 
         return move_uploaded_file($file, $targetPath);
@@ -386,7 +390,7 @@ class UploadedFile implements UploadedFileInterface
      */
     private function rename(string $file, string $targetPath): bool
     {
-        if ($this->sapi === 'mock:rename:false') {
+        if (defined('MOCK_RENAME_FALSE')) {
             return false;
         }
 

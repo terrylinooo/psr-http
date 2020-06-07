@@ -140,11 +140,12 @@ class Stream implements StreamInterface
     public function close(): void
     {
         if (isset($this->stream)) {
-            $this->detach();
-        }
 
-        if (is_resource($this->stream)) {
-            fclose($this->stream);
+            if (is_resource($this->stream)) {
+                fclose($this->stream);
+            }
+
+            $this->detach();
         }
     }
 
@@ -233,7 +234,7 @@ class Stream implements StreamInterface
             throw new RuntimeException('Stream does not exist.');
         }
 
-        if (! $this->seekable()) {
+        if (! $this->seekable) {
             throw new RuntimeException(
                 'Stream is not seekable.'
             );

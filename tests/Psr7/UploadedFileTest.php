@@ -91,7 +91,7 @@ class UploadedFileTest extends TestCase
             'image/png',
             100000,
             0,
-            'mock:is_uploaded_file:true'
+            'mock-is-uploaded-file-true'
         );
 
         $uploadedFile->moveTo($targetPath);
@@ -126,6 +126,47 @@ class UploadedFileTest extends TestCase
         $this->assertSame($uploadedFile->getClientFilename(), 'shieldon_logo.png');
         $this->assertSame($uploadedFile->getClientMediaType(), 'image/png');
         $this->assertSame($uploadedFile->getErrorMessage(), 'There is no error, the file uploaded with success.');
+    }
+
+    function testGetErrorMessage()
+    {
+        $uploadedFile = new UploadedFile(
+            BOOTSTRAP_DIR . '/sample/shieldon_logo.png',
+            'shieldon_logo.png',
+            'image/png',
+            100000,
+            UPLOAD_ERR_OK
+        );
+
+        $this->assertSame($uploadedFile->getErrorMessage(), 'There is no error, the file uploaded with success.');
+
+        $reflection = new ReflectionObject($uploadedFile);
+        $error = $reflection->getProperty('error');
+        $error->setAccessible(true);
+
+        $error->setValue($uploadedFile, UPLOAD_ERR_INI_SIZE);
+        $this->assertSame($uploadedFile->getErrorMessage(), 'The uploaded file exceeds the upload_max_filesize directive in php.ini');
+
+        $error->setValue($uploadedFile, UPLOAD_ERR_FORM_SIZE);
+        $this->assertSame($uploadedFile->getErrorMessage(), 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.');
+
+        $error->setValue($uploadedFile, UPLOAD_ERR_PARTIAL);
+        $this->assertSame($uploadedFile->getErrorMessage(), 'The uploaded file was only partially uploaded.');
+
+        $error->setValue($uploadedFile, UPLOAD_ERR_NO_FILE);
+        $this->assertSame($uploadedFile->getErrorMessage(), 'No file was uploaded.');
+
+        $error->setValue($uploadedFile, UPLOAD_ERR_NO_TMP_DIR);
+        $this->assertSame($uploadedFile->getErrorMessage(), 'Missing a temporary folder.');
+
+        $error->setValue($uploadedFile, UPLOAD_ERR_CANT_WRITE);
+        $this->assertSame($uploadedFile->getErrorMessage(), 'Failed to write file to disk.');
+
+        $error->setValue($uploadedFile, UPLOAD_ERR_EXTENSION);
+        $this->assertSame($uploadedFile->getErrorMessage(), 'File upload stopped by extension.');
+
+        $error->setValue($uploadedFile, 19890604);
+        $this->assertSame($uploadedFile->getErrorMessage(), 'Unknown upload error.');
     }
 
     /*
@@ -228,6 +269,8 @@ class UploadedFileTest extends TestCase
 
     public function test_Exception_MoveTo_FileCannotRename()
     {
+        define('MOCK_RENAME_FALSE', true);
+
         $this->expectException(RuntimeException::class);
 
         $uploadedFile = new UploadedFile(
@@ -236,11 +279,48 @@ class UploadedFileTest extends TestCase
             'image/png',
             100000,
             0,
-            'mock-cannot-rename'
+            'cli'
         );
 
-        $targetPath = save_testing_file('shieldon_logo_moved_from_stream.png');
+        $targetPath = save_testing_file('shieldon_logo_moved_from_file.png');
 
         $uploadedFile->moveTo($targetPath);
     }
+
+    public function test_Exception_MoveTo_FileNotUploaded()
+    {
+        $this->expectException(RuntimeException::class);
+
+        $uploadedFile = new UploadedFile(
+            BOOTSTRAP_DIR . '/sample/shieldon_logo.png',
+            'shieldon_logo.png',
+            'image/png',
+            100000,
+            0,
+            'mock-is-uploaded-file-false'
+        );
+
+        $targetPath = save_testing_file('shieldon_logo_moved_from_file.png');
+
+        $uploadedFile->moveTo($targetPath);
+    }
+
+    public function test_Exception_MoveTo_FileCannotBeMoved()
+    {
+        $this->expectException(RuntimeException::class);
+
+        $uploadedFile = new UploadedFile(
+            BOOTSTRAP_DIR . '/sample/shieldon_logo.png',
+            'shieldon_logo.png',
+            'image/png',
+            100000,
+            0,
+            'mock-move-uploaded-file'
+        );
+
+        $targetPath = save_testing_file('shieldon_logo_moved_from_file.png');
+
+        $uploadedFile->moveTo($targetPath);
+    }
+
 }
