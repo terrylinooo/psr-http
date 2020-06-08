@@ -351,10 +351,7 @@ class UploadedFile implements UploadedFileInterface
      */
     private function isUploadedFile(string $file): bool
     {
-        if (
-            $this->sapi === 'mock-is-uploaded-file-true' ||
-            $this->sapi === 'mock-move-uploaded-file'
-        ) {
+        if ($this->sapi === 'unit-test-1' || $this->sapi === 'unit-test-2') {
             return true;
         }
     
@@ -372,7 +369,7 @@ class UploadedFile implements UploadedFileInterface
      */
     private function moveUploadedFile(string $file, string $targetPath): bool
     {
-        if ($this->sapi === 'mock-is-uploaded-file-true') {
+        if ($this->sapi === 'unit-test-1') {
             return rename($file, $targetPath);
         }
 

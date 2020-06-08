@@ -10,31 +10,53 @@
 
 declare(strict_types=1);
 
-namespace Shieldon\Psr7;
+namespace Shieldon\Psr7\Factory;
 
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\UriInterface;
+use Shieldon\Psr7\Factory\StreamFactory;
+use Shieldon\Psr7\Factory\UriFactory;
+use Shieldon\Psr7\ServerRequest;
+use Shieldon\Psr7\Utils\SuperGlobal;
+
+use function str_replace;
 
 /**
- * RequestFactory.
+ * Server Request Factory
  */
 class ServerRequestFactory implements ServerRequestFactoryInterface
 {
     /**
-     * Create a new server request.
-     *
-     * Note that server parameters are taken precisely as given - no parsing/processing
-     * of the given values is performed. In particular, no attempt is made to
-     * determine the HTTP method or URI, which must be provided explicitly.
-     *
-     * @param string $method The HTTP method associated with the request.
-     * @param UriInterface|string $uri The URI associated with the request. 
-     * @param array $serverParams An array of Server API (SAPI) parameters with
-     *     which to seed the generated request instance.
+     * {@inheritdoc}
      */
     public function createServerRequest(string $method, $uri, array $serverParams = []): ServerRequestInterface
     {
+        $data = SuperGlobal::extract();
 
+        if (empty($method)) {
+            $method = $data[0]['REQUEST_METHOD'] ?? 'GET';
+        }
+
+        $protocol = $data['server']['SERVER_PROTOCOL'] ?? '1.1';
+        $protocol = str_replace('HTTP/', '',  $protocol);
+
+        $uriFactory = new uriFactory();
+        $streamFactory = new StreamFactory();
+
+        $uri = $uriFactory->createUri($uri);
+        $body = $streamFactory->createStream();
+
+        return new ServerRequest(
+            $method,
+            $uri,
+            $body,
+            $data[5],  // header
+            $protocol,
+            $data[0],  // server
+            $data[1],  // cookie
+            $data[2],  // post
+            $data[3],  // get
+            $data[4]   // files
+        );
     }
 }

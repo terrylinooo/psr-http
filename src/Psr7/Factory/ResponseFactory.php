@@ -14,22 +14,37 @@ namespace Shieldon\Psr7;
 
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
+use Shieldon\Psr7\Factory\StreamFactory;
+use Shieldon\Psr7\Response;
+use Shieldon\Psr7\Utils\SuperGlobal;
+
+use function str_replace;
 
 /**
- * RequestFactory.
+ * Response Factory
  */
 class ResponseFactory implements ResponseFactoryInterface
 {
     /**
-     * Create a new response.
-     *
-     * @param int $code The HTTP status code. Defaults to 200.
-     * @param string $reasonPhrase The reason phrase to associate with the status code
-     *     in the generated response. If none is provided, implementations MAY use
-     *     the defaults as suggested in the HTTP specification.
+     * {@inheritdoc}
      */
     public function createResponse(int $code = 200, string $reasonPhrase = ''): ResponseInterface
     {
-        
+        $data = SuperGlobal::extract();
+
+        $protocol = $data[0]['SERVER_PROTOCOL'] ?? '1.1';
+        $protocol = str_replace('HTTP/', '',  $protocol);
+
+        $streamFactory = new streamFactory();
+
+        $body = $streamFactory->createStream();
+
+        return new Response(
+            $code,
+            $data[5],
+            $body,
+            $protocol,
+            $reasonPhrase
+        );
     }
 }

@@ -12,29 +12,73 @@ declare(strict_types=1);
 
 namespace Shieldon\Psr7;
 
-use Psr\Http\Message\ServerRequestFactoryInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\UriInterface;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\StreamFactoryInterface;
+use Shieldon\Psr7\Stream;
+
+use InvalidArgumentException;
+use RuntimeException;
+
+use function fopen;
+use function fwrite;
+use function is_resource;
+use function preg_match;
+use function rewind;
 
 /**
- * RequestFactory.
+ * Stream Factory
  */
-class ServerRequestFactory implements ServerRequestFactoryInterface
+class streamFactory extends StreamFactoryInterface
 {
     /**
-     * Create a new server request.
-     *
-     * Note that server parameters are taken precisely as given - no parsing/processing
-     * of the given values is performed. In particular, no attempt is made to
-     * determine the HTTP method or URI, which must be provided explicitly.
-     *
-     * @param string $method The HTTP method associated with the request.
-     * @param UriInterface|string $uri The URI associated with the request. 
-     * @param array $serverParams An array of Server API (SAPI) parameters with
-     *     which to seed the generated request instance.
+     * {@inheritdoc}
      */
-    public function createServerRequest(string $method, $uri, array $serverParams = []): ServerRequestInterface
+    public function createStream(string $content = ''): StreamInterface
     {
+        $resource = fopen('php://temp', 'r+');
+        fwrite($resource, $content);
+        rewind($resource);
 
+        return $this->createStreamFromResource($resource);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createStreamFromFile(string $filename, string $mode = 'r'): StreamInterface
+    {
+        if ($mode === '' || ! preg_match('/^[rwaxce]{1}[bt]{0,1}[+]{0,1}+$/', $mode)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Invalid file opening mode "%s"',
+                    $mode
+                )
+            );
+        }
+
+        $resource = fopen($filename, $mode);
+
+        if (! $resource($resource)) {
+            throw new RuntimeException(
+                sprintf(
+                    'Unable to open file at "%s"',
+                    $filename
+                )
+            );
+        }
+
+        return new Stream($resource);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createStreamFromResource($resource): StreamInterface
+    {
+        if (! is_resource($resource)) {
+            $resource = fopen('php://temp', 'r+');
+        }
+
+        return new Stream($resource);
     }
 }

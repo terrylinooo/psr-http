@@ -91,7 +91,7 @@ class UploadedFileTest extends TestCase
             'image/png',
             100000,
             0,
-            'mock-is-uploaded-file-true'
+            'unit-test-1'
         );
 
         $uploadedFile->moveTo($targetPath);
@@ -278,8 +278,7 @@ class UploadedFileTest extends TestCase
             'shieldon_logo.png',
             'image/png',
             100000,
-            0,
-            'cli'
+            0
         );
 
         $targetPath = save_testing_file('shieldon_logo_moved_from_file.png');
@@ -315,7 +314,7 @@ class UploadedFileTest extends TestCase
             'image/png',
             100000,
             0,
-            'mock-move-uploaded-file'
+            'unit-test-2'
         );
 
         $targetPath = save_testing_file('shieldon_logo_moved_from_file.png');
