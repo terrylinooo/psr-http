@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace Shieldon\Psr7;
+namespace Shieldon\Psr7\Factory;
 
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
@@ -19,9 +19,10 @@ use Shieldon\Psr7\Factory\StreamFactory;
 use Shieldon\Psr7\Utils\SuperGlobal;
 
 use function str_replace;
+use function extract;
 
 /**
- * Request Factory
+ * PSR-17 Request Factory
  */
 class RequestFactory implements RequestFactoryInterface
 {
@@ -30,13 +31,9 @@ class RequestFactory implements RequestFactoryInterface
      */
     public function createRequest(string $method, $uri): RequestInterface
     {
-        $data = SuperGlobal::extract();
+        extract(SuperGlobal::extract());
 
-        if (empty($method)) {
-            $method = $data[0]['REQUEST_METHOD'] ?? 'GET';
-        }
-
-        $protocol = $data[0]['SERVER_PROTOCOL'] ?? '1.1';
+        $protocol = $server['SERVER_PROTOCOL'] ?? '1.1';
         $protocol = str_replace('HTTP/', '',  $protocol);
 
         $uriFactory = new uriFactory();
@@ -49,7 +46,7 @@ class RequestFactory implements RequestFactoryInterface
             $method,
             $uri,
             $body,
-            $data[5],
+            $header,
             $protocol
         );
     }

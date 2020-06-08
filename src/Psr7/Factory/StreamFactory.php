@@ -10,12 +10,11 @@
 
 declare(strict_types=1);
 
-namespace Shieldon\Psr7;
+namespace Shieldon\Psr7\Factory;
 
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Shieldon\Psr7\Stream;
-
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -26,9 +25,9 @@ use function preg_match;
 use function rewind;
 
 /**
- * Stream Factory
+ * PSR-17 Stream Factory
  */
-class streamFactory extends StreamFactoryInterface
+class StreamFactory implements StreamFactoryInterface
 {
     /**
      * {@inheritdoc}
@@ -58,7 +57,7 @@ class streamFactory extends StreamFactoryInterface
 
         $resource = fopen($filename, $mode);
 
-        if (! $resource($resource)) {
+        if (! is_resource($resource)) {
             throw new RuntimeException(
                 sprintf(
                     'Unable to open file at "%s"',

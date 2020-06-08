@@ -11,6 +11,7 @@
 namespace Shieldon\Psr7;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\StreamInterface;
 use Shieldon\Psr7\Stream;
 
 use InvalidArgumentException;
@@ -23,6 +24,8 @@ class StreamTest extends TestCase
     {
         $resource = fopen(BOOTSTRAP_DIR . '/sample/shieldon_logo.png', 'r+');
         $stream = new Stream($resource);
+
+        $this->assertTrue(($stream instanceof StreamInterface));
 
         $this->assertTrue($stream->isWritable());
         $this->assertTrue($stream->isReadable());

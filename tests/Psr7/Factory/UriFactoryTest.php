@@ -1,4 +1,4 @@
-<?php
+<?php 
 /*
  * This file is part of the Shieldon package.
  *
@@ -8,24 +8,19 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types=1);
-
 namespace Shieldon\Psr7\Factory;
 
-use Psr\Http\Message\UriFactoryInterface;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\UriInterface;
-use Shieldon\Psr7\Uri;
+use Shieldon\Psr7\Factory\UriFactory;
 
-/**
- * PSR-17 Uri Factory
- */
-class UriFactory implements UriFactoryInterface
+class UriFactoryTest extends TestCase
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function createUri(string $uri = '') : UriInterface
+    public function test_createUri()
     {
-        return new Uri($uri);
+        $uriFactory = new UriFactory;
+
+        $uri = $uriFactory->createUri();
+        $this->assertTrue(($uri instanceof UriInterface));
     }
 }

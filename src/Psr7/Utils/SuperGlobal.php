@@ -12,6 +12,13 @@ declare(strict_types=1);
 
 namespace Shieldon\Psr7\Utils;
 
+use function microtime;
+use function php_sapi_name;
+use function str_replace;
+use function strtolower;
+use function substr;
+use function time;
+
 /**
  * Data Helper
  */
@@ -24,13 +31,17 @@ class SuperGlobal
      */
     public static function extract(): array
     {
+        if (php_sapi_name() === 'cli') {
+            self::mock();
+        }
+
+        $headerParams = [];
         $serverParams = $_SERVER ?? [];
         $cookieParams = $_COOKIE ?? [];
+        $filesParams = $_FILES ?? [];
         $postParams = $_POST ?? [];
         $getParams = $_GET ?? [];
-        $filesParams = $_FILES ?? [];
-        $headerParams = [];
-
+        
         foreach ($serverParams as $name => $value) {
             if (substr($name, 0, 5) == 'HTTP_') {
                 $key = strtolower(str_replace('_', '-', substr($name, 5)));
@@ -39,12 +50,40 @@ class SuperGlobal
         }
 
         return [
-            0 => $serverParams,
-            1 => $cookieParams,
-            2 => $postParams,
-            3 => $getParams,     
-            4 => $filesParams,
-            5 => $headerParams,
+            'header' => $headerParams,
+            'server' => $serverParams,
+            'cookie' => $cookieParams,
+            'files' => $filesParams,
+            'post' => $postParams,
+            'get' => $getParams,
         ];
+    }
+
+    /**
+     * Mock data for unit testing purpose.
+     *
+     * @return void
+     */
+    public static function mock(): void
+    {
+        $_SERVER = [
+            'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9',
+            'HTTP_ACCEPT_CHARSET' => 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+            'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.9,zh-TW;q=0.8,zh;q=0.7',
+            'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+            'QUERY_STRING' => '',
+            'REMOTE_ADDR' => '127.0.0.1',
+            'REQUEST_METHOD' => 'GET',
+            'REQUEST_SCHEME' => 'http',
+            'REQUEST_TIME' => time(),
+            'REQUEST_TIME_FLOAT' => microtime(true),
+            'REQUEST_URI' => '',
+            'SCRIPT_NAME' => '',
+            'SERVER_NAME' => 'localhost',
+            'SERVER_PORT' => 80,
+            'SERVER_PROTOCOL' => 'HTTP/1.1',
+        ];
+
+        $_POST = $_COOKIE = $_GET = $_FILES = [];
     }
 }

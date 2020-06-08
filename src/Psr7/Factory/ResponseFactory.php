@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace Shieldon\Psr7;
+namespace Shieldon\Psr7\Factory;
 
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -19,9 +19,10 @@ use Shieldon\Psr7\Response;
 use Shieldon\Psr7\Utils\SuperGlobal;
 
 use function str_replace;
+use function extract;
 
 /**
- * Response Factory
+ * PSR-17 Response Factory
  */
 class ResponseFactory implements ResponseFactoryInterface
 {
@@ -30,9 +31,9 @@ class ResponseFactory implements ResponseFactoryInterface
      */
     public function createResponse(int $code = 200, string $reasonPhrase = ''): ResponseInterface
     {
-        $data = SuperGlobal::extract();
+        extract(SuperGlobal::extract());
 
-        $protocol = $data[0]['SERVER_PROTOCOL'] ?? '1.1';
+        $protocol = $server['SERVER_PROTOCOL'] ?? '1.1';
         $protocol = str_replace('HTTP/', '',  $protocol);
 
         $streamFactory = new streamFactory();
@@ -41,7 +42,7 @@ class ResponseFactory implements ResponseFactoryInterface
 
         return new Response(
             $code,
-            $data[5],
+            $header,
             $body,
             $protocol,
             $reasonPhrase

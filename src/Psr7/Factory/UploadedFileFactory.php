@@ -10,17 +10,16 @@
 
 declare(strict_types=1);
 
-namespace Shieldon\Psr7;
+namespace Shieldon\Psr7\Factory;
 
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Shieldon\Psr7\UploadedFile;
-
 use InvalidArgumentException;
 
 /**
- * Uploaded File Factory
+ * PSR-17 Uploaded File Factory
  */
 class UploadedFileFactory implements UploadedFileFactoryInterface
 {
