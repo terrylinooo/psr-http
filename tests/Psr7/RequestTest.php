@@ -100,6 +100,9 @@ class RequestTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
+        // Exception:
+        // => Unsupported HTTP method. It must be compatible with RFC-7231 
+        //    request method, but "GETX" provided.
         $request = new Request('GETX', 'https://terryl.in/', '', [], '1.1');
     }
 
@@ -107,6 +110,8 @@ class RequestTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
+        // Exception:
+        // => Unsupported HTTP protocol version number. "1.5" provided.
         $request = new Request('GET', 'https://terryl.in/', '', [], '1.5');
     }
 
@@ -115,6 +120,9 @@ class RequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         $request = new Request('GET', 'https://terryl.in/', '', [], '1.1');
+
+        // Exception:
+        // => A request target cannot contain any whitespace.
         $newRequest = $request->withRequestTarget('/newTarget/te st/?q=1234');
     }
 
@@ -123,6 +131,9 @@ class RequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         $request = new Request('GET', 'https://terryl.in/', '', [], '1.1');
+
+        // Exception:
+        // => A request target must be a string.
         $newRequest = $request->withRequestTarget(['foo' => 'bar']);
     }
 
@@ -130,6 +141,8 @@ class RequestTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
+        // Exception:
+        // => URI should be a string or an instance of UriInterface, but array provided.
         $request = new Request('GET', [], '', [], '1.1');
     }
 }

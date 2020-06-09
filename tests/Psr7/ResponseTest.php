@@ -47,6 +47,8 @@ class ResponseTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
+        // Exception:
+        // => Status code should be in a range of 100-599, but 600 provided.
         $response = new Response(600);
     }
 
@@ -56,6 +58,8 @@ class ResponseTest extends TestCase
 
         $response = new Response();
 
+        // Exception:
+        // => Status code should be an integer value, but string provided.
         $newResponse = $response->withStatus("500", 'Custom reason phrase');
     }
 
@@ -65,6 +69,8 @@ class ResponseTest extends TestCase
 
         $response = new Response();
 
+        // Exception:
+        // => Reason phrase must be a string, but integer provided.
         $newResponse = $response->withStatus(200, 12345678);
     }
 
@@ -74,6 +80,8 @@ class ResponseTest extends TestCase
 
         $response = new Response();
 
+        // Exception:
+        // => Reason phrase contains "\r" that is considered as a prohibited character.
         $newResponse = $response->withStatus(200, 'Custom reason phrase\n\rThe next line');
     }
 }

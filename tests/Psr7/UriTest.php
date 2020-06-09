@@ -170,6 +170,9 @@ class UriTest extends TestCase
         $reflection = new ReflectionObject($uri);
         $assertScheme = $reflection->getMethod('assertScheme');
         $assertScheme->setAccessible(true);
+
+        // Exception: 
+        // => The string "telnet" is not a valid scheme.
         $assertScheme->invokeArgs($uri, ['telnet']);
     }
 
@@ -182,6 +185,9 @@ class UriTest extends TestCase
         $reflection = new ReflectionObject($uri);
         $assertString = $reflection->getMethod('assertString');
         $assertString->setAccessible(true);
+
+        // Exception: 
+        // => It must be a string, but integer provided.
         $assertString->invokeArgs($uri, [1234]);
     }
 
@@ -194,6 +200,9 @@ class UriTest extends TestCase
         $reflection = new ReflectionObject($uri);
         $assertValidUri = $reflection->getMethod('assertValidUri');
         $assertValidUri->setAccessible(true);
+
+        // Exception: 
+        // => "https://www.example_test.com" is not a valid URI
         $assertValidUri->invokeArgs($uri, ['https://www.example_test.com']);
     }
 
@@ -206,10 +215,13 @@ class UriTest extends TestCase
         $reflection = new ReflectionObject($uri);
         $assertHost = $reflection->getMethod('assertHost');
         $assertHost->setAccessible(true);
+
+        // Exception: 
+        // => "example_test.com" is not a valid host
         $assertHost->invokeArgs($uri, ['example_test.com']);
     }
 
-    public function test_Exception_AssertHost_ReturnVoid()
+    public function test_AssertHost_ReturnVoid()
     {
         $uri = new Uri();
 
@@ -230,6 +242,9 @@ class UriTest extends TestCase
         $reflection = new ReflectionObject($uri);
         $assertPort = $reflection->getMethod('assertPort');
         $assertPort->setAccessible(true);
+
+        // Exception: 
+        // => Port must be an integer or a null value, but string provided.
         $assertPort->invokeArgs($uri, ['8080']);
     }
 
@@ -242,6 +257,9 @@ class UriTest extends TestCase
         $reflection = new ReflectionObject($uri);
         $assertPort = $reflection->getMethod('assertPort');
         $assertPort->setAccessible(true);
+
+        // Exception: 
+        // => Port number should be in a range of 0-65535, but 70000 provided.
         $assertPort->invokeArgs($uri, [70000]);
     }
 }

@@ -192,6 +192,9 @@ EOF;
         $this->expectException(InvalidArgumentException::class);
 
         $message = new Message();
+
+        // Exception:
+        // => "hello-wo)rld" is not valid header name, it must be an RFC 7230 compatible string.
         $newMessage = $message->withHeader('hello-wo)rld', 'ok');
     }
 
@@ -200,6 +203,9 @@ EOF;
         $this->expectException(InvalidArgumentException::class);
 
         $message = new Message();
+
+        // Exception:
+        // => The header field value only accepts string and array, but "boolean" provided.
         $newMessage = $message->withHeader('hello-world', false);
     }
 
@@ -208,6 +214,9 @@ EOF;
         $this->expectException(InvalidArgumentException::class);
 
         $message = new Message();
+
+        // Exception:
+        // => The header field value only accepts string and array, but "NULL" provided.
         $newMessage = $message->withHeader('hello-world', null);
     }
 
@@ -219,6 +228,8 @@ EOF;
         $mockObject = new stdClass();
         $mockObject->test = 1;
 
+        // Exception:
+        // => The header field value only accepts string and array, but "object" provided.
         $newMessage = $message->withHeader('hello-world', $mockObject);
     }
 
@@ -233,6 +244,9 @@ EOF;
         ];
 
         $message = new Message();
+
+        // Exception:
+        // => The header values only accept string and number, but "boolean" provided.
         $newMessage = $message->withHeader('hello-world', $testArr);
     }
 
@@ -241,7 +255,12 @@ EOF;
         $this->expectException(InvalidArgumentException::class);
 
         $message = new Message();
+
+        // Exception:
+        // => "This string contains many invisible spaces." is not valid header 
+        //    value, it must contains visible ASCII characters only.
         $newMessage = $message->withHeader('hello-world', 'This string contains many invisible spaces.');
+
         // $newMessage = $message->withHeader('hello-world', 'This string contains visible space.');
     }
 }

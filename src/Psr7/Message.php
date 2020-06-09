@@ -14,18 +14,30 @@ namespace Shieldon\Psr7;
 
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
+use Shieldon\Psr7\Stream;
 use InvalidArgumentException;
 
+use function array_map;
 use function array_merge;
+use function count;
+use function fopen;
+use function fseek;
+use function fwrite;
 use function gettype;
 use function implode;
 use function is_array;
 use function is_bool;
+use function is_float;
+use function is_integer;
 use function is_scalar;
 use function is_string;
 use function preg_match;
+use function preg_match_all;
 use function sprintf;
 use function strtolower;
+use function trim;
+
+use const PREG_SET_ORDER;
 
 /**
  * HTTP messages consist of requests from a client to a server and responses
@@ -373,7 +385,7 @@ class Message implements MessageInterface
                 if (! is_scalar($item) || is_bool($item)) {
                     throw new InvalidArgumentException(
                         sprintf(
-                            'The header values only accept string and number, but %s provided.',
+                            'The header values only accept string and number, but "%s" provided.',
                             gettype($item)
                         )
                     );
@@ -402,7 +414,7 @@ class Message implements MessageInterface
         } else {
             throw new InvalidArgumentException(
                 sprintf(
-                    'The header field value only accepts string and array, but %s provided.',
+                    'The header field value only accepts string and array, but "%s" provided.',
                     gettype($value)
                 )
             );
@@ -423,7 +435,7 @@ class Message implements MessageInterface
         if (! in_array($version, $this->validProtocolVersions)) {
             throw new InvalidArgumentException(
                 sprintf(
-                    'Unsupported HTTP protocol version number. %s provided.',
+                    'Unsupported HTTP protocol version number. "%s" provided.',
                     $version
                 )
             );

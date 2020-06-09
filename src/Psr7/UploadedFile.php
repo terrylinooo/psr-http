@@ -17,9 +17,11 @@ use Psr\Http\Message\UploadedFileInterface;
 use InvalidArgumentException;
 use RuntimeException;
 
+use function file_exists;
+use function file_put_contents;
 use function is_string;
-use function is_writable;
 use function is_uploaded_file;
+use function is_writable;
 use function move_uploaded_file;
 use function php_sapi_name;
 use function rename;
@@ -165,7 +167,9 @@ class UploadedFile implements UploadedFileInterface
     public function moveTo($targetPath): void
     {
         if ($this->isMoved) {
-            throw new RuntimeException('Uploaded file already moved');
+            throw new RuntimeException(
+                'Uploaded file already moved'
+            );
         }
 
         if ($this->isFile()) {

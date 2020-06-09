@@ -264,6 +264,8 @@ class UploadedFileTest extends TestCase
             0
         );
 
+        // Exception: 
+        // => The target path "/tmp/folder-not-exists/test.png" is not writable.
         $uploadedFile->moveTo(BOOTSTRAP_DIR . '/tmp/folder-not-exists/test.png');
     }
 
@@ -283,6 +285,8 @@ class UploadedFileTest extends TestCase
 
         $targetPath = save_testing_file('shieldon_logo_moved_from_file.png');
 
+        // Exception: 
+        // => Could not rename the file to the target path "/tmp/shieldon_logo_moved_from_file.png".
         $uploadedFile->moveTo($targetPath);
     }
 

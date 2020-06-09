@@ -419,6 +419,9 @@ class ServerRequestTest extends TestCase
         $reflection = new ReflectionObject($serverRequest);
         $assertUploadedFiles = $reflection->getMethod('assertUploadedFiles');
         $assertUploadedFiles->setAccessible(true);
+
+        // Exception:
+        // => Invalid PSR-7 array structure for handling UploadedFile.
         $assertUploadedFiles->invokeArgs($serverRequest, [
             [
                 ['files' => '']
@@ -435,6 +438,9 @@ class ServerRequestTest extends TestCase
         $reflection = new ReflectionObject($serverRequest);
         $assertParsedBody = $reflection->getMethod('assertParsedBody');
         $assertParsedBody->setAccessible(true);
+
+        // Exception:
+        // => Only accepts array, object and null, but string provided.
         $assertParsedBody->invokeArgs($serverRequest, ['invalid string body']);
 
         // Just for code coverage.

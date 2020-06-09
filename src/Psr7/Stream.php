@@ -433,7 +433,7 @@ class Stream implements StreamInterface
         if (! is_resource($stream)) {
             throw new InvalidArgumentException(
                 sprintf(
-                    'Stream should be a resource, but %s provided.',
+                    'Stream should be a resource, but "%s" provided.',
                     gettype($stream)
                 )
             );

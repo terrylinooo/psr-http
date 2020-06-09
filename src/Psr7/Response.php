@@ -21,6 +21,8 @@ use function is_integer;
 use function is_string;
 use function sprintf;
 use function str_replace;
+use function strpos;
+
 /*
  * Representation of an outgoing, server-side response.
  */
@@ -212,7 +214,7 @@ class Response extends Message implements ResponseInterface
         if (! is_integer($code)) {
             throw new InvalidArgumentException(
                 sprintf(
-                    'Status code should be an integer value, but %s provided.',
+                    'Status code should be an integer value, but "%s" provided.',
                     gettype($code)
                 )
             );
@@ -221,7 +223,7 @@ class Response extends Message implements ResponseInterface
         if (! ($code > 100 && $code < 599)) {
             throw new InvalidArgumentException(
                 sprintf(
-                    'Status code should be in a range of 100-599, but %s provided.',
+                    'Status code should be in a range of 100-599, but "%s" provided.',
                     $code
                 )
             );
@@ -246,7 +248,7 @@ class Response extends Message implements ResponseInterface
         if (! is_string($reasonPhrase)) {
             throw new InvalidArgumentException(
                 sprintf(
-                    'Reason phrase must be a string, but %s provided.',
+                    'Reason phrase must be a string, but "%s" provided.',
                     gettype($reasonPhrase)
                 )
             );

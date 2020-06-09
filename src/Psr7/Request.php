@@ -13,15 +13,17 @@ declare(strict_types=1);
 namespace Shieldon\Psr7;
 
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 use Shieldon\Psr7\Message;
 use Shieldon\Psr7\Uri;
 use InvalidArgumentException;
-use Psr\Http\Message\StreamInterface;
 
 use function in_array;
 use function is_string;
+use function preg_match;
 use function sprintf;
+use function strtoupper;
 
 /*
  * Representation of an outgoing, client-side request.
@@ -125,7 +127,7 @@ class Request extends Message implements RequestInterface
         } else {
             throw new InvalidArgumentException(
                 sprintf(
-                    'URI should be a string or an instance of UriInterface, but %s provided.',
+                    'URI should be a string or an instance of UriInterface, but "%s" provided.',
                     gettype($uri)
                 )
             );
@@ -262,7 +264,7 @@ class Request extends Message implements RequestInterface
         if (! in_array($this->method, $this->validMethods)) {
             throw new InvalidArgumentException(
                 sprintf(
-                    'Unsupported HTTP method. It must be compatible with RFC-7231 request method, but %s provided.',
+                    'Unsupported HTTP method. It must be compatible with RFC-7231 request method, but "%s" provided.',
                     $method
                 )
             );
