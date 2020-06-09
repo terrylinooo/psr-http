@@ -14,6 +14,8 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\UploadedFileInterface;
 use Shieldon\Psr7\Factory\UploadedFileFactory;
 use Shieldon\Psr7\Factory\StreamFactory;
+use ReflectionObject;
+use InvalidArgumentException;
 
 class UploadFileFactoryTest extends TestCase
 {
@@ -45,5 +47,34 @@ class UploadFileFactoryTest extends TestCase
         }
 
         unlink($targetPath);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Exceptions
+    |--------------------------------------------------------------------------
+    */
+
+    public function test_Exception_FileIsNotReadable()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $uploadedFileFactory = new UploadedFileFactory();
+
+        $sourceFile = BOOTSTRAP_DIR . '/sample/shieldon_logo.png';
+
+        $streamFactory = new StreamFactory();
+        $stream = $streamFactory->createStreamFromFile($sourceFile);
+
+        $reflection = new ReflectionObject($stream);
+        $readable = $reflection->getProperty('readable');
+        $readable->setAccessible(true);
+        $readable->setValue($stream, false);
+
+        $uploadedFileFactory = new UploadedFileFactory();
+
+        // Exception: 
+        // => File is not readable.
+        $uploadedFile = $uploadedFileFactory->createUploadedFile($stream);
     }
 }

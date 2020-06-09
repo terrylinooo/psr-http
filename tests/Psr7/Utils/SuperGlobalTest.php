@@ -35,9 +35,9 @@ class SuperGlobalTest extends TestCase
             'SERVER_PROTOCOL' => 'HTTP/1.1',
         ];
 
-        unset($data[0]['REQUEST_TIME']);
-        unset($data[0]['REQUEST_TIME_FLOAT']);
+        unset($data['server']['REQUEST_TIME']);
+        unset($data['server']['REQUEST_TIME_FLOAT']);
 
-        $this->assertEquals($data[0], $array);
+        $this->assertEquals($data['server'], $array);
     }
 }

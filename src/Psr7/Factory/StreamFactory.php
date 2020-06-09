@@ -55,7 +55,7 @@ class StreamFactory implements StreamFactoryInterface
             );
         }
 
-        $resource = fopen($filename, $mode);
+        $resource = @fopen($filename, $mode);
 
         if (! is_resource($resource)) {
             throw new RuntimeException(

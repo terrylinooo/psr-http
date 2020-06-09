@@ -42,7 +42,7 @@ class ResponseFactory implements ResponseFactoryInterface
 
         return new Response(
             $code,
-            $header,
+            $header, // from extract.
             $body,
             $protocol,
             $reasonPhrase

@@ -18,6 +18,9 @@ class RequestFactoryTest extends TestCase
 {
     public function test_createRequest()
     {
+        $requestFactory = new RequestFactory();
+        $request = $requestFactory->createRequest('POST', 'https://www.google.com');
 
+        $this->assertTrue(($request instanceof RequestInterface));
     }
 }

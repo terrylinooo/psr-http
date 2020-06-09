@@ -18,6 +18,9 @@ class ResponseFactoryTest extends TestCase
 {
     public function test_createResponse()
     {
+        $responseFactory = new ResponseFactory();
+        $response = $responseFactory->createResponse(200, 'OK');
 
+        $this->assertTrue(($response instanceof ResponseInterface));
     }
 }

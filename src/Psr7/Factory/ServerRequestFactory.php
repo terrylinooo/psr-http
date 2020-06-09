@@ -47,13 +47,13 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
             $method,
             $uri,
             $body,
-            $header,
+            $header, // from extract.
             $protocol,
-            $server,
-            $cookie,
-            $post,
-            $get,
-            $files
+            $server, // from extract.
+            $cookie, // from extract.
+            $post,   // from extract.
+            $get,    // from extract.
+            $files   // from extract.
         );
     }
 }

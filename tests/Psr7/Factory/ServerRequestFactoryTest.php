@@ -18,6 +18,9 @@ class ServerRequestFactoryTest extends TestCase
 {
     public function test_createServerRequest()
     {
-        
+        $serverRequestFactory = new ServerRequestFactory();
+        $serverRequest = $serverRequestFactory->createServerRequest('GET', '', []);
+
+        $this->assertTrue(($serverRequest instanceof ServerRequestInterface));
     }
 }

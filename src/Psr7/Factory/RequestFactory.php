@@ -17,6 +17,7 @@ use Psr\Http\Message\RequestInterface;
 use Shieldon\Psr7\Factory\UriFactory;
 use Shieldon\Psr7\Factory\StreamFactory;
 use Shieldon\Psr7\Utils\SuperGlobal;
+use Shieldon\Psr7\Request;
 
 use function str_replace;
 use function extract;
@@ -42,11 +43,11 @@ class RequestFactory implements RequestFactoryInterface
         $uri = $uriFactory->createUri($uri);
         $body = $streamFactory->createStream();
 
-        return Request(
+        return new Request(
             $method,
             $uri,
             $body,
-            $header,
+            $header, // from extract.
             $protocol
         );
     }

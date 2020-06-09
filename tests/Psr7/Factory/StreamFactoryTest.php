@@ -13,6 +13,8 @@ namespace Shieldon\Psr7\Factory;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 use Shieldon\Psr7\Factory\StreamFactory;
+use InvalidArgumentException;
+use RuntimeException;
 
 class StreamFactoryTest extends TestCase
 {
@@ -37,5 +39,45 @@ class StreamFactoryTest extends TestCase
         $stream =  $streamFactory->createStreamFromFile($sourceFile);
         $this->assertTrue(($stream instanceof StreamInterface));
         $this->assertSame($stream->getSize(), 15166);
+    }
+
+    public function test_createStreamFromResource()
+    {
+        $streamFactory = new StreamFactory();
+        $stream =  $streamFactory->createStreamFromResource('this is string, not resource');
+
+        $this->assertTrue(($stream instanceof StreamInterface));
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Exceptions
+    |--------------------------------------------------------------------------
+    */
+
+    public function test_Exception_CreateStreamFromFile_InvalidOpeningMethod()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $sourceFile = BOOTSTRAP_DIR . '/sample/shieldon_logo.png';
+
+        $streamFactory = new StreamFactory();
+        
+        // Exception: 
+        // => Invalid file opening mode "b"
+        $stream =  $streamFactory->createStreamFromFile($sourceFile, 'b');
+    }
+
+    public function test_Exception_CreateStreamFromFile_UnableToOpen()
+    {
+        $this->expectException(RuntimeException::class);
+
+        $sourceFile = BOOTSTRAP_DIR . '/sample/shieldon_logo_not_exists.png';
+
+        $streamFactory = new StreamFactory();
+        
+        // Exception: 
+        // => Invalid file opening mode "b"
+        $stream =  $streamFactory->createStreamFromFile($sourceFile);
     }
 }

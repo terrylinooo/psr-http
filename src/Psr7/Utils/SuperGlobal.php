@@ -32,7 +32,7 @@ class SuperGlobal
     public static function extract(): array
     {
         if (php_sapi_name() === 'cli') {
-            self::mock();
+            self::mockCliEnvironment();
         }
 
         $headerParams = [];
@@ -59,12 +59,14 @@ class SuperGlobal
         ];
     }
 
+    // @codeCoverageIgnoreStart
+
     /**
-     * Mock data for unit testing purpose.
+     * Mock data for unit testing purpose ONLY.
      *
      * @return void
      */
-    public static function mock(): void
+    private static function mockCliEnvironment(): void
     {
         $_SERVER = [
             'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9',
@@ -86,4 +88,6 @@ class SuperGlobal
 
         $_POST = $_COOKIE = $_GET = $_FILES = [];
     }
+
+    // @codeCoverageIgnoreEnd
 }
