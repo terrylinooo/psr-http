@@ -13,13 +13,5 @@ composer require shieldon/psr7
 The Shieldon PSR-7 impletation requires at least PHP 7.1 to run.
 The usages of every method can be found in the [unit tests](https://github.com/terrylinooo/psr7/tree/master/tests/Psr7).
 
-### ServerRequest
-### Request
-### Response
-### Stream
-### UploadedFile
-### Uri
-### Message
 
-## Examples
 

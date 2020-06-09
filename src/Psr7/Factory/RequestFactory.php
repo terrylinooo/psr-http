@@ -37,7 +37,7 @@ class RequestFactory implements RequestFactoryInterface
         $protocol = $server['SERVER_PROTOCOL'] ?? '1.1';
         $protocol = str_replace('HTTP/', '',  $protocol);
 
-        $uriFactory = new uriFactory();
+        $uriFactory = new UriFactory();
         $streamFactory = new StreamFactory();
 
         $uri = $uriFactory->createUri($uri);
