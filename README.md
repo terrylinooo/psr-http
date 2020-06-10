@@ -15,7 +15,38 @@ The usages of every method can be found in the [unit tests](https://github.com/t
 
 ## Factories
 
-Here are some examples that show you the way creating PSR-7 instances from PSR-17 HTTP factories. 
+- RequestFactory
+- ServerRequestFactory
+- ResponseFactory
+- StreamFactory
+- UploadedFileFactory
+- UriFactory
+
+Here are some examples that show you the way creating PSR-7 instances from PSR-17 HTTP factories.
+
+### RequestFactory
+
+#### __construct
+
+RequestFactory does not have a Constructor.
+
+#### createRequest
+
+- ***param*** `string ` $method
+*The HTTP method associated with the request.*
+- ***param*** `UriInterface|string` $uri
+*The URI associated with the request.*
+- ***return*** `RequestInterface`
+
+
+Example:
+```php
+use Shieldon\Psr7\Factory\RequestFactory;
+
+$requestFactory = new RequestFactory();
+$request = $requestFactory->createRequest('GET', 'https://www.google.com');
+```
+
 ### ServerRequestFactory
 
 #### __construct
@@ -63,26 +94,9 @@ $url = 'https://www.yourwebsite.com/current-page/';
 $serverRequest = $serverRequestFactory->createServerRequest($method, $uri);
 ```
 
-### RequestFactory
-
-RequestFactory does not have a Constructor.
-
-- ***param*** `string ` $method
-*The HTTP method associated with the request.*
-- ***param*** `UriInterface|string` $uri
-*The URI associated with the request.*
-- ***return*** `RequestInterface`
-
-
-Example:
-```php
-use Shieldon\Psr7\Factory\RequestFactory;
-
-$requestFactory = new RequestFactory();
-$request = $requestFactory->createRequest('GET', 'https://www.google.com');
-```
-
 ### ResponseFactory
+
+#### __construct
 
 ResponseFactory does not have a Constructor.
 
@@ -102,5 +116,12 @@ $responseFactory = new ResponseFactory();
 $response = $responseFactory->createResponse(200, 'OK');
 ```
 
+## PSR-7
 
-
+- Message
+- Request
+- ServerRequest
+- Response
+- Stream
+- UploadedFile
+- Uri
