@@ -23,6 +23,7 @@ class SuperGlobalTest extends TestCase
             'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9',
             'HTTP_ACCEPT_CHARSET' => 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
             'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.9,zh-TW;q=0.8,zh;q=0.7',
+            'HTTP_HOST' => '127.0.0.1',
             'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
             'QUERY_STRING' => '',
             'REMOTE_ADDR' => '127.0.0.1',

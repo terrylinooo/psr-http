@@ -17,6 +17,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 use Shieldon\Psr7\Factory\StreamFactory;
 use Shieldon\Psr7\Factory\UriFactory;
+use Shieldon\Psr7\Uri;
 use Shieldon\Psr7\ServerRequest;
 use Shieldon\Psr7\Utils\SuperGlobal;
 
@@ -68,18 +69,18 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
 
         if ($this->autoDetermine) {
             if ($method === '') {
-                $method = $server['REQUEST_METHOD'];
+                $method = $server['REQUEST_METHOD'] ?? 'GET';
             }
 
             if ($uri === '') {
-                $url = $this->createUriFromGlobal($server);
+                $uri = $this->createUriFromGlobal($server);
             }
         }
 
         $protocol = $server['SERVER_PROTOCOL'] ?? '1.1';
         $protocol = str_replace('HTTP/', '',  $protocol);
 
-        if (! ($url instanceof UriInterface)) {
+        if (! ($uri instanceof UriInterface)) {
             $uriFactory = new UriFactory();
             $uri = $uriFactory->createUri($uri);
         }
@@ -116,6 +117,8 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      */
     public function createUriFromGlobal($server): UriInterface
     {
+        $uri = '';
+
         $uriComponents = [
             'host' => 'HTTP_HOST',
             'pass' => 'PHP_AUTH_PW',
@@ -162,6 +165,6 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
             $uri .= '?' . $query;
         }
     
-        return UriFactory($uri);
+        return new Uri($uri);
     }
 }

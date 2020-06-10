@@ -13,6 +13,7 @@ namespace Shieldon\Psr7\Factory;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Shieldon\Psr7\Factory\ServerRequestFactory;
+use Shieldon\Psr7\Utils\SuperGlobal;
 
 class ServerRequestFactoryTest extends TestCase
 {
@@ -20,6 +21,20 @@ class ServerRequestFactoryTest extends TestCase
     {
         $serverRequestFactory = new ServerRequestFactory();
         $serverRequest = $serverRequestFactory->createServerRequest('GET', '', []);
+
+        $this->assertTrue(($serverRequest instanceof ServerRequestInterface));
+    }
+
+    public function test_createServerRequestFromGlobal()
+    {
+        SuperGlobal::mockCliEnvironment([
+            'PHP_AUTH_USER' => 'terry',
+            'PHP_AUTH_PW' => '1234',
+            'QUERY_STRING' => 'foo=bar'
+        ]);
+
+        $serverRequestFactory = new ServerRequestFactory(true);
+        $serverRequest = $serverRequestFactory->createServerRequest('', '', $_SERVER);
 
         $this->assertTrue(($serverRequest instanceof ServerRequestInterface));
     }

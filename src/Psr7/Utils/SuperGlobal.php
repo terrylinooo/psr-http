@@ -63,16 +63,24 @@ class SuperGlobal
 
     /**
      * Mock data for unit testing purpose ONLY.
+     * 
+     * @param array $server Overwrite the mock data.
      *
      * @return void
      */
-    private static function mockCliEnvironment(): void
+    public static function mockCliEnvironment(array $server = []): void
     {
+        $_POST   = $_POST   ?? [];
+        $_COOKIE = $_COOKIE ?? [];
+        $_GET    = $_GET    ?? [];
+        $_FILES  = $_FILES  ?? [];
+
         $_SERVER = [
             'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9',
             'HTTP_ACCEPT_CHARSET' => 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
             'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.9,zh-TW;q=0.8,zh;q=0.7',
             'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+            'HTTP_HOST' => '127.0.0.1',
             'QUERY_STRING' => '',
             'REMOTE_ADDR' => '127.0.0.1',
             'REQUEST_METHOD' => 'GET',
@@ -86,7 +94,7 @@ class SuperGlobal
             'SERVER_PROTOCOL' => 'HTTP/1.1',
         ];
 
-        $_POST = $_COOKIE = $_GET = $_FILES = [];
+        $_SERVER = array_merge($_SERVER, $server);
     }
 
     // @codeCoverageIgnoreEnd
