@@ -237,10 +237,10 @@ print(print_r($useragent, true));
 
 /* Outputs:
 
-Array
-(
-    [0] => Mozilla/5.0 (Windows NT 10.0; Win64; x64)
-)
+    Array
+    (
+        [0] => Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+    )
 
 */
 
@@ -250,7 +250,7 @@ print(print_r($useragent, true));
 
 /* Outputs:
 
-Array()
+    Array()
 
 */
 ```
@@ -462,7 +462,7 @@ echo $request->getUri()->getHost();
 #### withUri(`$uri`, `$preserveHost`)
 
 - ***param*** `UriInterface` uri `*` *New request URI to use.*
-- ***param*** `string` method `*` *Preserve the original state of the Host header.*
+- ***param*** `string` preserveHost `*` *Preserve the original state of the Host header.*
 - ***return*** `static`
 
 Example:
@@ -512,8 +512,285 @@ echo $newRequest2->getUri()->getHost();
 - ***param*** `array` filesParams `= []` *Typically $_FILES superglobal.*
 
 Example:
+
 ```php
 $serverRequest = new \Shieldon\Psr7\ServerRequest();
+```
+
+#### getServerParams()
+
+- ***return*** `array`
+
+Example:
+
+```php
+$serverParams = $serverRequests->getServerParams();
+
+print(print_r($serverParams, true));
+
+/* Outputs:
+
+    Array
+    (
+        [USER] => vagrant
+        [HOME] => /home/vagrant
+        [HTTP_COOKIE] => PHPSESSID=pca6qln5ab1k7ihthqvuo7rtietguapm
+        [HTTP_ACCEPT_LANGUAGE] => en-US,en;q=0.9,zh-TW;q=0.8,zh;q=0.7
+        [HTTP_ACCEPT_ENCODING] => gzip, deflate
+        [HTTP_ACCEPT] => text/html,application/xhtml+xml,application/xml
+        [HTTP_USER_AGENT] => Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+        [HTTP_UPGRADE_INSECURE_REQUESTS] => 1
+        [HTTP_CACHE_CONTROL] => max-age=0
+        [HTTP_CONNECTION] => keep-alive
+        [HTTP_HOST] => nantou.welcometw.lo
+        [CI_ENV] => development
+        [SCRIPT_FILENAME] => /home/terrylin/public/index.php
+        [REDIRECT_STATUS] => 200
+        [SERVER_NAME] => terryl.lo
+        [SERVER_PORT] => 80
+        [SERVER_ADDR] => 192.168.33.33
+        [REMOTE_PORT] => 64557
+        [REMOTE_ADDR] => 192.168.33.1
+        [SERVER_SOFTWARE] => nginx/1.14.0
+        [GATEWAY_INTERFACE] => CGI/1.1
+        [REQUEST_SCHEME] => http
+        [SERVER_PROTOCOL] => HTTP/1.1
+        [DOCUMENT_ROOT] => /home/terrylin/public
+        [DOCUMENT_URI] => /index.php
+        [REQUEST_URI] => /
+        [SCRIPT_NAME] => /index.php
+        [CONTENT_LENGTH] => 
+        [CONTENT_TYPE] => 
+        [REQUEST_METHOD] => GET
+        [QUERY_STRING] => 
+        [FCGI_ROLE] => RESPONDER
+        [PHP_SELF] => /index.php
+        [REQUEST_TIME_FLOAT] => 1591868770.3356
+        [REQUEST_TIME] => 1591868770
+    )
+
+*/
+```
+
+#### getCookieParams()
+
+- ***return*** `array`
+
+Example:
+
+```php
+$cookieParams = $serverRequests->getCookieParams();
+
+print(print_r($cookieParams, true));
+
+/* Outputs:
+
+    Array
+    (
+        [foo] => bar
+    )
+
+*/
+```
+
+#### getQueryParams()
+
+- ***return*** `array`
+
+Example:
+
+```php
+// https://www.example.com/?foo=bar
+$queryParams = $serverRequests->getQueryParams();
+
+print(print_r($queryParams, true));
+
+/* Outputs:
+
+    Array
+    (
+        [foo] => bar
+    )
+
+*/
+```
+
+#### withQueryParams(`$query`)
+
+- ***param*** `array` query `*` *Array of query string arguments, typically from $_GET.*
+- ***return*** `static`
+
+Example:
+
+```php
+$serverRequests = $serverRequests->withQueryParams([
+    'foo' => 'baz',
+    'yes' => 'I do',
+]);
+
+$queryParams = $serverRequests->getQueryParams();
+
+print(print_r($queryParams, true));
+
+/* Outputs:
+
+    Array
+    (
+        [foo] => baz
+        [yes] => I do
+    )
+
+*/
+```
+
+#### getUploadedFiles()
+
+- ***return*** `array`
+
+Example:
+
+```php
+
+$_FILES['avatar'] = [
+    'tmp_name' => '/tmp/phpmFLrzD',
+    'name' => 'my-avatar.png',
+    'type' => 'image/png',
+    'error' => 0,
+    'size' => 90996,
+];
+
+$serverRequest = new \Shieldon\Psr7\ServerRequest(
+    'GET', 
+    '', 
+    '', 
+    [], 
+    '1.1', 
+    [], 
+    [], 
+    [], 
+    [], 
+    $_FILES
+);
+
+echo $serverRequests->getUploadedFiles()->getClientFilename();
+// Outputs: my-avatar.png
+
+echo $serverRequests->getUploadedFiles()->getClientMediaType();
+// Outputs: image/png
+```
+
+#### getParsedBody()
+
+- ***return*** `null|array|object`
+
+Example:
+
+```php
+// Typically, $parsedBody is equal to $_POST superglobal.
+$parsedBody = $serverRequest->getParsedBody();
+```
+
+#### withParsedBody(`$data`)
+
+- ***param*** `null|array|object` $data `*` *The deserialized body data.*
+- ***return*** `static`
+
+Example:
+
+```php
+$serverRequest = $serverRequest->withParsedBody(
+    [
+        'foo' => 'bar',
+        'yes' => 'I do'
+    ]
+);
+
+$parsedBody = $serverRequest->getParsedBody();
+
+echo $parsedBody['yes'];
+// Outputs: I do
+```
+
+#### getAttributes()
+
+- ***return*** `array`
+
+Example:
+
+```php
+$_SESSION['user_name'] = 'terrylin';
+$_SESSION['user_role'] = 'admin';
+$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+
+$serverRequest = $serverRequest->
+    withAttribute('session', $_SESSION)->
+    withAttribute('ip_address', $_SERVER['REMOTE_ADDR']);
+
+$attributes = $serverRequest->getAttributes();
+
+echo $attributes['session']['user_name'];
+// Outputs: terrylin
+
+echo $attributes['ip_address'];
+// Outputs: 127.0.0.1
+```
+
+#### getAttribute(`$name`, `$default`)
+
+- ***param*** `string` name `*` *The attribute name.*
+- ***param*** `mixed` filesParams `= null` *Default value to return if the attribute does not exist.*
+- ***return*** `mixed`
+
+Example: 
+
+This example extends to the previous one.
+
+```php
+$ip = $serverRequest->getAttribute('ip_address');
+$session = $serverRequest->getAttribute('session');
+
+// paymentStatus does not exist.
+$paymentStatus = $serverRequest->getAttribute('paymentStatus', 'failed');
+
+echo $ip
+// Outputs: 127.0.0.1
+
+echo $session['user_role'];
+// Outputs: admin
+
+echo $paymentStatus;
+// Outputs: failed
+```
+
+#### withAttribute(`$name`, `$value`)
+
+- ***param*** `string` name `*` *The attribute name.*
+- ***param*** `mixed` value `*` *The value of the attribute.*
+- ***return*** `static`
+
+Example:
+
+```php
+$serverRequest = $serverRequest->withAttribute('ip_address', '19.89.6.4');
+$ip = $serverRequest->getAttribute('ip_address');
+
+echo $ip
+// Outputs: 19.89.6.4
+```
+
+#### withoutAttribute(`$name`)
+
+- ***param*** `string` name `*` *The attribute name.*
+- ***return*** `static`
+
+Example:
+
+```php
+$serverRequest = $serverRequest->withoutAttribute('ip_address');
+$ip = $serverRequest->getAttribute('ip_address', 'undefined');
+
+echo $ip
+// undefined
 ```
 
 ---
