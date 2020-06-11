@@ -790,12 +790,16 @@ $serverRequest = $serverRequest->withoutAttribute('ip_address');
 $ip = $serverRequest->getAttribute('ip_address', 'undefined');
 
 echo $ip
-// undefined
+// Outputs: undefined
 ```
 
 ---
 
 ### Response
+
+- getStatusCode	
+- withStatus		
+- getReasonPhrase
 
 #### __construct
 
@@ -803,31 +807,73 @@ echo $ip
 - ***param*** `array` headers `= []` *Response headers.*
 - ***param*** `StreamInterface|string` body `= ""` *Response body.*
 - ***param*** `string` version `= "1.1"` *Response protocol version.*
- ***param*** `string` reason `= "OK"` *Reasponse HTTP reason phrase.*
+- ***param*** `string` reason `= "OK"` *Reasponse HTTP reason phrase.*
 
 Example:
 ```php
 $response = new \Shieldon\Psr7\Response();
 ```
 
+#### getStatusCode()
+
+- ***return*** `int`
+
+Example:
+```php
+$statusCode = $response->getStatusCode();
+
+echo $statusCode
+// Outputs: 200
+```
+
+#### withStatus(`$code`, `$reasonPhrase`)
+
+- ***param*** `string` code `*` *The 3-digit integer result code to set.*
+- ***param*** `string` reasonPhrase `= ""` *The reason phrase to use with the provided status code*
+- ***return*** `static`
+
+Example:
+```php
+$response = $response->withStatus(599, 'Something went wrong.');
+
+echo $response->getStatusCode();
+// Outputs: 599
+
+echo $response->getReasonPhrase();
+// Outputs: Something went wrong.
+```
+
+#### getReasonPhrase()
+
+- ***return*** `string`
+
+Example:
+
+```php
+$reasonPhrase = $response->getReasonPhrase();
+
+echo $reasonPhrase
+// Outputs: OK
+```
+
 ---
 
 ### Stream
 
-- isWritable	
-- isReadable	
-- isSeekable	
-- close	
-- detach	
-- getSize	
-- tell	
-- eof	
-- seek	
-- rewind	
-- write	
-- read	
-- getContents	
-- getMetadata	
+- isWritable
+- isReadable
+- isSeekable
+- close
+- detach
+- getSize
+- tell
+- eof
+- seek
+- rewind
+- write
+- read
+- getContents
+- getMetadata
 - __toString
 
 #### __construct
@@ -835,8 +881,300 @@ $response = new \Shieldon\Psr7\Response();
 - **param** `resource` stream `*` *A valid resource.*
 
 Example:
+
 ```php
 $stream = new \Shieldon\Psr7\Stream(fopen('php://temp', 'r+'));
+```
+
+#### isWritable()
+
+Write data to the stream.
+
+- ***return*** `bool`
+
+Example:
+
+```php
+$resource = fopen(BOOTSTRAP_DIR . '/sample/shieldon_logo.png', 'r+');
+$stream = new \Shieldon\Psr7\Stream($resource);
+
+if ($stream->isWritable()) {
+    echo 'File is writable';
+}
+// Outputs: File is writable
+```
+
+#### isReadable()
+
+Returns whether or not the stream is readable.
+
+- ***return*** `bool`
+
+Example:
+
+```php
+$resource = fopen(BOOTSTRAP_DIR . '/sample/shieldon_logo.png', 'r+');
+$stream = new \Shieldon\Psr7\Stream($resource);
+
+if ($stream->isReadable()) {
+    echo 'File is readable';
+}
+// Outputs: File is readable
+```
+
+#### isSeekable()
+
+Seek to a position in the stream.
+
+- ***return*** `bool`
+
+Example:
+
+```php
+$resource = fopen(BOOTSTRAP_DIR . '/sample/shieldon_logo.png', 'r+');
+$stream = new \Shieldon\Psr7\Stream($resource);
+
+if ($stream->isSeekable()) {
+    echo 'File is seekable';
+}
+// Outputs: File is seekable
+```
+
+#### close()
+
+loses the stream and any underlying resources.
+
+- ***return*** `void`
+
+Example:
+```php
+$stream = new Stream(fopen('php://temp', 'r+'));
+/* ... do something ... */
+$stream->close();
+```
+
+#### detach()
+
+Separates any underlying resources from the stream. After the stream has been detached, the stream is in an unusable state.
+
+- ***return*** `resource|null`
+
+Example:
+```php
+$stream = new Stream(fopen('php://temp', 'r+'));
+/* ... do something ... */
+$legacy = $stream->detach();
+
+if (is_resouce($legacy)) {
+    echo 'Resource is detached.';
+}
+// Outputs: Resource is detached.
+
+$legacy = $stream->detach();
+
+if (is_null($legacy)) {
+    echo 'Resource has been null.';
+}
+// Outputs: Resource has been null.
+```
+
+#### getSize()
+
+Get the size of the stream if known.
+
+- ***return*** `int|null`
+
+Example:
+
+```php
+$resource = fopen(BOOTSTRAP_DIR . '/sample/shieldon_logo.png', 'r+');
+$stream = new \Shieldon\Psr7\Stream($resource);
+echo $stream->getSize();
+// Outputs: 15166
+```
+
+#### tell()
+
+Returns the current position of the file read/write pointer
+
+- ***return*** `int` Position of the file pointer
+
+```php
+$resource = fopen(BOOTSTRAP_DIR . '/sample/shieldon_logo.png', 'r+');
+$stream = new Stream($resource);
+
+$stream->seek(10);
+echo $stream->tell();
+// Outputs: 10
+
+$stream->rewind();
+echo $stream->tell();
+// Outputs: 0
+
+$stream->close();
+```
+
+#### eof()
+
+Returns true if the stream is at the end of the stream.
+
+- ***return*** `bool`
+
+```php
+$resource = fopen(BOOTSTRAP_DIR . '/sample/shieldon_logo.png', 'r+');
+$stream = new Stream($resource);
+
+$stream->seek(10);
+
+if ($stream->eof()) {
+    echo 'The position of the file pointer of the stream is at the end.';
+} else {
+    echo 'Not at the end.';
+}
+// Outputs: Not at the end.
+
+$stream->seek(15166);
+
+if ($stream->eof()) {
+    echo 'The position of the file pointer of the stream is at the end.';
+} else {
+    echo 'Not at the end.';
+}
+// Outputs: The position of the file pointer of the stream is at the end.
+```
+
+#### seek(`$offset`, `$whence`)
+
+Seek to a position in the stream.
+
+- **param** `int` offset `*` *Stream offset.*
+- **param** `int` whence `= SEEK_SET` *Specifies how the cursor position will be calculated based on the seek offset.*
+- ***return*** `void`
+
+Example:
+
+```php
+// See eof() example.
+```
+
+#### rewind()
+
+Seek to the beginning of the stream.
+
+- ***return*** `void`
+
+Example:
+
+```php
+// See tell() example.
+```
+
+#### write(`$string`)
+
+- **param** `string` string `*` *The string that is to be written.*
+- ***return*** `int` *Returns the number of bytes written to the stream.*
+
+Example:
+
+```php
+$stream = new Stream(fopen('php://temp', 'r+'));
+$stream->write('Foo Bar');
+
+echo $stream->getContents();
+
+// Outputs: Foo Bar
+```
+
+#### read(`$length`)
+
+Read data from the stream.
+
+- **param** `int` length `*` *Read up to $length bytes from the object and return them.*
+- ***return*** `string`
+
+Example:
+
+```php
+$stream = new Stream(fopen('php://temp', 'r+'));
+$stream->write('Glory to Hong Kong');
+
+echo $stream->read(5);
+
+// Outputs: Glory
+```
+
+#### getContents()
+
+Returns the remaining contents in a string
+
+- ***return*** `string`
+
+Example:
+
+```php
+$stream = new Stream(fopen('php://temp', 'r+'));
+$stream->write('Glory to Hong Kong');
+
+echo $stream->getContents();
+
+// Outputs: Glory to Hong Kong
+```
+
+#### getMetadata(`$key`)
+
+Get stream metadata as an associative array or retrieve a specific key.
+
+- **param** `string` key `= null` *Specific metadata to retrieve.*
+- ***return*** `array|mixed|null`
+
+Example:
+
+```php
+$resource = fopen(BOOTSTRAP_DIR . '/sample/shieldon_logo.png', 'r+');
+$stream = new Stream($resource);
+$meta = $stream->getMetadata();
+
+print(print_r($queryParams, true));
+
+/* Outputs:
+
+    Array
+    (
+        [timed_out] => false
+        [blocked] => true
+        [eof] => false
+        [wrapper_type] => plainfile
+        [stream_type] => STDIO
+        [mode] => r+
+        [unread_bytes] => 0
+        [seekable] => true
+        [uri] => /home/terrylin/data/psr7/tests/sample/shieldon_logo.png
+    )
+*/
+
+echo $stream->getMetadata('mode')
+// Outputs: r+
+```
+
+#### __toString()
+
+Reads all data from the stream into a string, from the beginning to end.
+
+- ***return*** `string`
+
+Example:
+
+```php
+$stream = new Stream(fopen('php://temp', 'r+'));
+$stream->write('Foo Bar');
+
+ob_start();
+echo $stream;
+$output = ob_get_contents();
+ob_end_clean();
+
+echo $output;
+// Outputs: Foo Bar
 ```
 
 ---
