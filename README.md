@@ -132,7 +132,7 @@ ResponseFactory does not have a Constructor.
 
 Example:
 ```php
-$message = new \Shieldon\Psr7\Message;(true);
+$message = new \Shieldon\Psr7\Message();
 ```
 
 ### Request
