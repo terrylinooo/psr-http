@@ -989,6 +989,7 @@ Example:
 ```php
 $resource = fopen(BOOTSTRAP_DIR . '/sample/shieldon_logo.png', 'r+');
 $stream = new \Shieldon\Psr7\Stream($resource);
+
 echo $stream->getSize();
 // Outputs: 15166
 ```
@@ -1168,12 +1169,7 @@ Example:
 $stream = new Stream(fopen('php://temp', 'r+'));
 $stream->write('Foo Bar');
 
-ob_start();
 echo $stream;
-$output = ob_get_contents();
-ob_end_clean();
-
-echo $output;
 // Outputs: Foo Bar
 ```
 
@@ -1182,7 +1178,7 @@ echo $output;
 ### UploadedFile
 
 - *__construct*
-- getStream	
+- getStream
 - moveTo	
 - getSize	
 - getError	
@@ -1207,6 +1203,134 @@ $uploadedFile = new \Shieldon\Psr7\UploadedFile(
     100000,             // size
     0                   // error
 );
+```
+
+#### getStream()
+
+Retrieve a stream representing the uploaded file.
+
+- ***return*** `StreamInterface`
+
+Example:
+
+```php
+$stream = new Stream(fopen(BOOTSTRAP_DIR . '/sample/shieldon_logo.png', 'r+'));
+$uploadedFile = new UploadedFile($stream);
+
+$stream2 = $uploadedFile->getStream();
+
+echo $stream2->getMetadata('mode');
+// Outputs: r+
+```
+
+#### moveTo($targetPath)
+
+Move the uploaded file to a new location.
+
+- **param** `string` targetPath `*` *Path to which to move the uploaded file.*
+
+```php
+$stream = new Stream(
+    fopen(BOOTSTRAP_DIR . '/sample/shieldon_logo.png', 'r+')
+);
+
+$uploadedFile = new UploadedFile($stream);
+
+$uploadedFile->moveTo('/home/terrylin/public/image_cache/shieldon_logo_png');
+
+if (
+    file_exists('/home/terrylin/public/image_cache/shieldon_logo_png') &&
+    ! file_exists(BOOTSTRAP_DIR . '/sample/shieldon_logo.png')
+) {
+    echo 'File has been moved to the new place.';
+} else {
+    echo 'Cannot move file.';
+}
+// Outputs: File has been moved to the new place.
+```
+
+#### getSize()
+
+Retrieve the file size.
+
+- ***return*** `int|null`
+
+Example:
+
+```php
+$uploadedFile = new \Shieldon\Psr7\UploadedFile(
+    '/tmp/php200A.tmp',
+    'example1.jpg',
+    'image/jpeg',
+    100000,
+    0
+);
+
+echo $uploadedFile->getSize();
+// Outputs: 100000
+```
+
+#### getError()
+
+Retrieve the error associated with the uploaded file.
+
+- ***return*** `int`
+
+Example:
+
+```php
+$uploadedFile = new \Shieldon\Psr7\UploadedFile(
+    '/tmp/php200A.tmp',
+    'example1.jpg',
+    'image/jpeg',
+    100000,
+    0
+);
+
+$uploadedFile->getError();
+// Outputs: 0
+```
+
+#### getClientFilename()
+
+Retrieve the filename sent by the client.
+
+- ***return*** `string|null`
+
+Example:
+
+```php
+$uploadedFile = new \Shieldon\Psr7\UploadedFile(
+    '/tmp/php200A.tmp',
+    'example1.jpg',
+    'image/jpeg',
+    100000,
+    0
+);
+
+$uploadedFile->getClientFilename();
+// Outputs: example1.jpg
+```
+
+#### getClientMediaType()
+
+Retrieve the media type sent by the client.
+
+- ***return*** `string|null`
+
+Example:
+
+```php
+$uploadedFile = new \Shieldon\Psr7\UploadedFile(
+    '/tmp/php200A.tmp',
+    'example1.jpg',
+    'image/jpeg',
+    100000,
+    0
+);
+
+$uploadedFile->getClientMediaType();
+// Outputs: image/jpeg
 ```
 
 ---
@@ -1237,4 +1361,246 @@ $uploadedFile = new \Shieldon\Psr7\UploadedFile(
 Example:
 ```php
 $uri = new \Shieldon\Psr7\Uri('https://www.example.com');
+```
+
+#### getScheme()
+
+- ***return*** `string`
+
+Example:
+
+```php
+$uri = new \Shieldon\Psr7\Uri(
+    'https://www.example.com'
+);
+echo $uri->getScheme();
+// Outputs: https
+```
+
+#### getAuthority()
+
+- ***return*** `string`
+
+Example:
+
+```php
+$uri = new \Shieldon\Psr7\Uri(
+    'https://terry:1234@example.com:8888/phpMyAdmin/'
+);
+echo $uri->getAuthority();
+// Outputs: terry:1234@example.com:8888
+```
+
+#### getUserInfo()
+
+- ***return*** `string`
+
+Example:
+
+```php
+$uri = new \Shieldon\Psr7\Uri(
+    'https://terry:1234@example.com:8888/phpMyAdmin/'
+);
+echo $uri->getUserInfo();
+// Outputs: terry:1234
+```
+
+#### getHost()
+
+- ***return*** `string`
+
+Example:
+
+```php
+$uri = new \Shieldon\Psr7\Uri(
+    'https://terry:1234@example.com:8888/phpMyAdmin/'
+);
+echo $uri->getUserInfo();
+// Outputs: example.com
+```
+
+#### getPort()
+
+- ***return*** `int|null`
+
+Example:
+
+```php
+$uri = new \Shieldon\Psr7\Uri(
+    'https://terry:1234@example.com:8888/phpMyAdmin/'
+);
+echo $uri->getUserInfo();
+// Outputs: 8888
+```
+
+#### getPath
+
+- ***return*** `string`
+
+Example:
+
+```php
+$uri = new \Shieldon\Psr7\Uri(
+    'https://example.com/post/?p=113&foo=bar#yes-i-do'
+);
+echo $uri->getPath();
+// Outputs: /post/
+```
+
+#### getQuery
+
+- ***return*** `string`
+
+Example:
+
+```php
+$uri = new \Shieldon\Psr7\Uri(
+    'https://example.com/post/?p=113&foo=bar#yes-i-do'
+);
+echo $uri->getQuery();
+// Outputs: p=113&foo=bar
+```
+
+#### getFragment
+
+- ***return*** `string`
+
+Example:
+
+```php
+$uri = new \Shieldon\Psr7\Uri(
+    'https://example.com/post/?p=113&foo=bar#yes-i-do'
+);
+echo $uri->getFragment();
+// Outputs: yes-i-do
+```
+
+#### withScheme(`$scheme`)
+
+- ***param*** `string` scheme `*` *The scheme to use with the new instance.*
+- ***return*** `static`
+
+Example:
+
+```php
+echo $uri->getScheme();
+// Outputs: https
+
+$url = $uri->withScheme('http');
+echo $uri->getScheme();
+// Outputs: http
+```
+
+#### withUserInfo($user, $password)
+
+- ***param*** `string` user `*` *The user name to use for authority.*
+- ***param*** `string|null` password `= null` *The password associated with $user.*
+
+- ***return*** `static`
+
+Example:
+
+```php
+echo $uri->getUserInfo();
+// Outputs: terry:1234
+
+$url = $uri->withUserInfo('jack', '5678');
+echo $uri->getUserInfo();
+// Outputs: jack:5678
+```
+
+#### withHost(`$host`)
+
+- ***param*** `string` host `*` *The hostname to use with the new instance.*
+- ***return*** `static`
+
+Example:
+
+```php
+echo $uri->getUserInfo();
+// Outputs: example.com
+
+$url = $uri->withHost('terryl.in');
+echo $uri->getHost();
+// Outputs: terryl.in
+```
+
+#### withPort(`$port`)
+
+- ***param*** `int|null` port `*` *The port to use with the new instance; a null value removes the port information.*
+- ***return*** `static`
+
+Example:
+
+```php
+echo $uri->getUserInfo();
+// Outputs: 8888
+
+$uri = $uri->withPort(443);
+echo $uri->getUserInfo();
+// Outputs: 443
+
+$uri = $uri->withPort(null);
+echo $uri->getUserInfo();
+// Outputs:
+```
+
+#### withPath(`$path`)
+
+- ***param*** `string` path `*` *The path to use with the new instance.*
+- ***return*** `static`
+
+Example:
+
+```php
+echo $uri->getPath();
+// Outputs: /post/
+
+$uri = $uri->withPath('/new-path');
+echo $uri->getPath();
+// Outputs: /new-path
+```
+
+#### withQuery(`$query`)
+
+- ***param*** `string` query `*` *The query string to use with the new instance.*
+- ***return*** `static`
+
+Example:
+
+```php
+echo $uri->getQuery();
+// Outputs: p=113&foo=bar
+
+$uri = $uri->witQuery('p=120&foo=baz');
+echo $uri->getQuery();
+// Outputs: p=120&foo=baz
+```
+
+#### withFragment(`$fragment`)
+
+- ***param*** `string` fragment `*` *The fragment to use with the new instance.*
+- ***return*** `static`
+
+Example:
+
+```php
+echo $uri->getFragment();
+// Outputs: yes-i-do
+
+$uri = $uri->withFragment('no-i-cant');
+echo $uri->getFragment();
+// Outputs: no-i-cant
+```
+
+#### __toString
+
+- ***return*** `string`
+
+Example:
+
+```php
+$uri = new Uri('http://example.com:8888/demo/#section-1');
+echo $uri;
+// Outputs: http://example.com:8888/demo/#section-1
 ```
