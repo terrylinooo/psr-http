@@ -154,6 +154,7 @@ $message = new \Shieldon\Psr7\Message();
 - ***return*** `string` *HTTP protocol version.*
 
 Example:
+
 ```php
 echo $message->getProtocolVersion();
 // Outputs: 1.1
@@ -169,6 +170,7 @@ echo $message->getProtocolVersion();
 - ***return*** `array` (`string[][]`) *Each key is a header name, and each value is an array of strings for that header*
 
 Example:
+
 ```php
 $headers = $message->getHeaders();
 
@@ -227,6 +229,7 @@ if ($message->hasHeader('user-agent')) {
 - ***return*** `array` *An array of string values as provided for the given. Return empty array if the header dosn't exist.*
 
 Example:
+
 ```php
 $useragent = $this->message->getHeader('user-agent');
 
@@ -258,6 +261,7 @@ Array()
 - ***return*** `array` *a string values as provided for the given header concatenated together using a comma. Return empty string if the header dosn't exist.*
 
 Example:
+
 ```php
 echo $this->message->getHeaderLine('user-agent');
 
@@ -271,6 +275,7 @@ echo $this->message->getHeaderLine('user-agent');
 - ***return*** `static`
 
 Example:
+
 ```php
 $message = $message->withHeader('foo', 'bar');
 
@@ -298,6 +303,7 @@ echo $message->getHeaderLine('foo');
 Existing values for the specified header will be maintained. The new value(s) will be appended to the existing list. If the header did not exist previously, it will be added.
 
 Example:
+
 ```php
 $message = $message->withHeader('foo', 'bar');
 
@@ -319,6 +325,7 @@ echo $message->getHeaderLine('foo2');
 - ***return*** `static`
 
 Example:
+
 ```php
 $message = $message->withHeader('foo', 'bar');
 
@@ -335,6 +342,7 @@ echo $message->getHeaderLine('foo');
 - ***return*** `StreamInterface`
 
 Example:
+
 ```php
 $stream = $message->getBody();
 
@@ -351,6 +359,7 @@ echo $stream->getContents();
 - ***return*** `static`
 
 Example:
+
 ```php
 
 $stream = new \Shieldon\Psr7\Stream(fopen('php://temp', 'r+'));
@@ -374,7 +383,7 @@ echo $message->getBody()->getContents();
 - getUri	
 - withUri
 
-#### __construct
+#### __construct(`$method`, `$uri`, `$body`, `$headers`, `$version`)
 
 - ***param*** `string` method `= "GET"` *Request HTTP method.*
 - ***param*** `string|UriInterface` uri `= ""` *Request URI object URI or URL.*
@@ -383,8 +392,92 @@ echo $message->getBody()->getContents();
 - ***param*** `string` version `= "1.1"` *Request protocol version.*
 
 Example:
+
 ```php
 $request = new \Shieldon\Psr7\Request('GET', 'https://www.example.com');
+```
+
+#### getRequestTarget()
+
+- ***return*** `string`
+
+In most cases, this will be the origin-form of the composed URI, unless it is changed by `withRequestTarget` method.
+
+Example:
+
+```php
+echo $request->getRequestTarget();
+// Outputs: /
+```
+
+#### withRequestTarget(`$requestTarget`)
+
+- ***param*** `string` requestTarget `*`
+- ***return*** `static`
+
+Example:
+
+```php
+$request = $request->withRequestTarget('https://www.example2.com/en/');
+
+echo $request->getRequestTarget();
+// Outputs: https://www.example2.com/en/
+```
+
+#### getMethod()
+
+- ***return*** `string`
+
+Example:
+
+```php
+echo $request->getMethod();
+// Outputs: GET
+```
+
+#### withMethod(`$method`)
+
+- ***param*** `string` method `*` *Case-sensitive method.*
+- ***return*** `static`
+
+Example:
+
+```php
+$request = $request->withMethod('POST');
+echo $request->getMethod();
+// Outputs: POST
+```
+
+#### getUri()
+
+- ***return*** `UriInterface`
+
+Example:
+
+```php
+echo $request->getUri()->getHost();
+// Outputs: www.example.com
+```
+
+#### withUri(`$uri`, `$preserveHost`)
+
+- ***param*** `UriInterface` uri `*` *New request URI to use.*
+- ***param*** `string` method `*` *Preserve the original state of the Host header.*
+- ***return*** `static`
+
+Example:
+
+```php
+$request = new Request('GET', 'https://terryl.in/zh/', '', [], '1.1');
+
+$newRequest = $request->withUri(new Uri('https://play.google.com'));
+$newRequest2 = $newRequest->withUri(new Uri('https://www.facebook.com'), true);
+
+echo $newRequest->getUri()->getHost();
+// Outputs: play.google.com
+
+echo $newRequest2->getUri()->getHost();
+// Outputs: terryl.in
 ```
 
 ---
