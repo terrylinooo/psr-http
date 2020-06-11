@@ -32,10 +32,8 @@ RequestFactory does not have a Constructor.
 
 #### createRequest
 
-- ***param*** `string ` $method
-*The HTTP method associated with the request.*
-- ***param*** `UriInterface|string` $uri
-*The URI associated with the request.*
+- ***param*** `string ` method `*` *The HTTP method associated with the request.*
+- ***param*** `UriInterface|string` uri `*` *The URI associated with the request.*
 - ***return*** `RequestInterface`
 
 
@@ -51,8 +49,9 @@ $request = $requestFactory->createRequest('GET', 'https://www.google.com');
 
 #### __construct
 
-- **param** `bool` $autoDetermine `= false`
-*Determine HTTP method and URI automatically.*
+- **param** `bool` autoDetermine `= false` *Determine HTTP method and URI automatically.*
+
+Example:
 
 ```php
 use Shieldon\Psr7\Factory\ServerRequestFactory;
@@ -66,12 +65,9 @@ I think that HTTP method and URI can be given by superglobal in SAPI enviornment
 
 #### createServerRequest
 
-- ***param*** `string` $method
-*The HTTP method associated with the request.*
-- ***param*** `UriInterface|string` $uri
-*The URI associated with the request.*
-- ***param*** `array` $serverParams `= []`
-*An array of Server API (SAPI) parameters with which to seed the generated request instance.*
+- ***param*** `string` method `*`*The HTTP method associated with the request.*
+- ***param*** `UriInterface|string` uri `*`*The URI associated with the request.*
+- ***param*** `array` serverParams `= []` *An array of Server API (SAPI) parameters with which to seed the generated request instance.*
 - ***return*** `ServerRequestInterface`
 
 Examples:
@@ -102,10 +98,8 @@ ResponseFactory does not have a Constructor.
 
 #### createResponse
 
-- ***param*** `int` $code `= 200`
-*The HTTP status code.*
-- ***param*** `string` $reasonPhrase `= ''`
-*The reason phrase to associate with the status code.*
+- ***param*** `int` code `= 200` *The HTTP status code.*
+- ***param*** `string` reasonPhrase `= ''` *The reason phrase to associate with the status code.*
 - ***return*** `ResponseInterface`
 
 Example:
@@ -125,3 +119,112 @@ $response = $responseFactory->createResponse(200, 'OK');
 - Stream
 - UploadedFile
 - Uri
+
+Note: 
+
+Here only shows the PSR-7 methods because other non-PSR methods are just helpers. They are listed on the bottom of this page, you can check out them if you are interested.
+
+### Message
+
+#### __construct
+
+ResponseFactory does not have a Constructor.
+
+Example:
+```php
+$message = new \Shieldon\Psr7\Message;(true);
+```
+
+### Request
+
+#### __construct
+
+- ***param*** `string` method `= "GET"` *Request HTTP method.*
+- ***param*** `string|UriInterface` uri `= ""` *Request URI object URI or URL.*
+- ***param*** `string|StreamInterface` body `= ""` *Request body - see setBody()*
+- ***param*** `array` headers `= []` *Request headers.*
+- ***param*** `string` version `= "1.1"` *Request protocol version.*
+
+Example:
+```php
+$request = new \Shieldon\Psr7\Request('GET', 'https://www.example.com');
+```
+
+### ServerRequest
+
+#### __construct
+
+- ***param*** `string` method `= "GET"` *Request HTTP method.*
+- ***param*** `string|UriInterface` uri `= ""` *Request URI object URI or URL.*
+- ***param*** `string|StreamInterface` body `= ""` *Request body.*
+- ***param*** `array` headers `= []` *Request headers.*
+- ***param*** `string` version `= "1.1"` *Request protocol version.*
+- ***param*** `array` serverParams `= []` *Typically $_SERVER superglobal.*
+- ***param*** `array` cookieParams `= []` *Typically $_COOKIE superglobal.*
+- ***param*** `array` postParams `= []` *Typically $_POST superglobal.*
+- ***param*** `array` getParams `= []` *Typically $_GET superglobal.*
+- ***param*** `array` filesParams `= []` *Typically $_FILES superglobal.*
+
+Example:
+```php
+$serverRequest = new \Shieldon\Psr7\ServerRequest();
+```
+
+### Response
+
+#### __construct
+
+- ***param*** `int` status `= 200` *Response HTTP status code.*
+- ***param*** `array` headers `= []` *Response headers.*
+- ***param*** `StreamInterface|string` body `= ""` *Response body.*
+- ***param*** `string` version `= "1.1"` *Response protocol version.*
+ ***param*** `string` reason `= "OK"` *Reasponse HTTP reason phrase.*
+
+Example:
+```php
+$response = new \Shieldon\Psr7\Response();
+```
+
+### Stream
+
+#### __construct
+
+- **param** `resource` stream `*` *A valid resource.*
+
+Example:
+```php
+$stream = new \Shieldon\Psr7\Stream(fopen('php://temp', 'r+'));
+```
+
+### UploadedFile
+
+#### __construct
+
+- **param** `string|StreamInterface` source `*` *The full path of a file or stream.*
+- **param** `string|null` name `= null` *The file name.*
+- **param** `string|null` type `= null` *The file media type.*
+- **param** `int|null` size `= null` *The file size in bytes.*
+- **param** `int` error `= 0` *The status code of the upload.*
+- **param** `string|null` sapi `= null` *Only assign for unit testing *
+
+Example:
+```php
+$uploadedFile = new \Shieldon\Psr7\UploadedFile(
+    '/tmp/php200A.tmp', // source
+    'example1.jpg',     // name
+    'image/jpeg',       // type
+    100000,             // size
+    0                   // error
+);
+```
+
+### Uri
+
+#### __construct
+
+- **param** `string` uri `= ""` *The URI.*
+
+Example:
+```php
+$uri = new \Shieldon\Psr7\Uri('https://www.example.com');
+```
