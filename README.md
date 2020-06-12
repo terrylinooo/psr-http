@@ -96,7 +96,7 @@ $serverRequest = $serverRequestFactory->createServerRequest($method, $uri);
 
 ResponseFactory does not have a Constructor.
 
-#### createResponse
+#### createResponse(`$code`, `$reasonPhrase`)
 
 - ***param*** `int` code `= 200` *The HTTP status code.*
 - ***param*** `string` reasonPhrase `= ''` *The reason phrase to associate with the status code.*
@@ -1048,8 +1048,8 @@ if ($stream->eof()) {
 
 Seek to a position in the stream.
 
-- **param** `int` offset `*` *Stream offset.*
-- **param** `int` whence `= SEEK_SET` *Specifies how the cursor position will be calculated based on the seek offset.*
+- ***param*** `int` offset `*` *Stream offset.*
+- ***param*** `int` whence `= SEEK_SET` *Specifies how the cursor position will be calculated based on the seek offset.*
 - ***return*** `void`
 
 Example:
@@ -1072,7 +1072,7 @@ Example:
 
 #### write(`$string`)
 
-- **param** `string` string `*` *The string that is to be written.*
+- ***param*** `string` string `*` *The string that is to be written.*
 - ***return*** `int` *Returns the number of bytes written to the stream.*
 
 Example:
@@ -1090,7 +1090,7 @@ echo $stream->getContents();
 
 Read data from the stream.
 
-- **param** `int` length `*` *Read up to $length bytes from the object and return them.*
+- ***param*** `int` length `*` *Read up to $length bytes from the object and return them.*
 - ***return*** `string`
 
 Example:
@@ -1125,7 +1125,7 @@ echo $stream->getContents();
 
 Get stream metadata as an associative array or retrieve a specific key.
 
-- **param** `string` key `= null` *Specific metadata to retrieve.*
+- ***param*** `string` key `= null` *Specific metadata to retrieve.*
 - ***return*** `array|mixed|null`
 
 Example:
@@ -1187,12 +1187,12 @@ echo $stream;
 
 #### __construct
 
-- **param** `string|StreamInterface` source `*` *The full path of a file or stream.*
-- **param** `string|null` name `= null` *The file name.*
-- **param** `string|null` type `= null` *The file media type.*
-- **param** `int|null` size `= null` *The file size in bytes.*
-- **param** `int` error `= 0` *The status code of the upload.*
-- **param** `string|null` sapi `= null` *Only assign for unit testing purpose.*
+- ***param*** `string|StreamInterface` source `*` *The full path of a file or stream.*
+- ***param*** `string|null` name `= null` *The file name.*
+- ***param*** `string|null` type `= null` *The file media type.*
+- ***param*** `int|null` size `= null` *The file size in bytes.*
+- ***param*** `int` error `= 0` *The status code of the upload.*
+- ***param*** `string|null` sapi `= null` *Only assign for unit testing purpose.*
 
 Example:
 ```php
@@ -1227,7 +1227,7 @@ echo $stream2->getMetadata('mode');
 
 Move the uploaded file to a new location.
 
-- **param** `string` targetPath `*` *Path to which to move the uploaded file.*
+- ***param*** `string` targetPath `*` *Path to which to move the uploaded file.*
 
 ```php
 $stream = new Stream(
@@ -1356,7 +1356,7 @@ $uploadedFile->getClientMediaType();
 
 #### __construct
 
-- **param** `string` uri `= ""` *The URI.*
+- ***param*** `string` uri `= ""` *The URI.*
 
 Example:
 ```php
@@ -1604,3 +1604,17 @@ $uri = new Uri('http://example.com:8888/demo/#section-1');
 echo $uri;
 // Outputs: http://example.com:8888/demo/#section-1
 ```
+
+## Run test
+```bash
+composer install
+composer test
+```
+
+## Author
+
+Shieldon HTTP message library (PSR-7 implementation) is brought to you by [Terry L.](https://terryl.in) from Taiwan.
+
+## License
+
+Shieldon HTTP message library is an open-sourced software licensed under the **MIT** license.
