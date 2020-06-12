@@ -13,22 +13,24 @@ composer require shieldon/psr7
 The Shieldon PSR-7 implementation requires at least PHP 7.1 to run.
 The usages of every method can be found in the [unit tests](https://github.com/terrylinooo/psr7/tree/master/tests/Psr7).
 
-## Factories
+## PSR-17 Factories
 
-- RequestFactory
-- ServerRequestFactory
-- ResponseFactory
-- StreamFactory
-- UploadedFileFactory
-- UriFactory
+- [RequestFactory](https://github.com/terrylinooo/psr7#requestfactory)
+- [ServerRequestFactory](https://github.com/terrylinooo/psr7#serverrequestfactory)
+- [ResponseFactory](https://github.com/terrylinooo/psr7#responsefactory)
+- [StreamFactory](https://github.com/terrylinooo/psr7#streamfactory)
+- [UploadedFileFactory](https://github.com/terrylinooo/psr7#uploadedfilefactory)
+- [UriFactory](https://github.com/terrylinooo/psr7#urifactory)
 
 Here are some examples that show you the way creating PSR-7 instances from PSR-17 HTTP factories.
 
 ### RequestFactory
 
+- createRequest
+
 #### __construct
 
-RequestFactory does not have a Constructor.
+None
 
 #### createRequest(`$method`, `$uri`)
 
@@ -36,8 +38,8 @@ RequestFactory does not have a Constructor.
 - ***param*** `UriInterface|string` uri `*` *The URI associated with the request.*
 - ***return*** `RequestInterface`
 
-
 Example:
+
 ```php
 use Shieldon\Psr7\Factory\RequestFactory;
 
@@ -46,6 +48,8 @@ $request = $requestFactory->createRequest('GET', 'https://www.google.com');
 ```
 
 ### ServerRequestFactory
+
+- createServerRequest
 
 #### __construct(`$autoDetermine`)
 
@@ -92,9 +96,11 @@ $serverRequest = $serverRequestFactory->createServerRequest($method, $uri);
 
 ### ResponseFactory
 
+- createResponse
+
 #### __construct
 
-ResponseFactory does not have a Constructor.
+None
 
 #### createResponse(`$code`, `$reasonPhrase`)
 
@@ -110,15 +116,129 @@ $responseFactory = new ResponseFactory();
 $response = $responseFactory->createResponse(200, 'OK');
 ```
 
-## PSR-7
+### StreamFactory
 
-- Message
-- Request *(externds Message)*
-- ServerRequest *(externds Request)*
-- Response
-- Stream
-- UploadedFile
-- Uri
+- createStream
+- createStreamFromFile
+- createStreamFromResource
+
+#### __construct
+
+None
+
+#### createStream(`$content`)
+
+- ***param*** `string` content `= ""` *String content with which to populate the stream.*
+- ***return*** `StreamInterface`
+
+Example:
+
+```php
+$streamFactory = new StreamFactory();
+$stream = $streamFactory->createStream('Foo Bar');
+
+echo $stream;
+// Outputs: Foo Bar
+```
+
+#### createStreamFromFile(`$filename`, `$mode`)
+
+- ***param*** `string` filename `*` *The filename or stream URI to use as basis of stream.*
+- ***param*** `string` mode `r` *The mode with which to open the underlying filename/stream.*
+- ***return*** `StreamInterface`
+
+Example:
+
+```php
+$sourceFile = BOOTSTRAP_DIR . '/sample/shieldon_logo.png';
+
+$streamFactory = new StreamFactory();
+$stream =  $streamFactory->createStreamFromFile($sourceFile);
+
+echo $stream->getSize();
+// Outputs: 15166
+```
+
+#### createStreamFromResource(`$resource`)
+
+- ***param*** `string` resource `*` *The PHP resource to use as the basis for the stream.*
+- ***return*** `StreamInterface`
+
+Example:
+
+```php
+$streamFactory = new StreamFactory();
+$stream =  $streamFactory->createStreamResource(
+    fopen('php://temp', 'r+')
+);
+```
+
+### UploadedFileFactory
+
+- createUploadedFile
+
+#### __construct
+
+None
+
+#### createUploadedFile(`$stream`, `$size`, `$error`, `$clientFilename`, `$clientMediaType`)
+
+- ***param*** `StreamInterface` stream `*` *The underlying stream representing the uploaded file content.*
+- ***param*** `int|null` size `= null` *The size of the file in bytes.*
+- ***param*** `int` error `= 0` *The PHP file upload error.*
+- ***param*** `string|null` clientFilename `= null` *The filename as provided by the client, if any.*
+- ***param*** `string|null` clientMediaType `= null` *The media type as provided by the client, if any.*
+- ***return*** `UploadedFileInterface`
+
+Example:
+
+```php
+$uploadedFileFactory = new UploadedFileFactory();
+
+$sourcePath = BOOTSTRAP_DIR . '/sample/shieldon_logo.png';
+$targetPath = STORAGE_DIR . '/images/shieldon_logo.png';
+
+$streamFactory = new StreamFactory();
+$uploadedFileFactory = new UploadedFileFactory();
+
+$stream =  $streamFactory->createStreamFromFile($sourcePath);
+$uploadedFile = $uploadedFileFactory->createUploadedFile($stream);
+
+// Move file from $sourcePath to $targetPath.
+$uploadedFile->moveTo($targetPath);
+```
+
+### UriFactory
+
+- createUri
+
+#### __construct
+
+None
+
+#### createUri(`$uri`)
+
+- ***param*** `string` uri `= ""` *The URI to parse.*
+- ***return*** `UriInterface`
+
+Example:
+
+```php
+$uriFactory = new UriFactory;
+$uri = $uriFactory->createUri();
+```
+
+---
+
+## PSR-7 Classes
+
+- [Message](https://github.com/terrylinooo/psr7#message)
+- [Request](https://github.com/terrylinooo/psr7#request) *(externds Message)*
+- [ServerRequest](https://github.com/terrylinooo/psr7#serverrequest) *(externds Request)*
+- [Response](https://github.com/terrylinooo/psr7#response)
+- [Stream](https://github.com/terrylinooo/psr7#stream)
+- [UploadedFile](https://github.com/terrylinooo/psr7#uploadedfile)
+- [Uri](https://github.com/terrylinooo/psr7#uri)
 
 Note: 
 
@@ -142,7 +262,7 @@ Here only shows the PSR-7 methods because other non-PSR methods are just helpers
 
 #### __construct
 
-ResponseFactory does not have a Constructor.
+None
 
 Example:
 ```php
@@ -1491,7 +1611,7 @@ echo $uri->getScheme();
 // Outputs: http
 ```
 
-#### withUserInfo($user, $password)
+#### withUserInfo(`$user`, `$password`)
 
 - ***param*** `string` user `*` *The user name to use for authority.*
 - ***param*** `string|null` password `= null` *The password associated with $user.*
