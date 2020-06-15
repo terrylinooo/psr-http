@@ -32,8 +32,7 @@ class SuperGlobal
     public static function extract(): array
     {
         if (php_sapi_name() === 'cli') {
-            $serverParams = $_SERVER ?? [];
-            self::mockCliEnvironment($serverParams);
+            self::mockCliEnvironment();
         }
 
         $headerParams = [];
@@ -75,8 +74,9 @@ class SuperGlobal
         $_COOKIE = $_COOKIE ?? [];
         $_GET    = $_GET    ?? [];
         $_FILES  = $_FILES  ?? [];
+        $_SERVER = $_SERVER ?? [];
 
-        $_SERVER = [
+        $defaultServerParams = [
             'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9',
             'HTTP_ACCEPT_CHARSET' => 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
             'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.9,zh-TW;q=0.8,zh;q=0.7',
@@ -95,7 +95,7 @@ class SuperGlobal
             'SERVER_PROTOCOL' => 'HTTP/1.1',
         ];
 
-        $_SERVER = array_merge($_SERVER, $server);
+        $_SERVER = array_merge($defaultServerParams, $server);
     }
 
     // @codeCoverageIgnoreEnd
