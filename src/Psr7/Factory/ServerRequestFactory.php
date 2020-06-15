@@ -111,7 +111,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      *
      * @return UriInterface
      */
-    public function createUriFromGlobal(): UriInterface
+    public static function createUriFromGlobal(): UriInterface
     {
         $server = $_SERVER ?? [];
 
