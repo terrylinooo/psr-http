@@ -32,7 +32,8 @@ class SuperGlobal
     public static function extract(): array
     {
         if (php_sapi_name() === 'cli') {
-            self::mockCliEnvironment();
+            $serverParams = $_SERVER ?? [];
+            self::mockCliEnvironment($serverParams);
         }
 
         $headerParams = [];

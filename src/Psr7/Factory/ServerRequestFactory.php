@@ -30,33 +30,6 @@ use function extract;
 class ServerRequestFactory implements ServerRequestFactoryInterface
 {
     /**
-     * Determine HTTP method and URI automatically.
-     *
-     * @var bool
-     */
-    public $autoDetermine;
-
-    /**
-     * ServerRequestFactory Constructor.
-     *
-     * [Note]
-     *
-     * Although PSR-17 document says:
-     * "In particular, no attempt is made to determine the HTTP method or URI, 
-     * which must be provided explicitly."
-     *
-     * But I think that HTTP method and URI can be given by superglobal in SAPI.
-     * $autoDetermine is an option to allow you automatically determine the 
-     * HTTP method and URI when their values are empty.
-     *
-     * @param bool $autoDetermine Determine HTTP method and URI automatically
-     */
-    public function __construct(bool $autoDetermine = false)
-    {
-        $this->autoDetermine = $autoDetermine;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function createServerRequest(string $method, $uri, array $serverParams = []): ServerRequestInterface
@@ -65,16 +38,6 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
 
         if ($serverParams !== []) {
             $server = $serverParams;
-        }
-
-        if ($this->autoDetermine) {
-            if ($method === '') {
-                $method = $server['REQUEST_METHOD'] ?? 'GET';
-            }
-
-            if ($uri === '') {
-                $uri = $this->createUriFromGlobal($server);
-            }
         }
 
         $protocol = $server['SERVER_PROTOCOL'] ?? '1.1';
@@ -109,14 +72,49 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
     */
 
     /**
-     * Create a UriInterface instance from global variable.
+     * Create a ServerRequestInterface instance from global variable.
      *
-     * @param array $server
+     * @return ServerRequestInterface
+     */
+    public static function createServerRequestFromGlobal(): ServerRequestInterface
+    {
+        extract(SuperGlobal::extract());
+
+        // HTTP method.
+        $method = $server['REQUEST_METHOD'] ?? 'GET';
+
+        // HTTP protocal version.
+        $protocol = $server['SERVER_PROTOCOL'] ?? '1.1';
+        $protocol = str_replace('HTTP/', '',  $protocol);
+
+        $uri = self::createUriFromGlobal();
+
+        $streamFactory = new StreamFactory();
+        $body = $streamFactory->createStream();
+
+        return new ServerRequest(
+            $method,
+            $uri,
+            $body,
+            $header, // from extract.
+            $protocol,
+            $server, // from extract.
+            $cookie, // from extract.
+            $post,   // from extract.
+            $get,    // from extract.
+            $files   // from extract.
+        );
+    }
+
+    /**
+     * Create a UriInterface instance from global variable.
      *
      * @return UriInterface
      */
-    public function createUriFromGlobal($server): UriInterface
+    public function createUriFromGlobal(): UriInterface
     {
+        $server = $_SERVER ?? [];
+
         $uri = '';
 
         $uriComponents = [

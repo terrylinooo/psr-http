@@ -19,8 +19,10 @@ class ServerRequestFactoryTest extends TestCase
 {
     public function test_createServerRequest()
     {
+        SuperGlobal::mockCliEnvironment();
+
         $serverRequestFactory = new ServerRequestFactory();
-        $serverRequest = $serverRequestFactory->createServerRequest('GET', '', []);
+        $serverRequest = $serverRequestFactory->createServerRequest('GET', '', $_SERVER);
 
         $this->assertTrue(($serverRequest instanceof ServerRequestInterface));
     }
@@ -33,8 +35,7 @@ class ServerRequestFactoryTest extends TestCase
             'QUERY_STRING' => 'foo=bar'
         ]);
 
-        $serverRequestFactory = new ServerRequestFactory(true);
-        $serverRequest = $serverRequestFactory->createServerRequest('', '', $_SERVER);
+        $serverRequest = ServerRequestFactory::createServerRequestFromGlobal();
 
         $this->assertTrue(($serverRequest instanceof ServerRequestInterface));
     }

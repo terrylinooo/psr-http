@@ -50,22 +50,20 @@ $request = $requestFactory->createRequest('GET', 'https://www.google.com');
 ### ServerRequestFactory
 
 - createServerRequest
+- static::createServerRequestFromGlobal `(Non-PSR7)`
+- static::createUriFromGlobal `(Non-PSR7)`
 
-#### __construct(`$autoDetermine`)
+#### __construct
 
-- **param** `bool` autoDetermine `= false` *Determine HTTP method and URI automatically.*
+None
 
 Example:
 
 ```php
 use Shieldon\Psr7\Factory\ServerRequestFactory;
 
-$serverRequestFactory = new ServerRequestFactory(true);
+$serverRequestFactory = new ServerRequestFactory();
 ```
-
-PSR-17 document says, *In particular, no attempt is made to determine the HTTP method or URI, which must be provided explicitly.*
- 
-I think that HTTP method and URI can be given by superglobal in SAPI enviornment, since it is a server-side request. This is an option to allow you automatically determine the HTTP method and URI when `$method` and `$uri` are empty.
 
 #### createServerRequest(`$method`, `$uri`, `$serverParams`)
 
@@ -76,15 +74,6 @@ I think that HTTP method and URI can be given by superglobal in SAPI enviornment
 
 Examples:
 
-Determine HTTP method and URI automatically.
-
-```php
-$serverRequestFactory = new ServerRequestFactory(true);
-$serverRequest = $serverRequestFactory->createServerRequest('', '');
-```
-
-Or, the HTTP method and URI must be provided explicitly.
-
 ```php
 $serverRequestFactory = new ServerRequestFactory();
 
@@ -92,6 +81,26 @@ $method = 'GET';
 $url = 'https://www.yourwebsite.com/current-page/';
 
 $serverRequest = $serverRequestFactory->createServerRequest($method, $uri);
+```
+
+#### self::createServerRequestFromGlobal()
+
+- ***return*** `ServerRequestInterface`
+
+Examples:
+
+```php
+$serverRequest = ServerRequestFactory::createServerRequestFromGlobal();
+```
+
+#### self::createUriFromGlobal()
+
+- ***return*** `UriInterface`
+
+Examples:
+
+```php
+$uri = ServerRequestFactory::createUriFromGlobal();
 ```
 
 ### ResponseFactory
