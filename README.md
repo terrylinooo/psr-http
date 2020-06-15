@@ -153,7 +153,7 @@ Example:
 $sourceFile = BOOTSTRAP_DIR . '/sample/shieldon_logo.png';
 
 $streamFactory = new StreamFactory();
-$stream =  $streamFactory->createStreamFromFile($sourceFile);
+$stream = $streamFactory->createStreamFromFile($sourceFile);
 
 echo $stream->getSize();
 // Outputs: 15166
@@ -168,7 +168,7 @@ Example:
 
 ```php
 $streamFactory = new StreamFactory();
-$stream =  $streamFactory->createStreamResource(
+$stream = $streamFactory->createStreamResource(
     fopen('php://temp', 'r+')
 );
 ```
@@ -201,7 +201,7 @@ $targetPath = STORAGE_DIR . '/images/shieldon_logo.png';
 $streamFactory = new StreamFactory();
 $uploadedFileFactory = new UploadedFileFactory();
 
-$stream =  $streamFactory->createStreamFromFile($sourcePath);
+$stream = $streamFactory->createStreamFromFile($sourcePath);
 $uploadedFile = $uploadedFileFactory->createUploadedFile($stream);
 
 // Move file from $sourcePath to $targetPath.
@@ -1535,7 +1535,7 @@ Example:
 $uri = new \Shieldon\Psr7\Uri(
     'https://terry:1234@example.com:8888/phpMyAdmin/'
 );
-echo $uri->getUserInfo();
+echo $uri->getHost();
 // Outputs: example.com
 ```
 
@@ -1549,7 +1549,7 @@ Example:
 $uri = new \Shieldon\Psr7\Uri(
     'https://terry:1234@example.com:8888/phpMyAdmin/'
 );
-echo $uri->getUserInfo();
+echo $uri->getPort();
 // Outputs: 8888
 ```
 
@@ -1637,7 +1637,7 @@ echo $uri->getUserInfo();
 Example:
 
 ```php
-echo $uri->getUserInfo();
+echo $uri->getHost();
 // Outputs: example.com
 
 $url = $uri->withHost('terryl.in');
@@ -1653,15 +1653,15 @@ echo $uri->getHost();
 Example:
 
 ```php
-echo $uri->getUserInfo();
+echo $uri->getPort();
 // Outputs: 8888
 
 $uri = $uri->withPort(443);
-echo $uri->getUserInfo();
+echo $uri->getPort();
 // Outputs: 443
 
 $uri = $uri->withPort(null);
-echo $uri->getUserInfo();
+echo $uri->getPort();
 // Outputs:
 ```
 
