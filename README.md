@@ -50,8 +50,7 @@ $request = $requestFactory->createRequest('GET', 'https://www.google.com');
 ### ServerRequestFactory
 
 - createServerRequest
-- static::createServerRequestFromGlobal `(Non-PSR7)`
-- static::createUriFromGlobal `(Non-PSR7)`
+- ::fromGlobal `(Non-PSR7)`
 
 #### __construct
 
@@ -83,24 +82,14 @@ $url = 'https://www.yourwebsite.com/current-page/';
 $serverRequest = $serverRequestFactory->createServerRequest($method, $uri);
 ```
 
-#### self::createServerRequestFromGlobal()
+#### ::romGlobal()
 
 - ***return*** `ServerRequestInterface`
 
 Examples:
 
 ```php
-$serverRequest = ServerRequestFactory::createServerRequestFromGlobal();
-```
-
-#### self::createUriFromGlobal()
-
-- ***return*** `UriInterface`
-
-Examples:
-
-```php
-$uri = ServerRequestFactory::createUriFromGlobal();
+$serverRequest = ServerRequestFactory::fromGlobal();
 ```
 
 ### ResponseFactory
@@ -220,6 +209,7 @@ $uploadedFile->moveTo($targetPath);
 ### UriFactory
 
 - createUri
+- ::fromGlobal
 
 #### __construct
 
@@ -235,6 +225,15 @@ Example:
 ```php
 $uriFactory = new UriFactory;
 $uri = $uriFactory->createUri();
+```
+
+#### ::fromGlobal()
+
+- ***return*** `UriInterface`
+Examples:
+
+```php
+$uri = UriFactory::fromGlobal();
 ```
 
 ---

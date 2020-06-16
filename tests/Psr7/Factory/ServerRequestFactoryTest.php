@@ -35,7 +35,7 @@ class ServerRequestFactoryTest extends TestCase
             'QUERY_STRING' => 'foo=bar'
         ]);
 
-        $serverRequest = ServerRequestFactory::createServerRequestFromGlobal();
+        $serverRequest = ServerRequestFactory::fromGlobal();
 
         $this->assertTrue(($serverRequest instanceof ServerRequestInterface));
     }

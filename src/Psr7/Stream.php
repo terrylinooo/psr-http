@@ -180,11 +180,11 @@ class Stream implements StreamInterface
             return null;
         }
 
-        if (! $this->size) {
+        if ($this->size === null) {
             $stats = fstat($this->stream);
 
-            if ($stats) {
-                $this->size = isset($stats['size']) ? $stats['size'] : null;
+            if (isset($stats['size'])) {
+                $this->size = $stats['size'];
             }
         }
 

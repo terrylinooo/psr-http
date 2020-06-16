@@ -17,7 +17,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 use Shieldon\Psr7\Factory\StreamFactory;
 use Shieldon\Psr7\Factory\UriFactory;
-use Shieldon\Psr7\Uri;
 use Shieldon\Psr7\ServerRequest;
 use Shieldon\Psr7\Utils\SuperGlobal;
 
@@ -76,7 +75,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      *
      * @return ServerRequestInterface
      */
-    public static function createServerRequestFromGlobal(): ServerRequestInterface
+    public static function fromGlobal(): ServerRequestInterface
     {
         extract(SuperGlobal::extract());
 
@@ -87,7 +86,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $protocol = $server['SERVER_PROTOCOL'] ?? '1.1';
         $protocol = str_replace('HTTP/', '',  $protocol);
 
-        $uri = self::createUriFromGlobal();
+        $uri = UriFactory::fromGlobal();
 
         $streamFactory = new StreamFactory();
         $body = $streamFactory->createStream();
@@ -104,65 +103,5 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
             $get,    // from extract.
             $files   // from extract.
         );
-    }
-
-    /**
-     * Create a UriInterface instance from global variable.
-     *
-     * @return UriInterface
-     */
-    public static function createUriFromGlobal(): UriInterface
-    {
-        $server = $_SERVER ?? [];
-
-        $uri = '';
-
-        $uriComponents = [
-            'host' => 'HTTP_HOST',
-            'pass' => 'PHP_AUTH_PW',
-            'path' => 'REQUEST_URI',
-            'port' => 'SERVER_PORT',
-            'query' => 'QUERY_STRING',
-            'scheme' => 'REQUEST_SCHEME',
-            'user' => 'PHP_AUTH_USER',
-        ];
-
-        foreach ($uriComponents as $key => $value) {
-            ${$key} = $server[$value] ?? '';
-        }
-
-        $userInfo = $user;
-
-        if ($pass) {
-            $userInfo .= ':' . $pass;
-        }
-
-        $authority = '';
-
-        if ($userInfo) {
-            $authority .= $userInfo . '@';
-        }
-
-        $authority .= $host;
-
-        if ($port) {
-            $authority .= ':' . $port;
-        }
-
-        if ($scheme) {
-            $uri .= $scheme . ':';
-        }
-
-        if ($authority) {
-            $uri .= '//' . $authority;
-        }
-
-        $uri .= '/' . ltrim($path, '/');
-
-        if ($query) {
-            $uri .= '?' . $query;
-        }
-    
-        return new Uri($uri);
     }
 }

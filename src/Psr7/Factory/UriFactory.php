@@ -28,4 +28,70 @@ class UriFactory implements UriFactoryInterface
     {
         return new Uri($uri);
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Non PSR-7 Methods.
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Create a UriInterface instance from global variable.
+     *
+     * @return UriInterface
+     */
+    public static function fromGlobal(): UriInterface
+    {
+        $server = $_SERVER ?? [];
+
+        $uri = '';
+
+        $uriComponents = [
+            'host' => 'HTTP_HOST',
+            'pass' => 'PHP_AUTH_PW',
+            'path' => 'REQUEST_URI',
+            'port' => 'SERVER_PORT',
+            'query' => 'QUERY_STRING',
+            'scheme' => 'REQUEST_SCHEME',
+            'user' => 'PHP_AUTH_USER',
+        ];
+
+        foreach ($uriComponents as $key => $value) {
+            ${$key} = $server[$value] ?? '';
+        }
+
+        $userInfo = $user;
+
+        if ($pass) {
+            $userInfo .= ':' . $pass;
+        }
+
+        $authority = '';
+
+        if ($userInfo) {
+            $authority .= $userInfo . '@';
+        }
+
+        $authority .= $host;
+
+        if ($port) {
+            $authority .= ':' . $port;
+        }
+
+        if ($scheme) {
+            $uri .= $scheme . ':';
+        }
+
+        if ($authority) {
+            $uri .= '//' . $authority;
+        }
+
+        $uri .= '/' . ltrim($path, '/');
+
+        if ($query) {
+            $uri .= '?' . $query;
+        }
+    
+        return new Uri($uri);
+    }
 }

@@ -34,7 +34,14 @@ class StreamFactory implements StreamFactoryInterface
      */
     public function createStream(string $content = ''): StreamInterface
     {
-        $resource = fopen('php://temp', 'r+');
+        $resource = @fopen('php://temp', 'r+');
+
+        if (! is_resource($resource)) {
+            throw new RuntimeException(
+                'Unable to open "php://temp" resource.'
+            );
+        }
+
         fwrite($resource, $content);
         rewind($resource);
 
