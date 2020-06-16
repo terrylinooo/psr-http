@@ -82,7 +82,7 @@ $url = 'https://www.yourwebsite.com/current-page/';
 $serverRequest = $serverRequestFactory->createServerRequest($method, $uri);
 ```
 
-#### ::romGlobal()
+#### ::fromGlobal()
 
 - ***return*** `ServerRequestInterface`
 

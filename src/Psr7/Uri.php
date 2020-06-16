@@ -145,7 +145,7 @@ class Uri implements UriInterface
 
         $authority .= $this->getHost();
 
-        if ($this->getPort()) {
+        if (! empty($this->getPort())) {
             $authority .= ':' . $this->getPort();
         }
 
