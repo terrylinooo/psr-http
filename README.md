@@ -39,7 +39,7 @@ composer test
 
 
 The Shieldon HTTP implementation requires at least PHP 7.1 to run.
-The usages of every method can be found in the [unit tests](https://github.com/terrylinooo/psr-http/tree/master/tests/Psr7).
+The usages of every method can be found in the [unit tests](https://github.com/terrylinooo/psr-http/tree/master/tests/).
 
 ## PSR-17 Factories
 
@@ -78,7 +78,7 @@ $request = $requestFactory->createRequest('GET', 'https://www.google.com');
 ### ServerRequestFactory
 
 - createServerRequest
-- ::fromGlobal `(Non-PSR7)`
+- ::fromGlobal `(Non-PSR)`
 
 #### __construct
 
@@ -111,6 +111,8 @@ $serverRequest = $serverRequestFactory->createServerRequest($method, $uri);
 ```
 
 #### ::fromGlobal()
+
+ `(Non-PSR)`
 
 - ***return*** `ServerRequestInterface`
 
@@ -237,7 +239,7 @@ $uploadedFile->moveTo($targetPath);
 ### UriFactory
 
 - createUri
-- ::fromGlobal
+- ::fromGlobal  `(Non-PSR)`
 
 #### __construct
 
@@ -256,6 +258,8 @@ $uri = $uriFactory->createUri();
 ```
 
 #### ::fromGlobal()
+
+ `(Non-PSR)`
 
 - ***return*** `UriInterface`
 Examples:
@@ -1760,6 +1764,8 @@ $uri = new Uri('http://example.com:8888/demo/#section-1');
 echo $uri;
 // Outputs: http://example.com:8888/demo/#section-1
 ```
+
+---
 
 ## PSR-15 Middleware
 
