@@ -1,13 +1,13 @@
 # PHP PSR-7, PSR-15, PSR-17 Implementation and Examples
 
-[![Build Status](https://travis-ci.org/terrylinooo/psr7.svg?branch=master)](https://travis-ci.org/terrylinooo/psr7) [![codecov](https://img.shields.io/codecov/c/github/terrylinooo/psr7.svg)](https://codecov.io/gh/terrylinooo/psr7) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://travis-ci.org/terrylinooo/psr7.svg?branch=master)](https://travis-ci.org/terrylinooo/psr-http) [![codecov](https://img.shields.io/codecov/c/github/terrylinooo/psr7.svg)](https://codecov.io/gh/terrylinooo/psr-http) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This library is a PSR HTTP implementation used by [Shieldon](https://github.com/terrylinooo/shieldon) firewall 2 version, following up the PSR-7 [HTTP message interfaces](https://www.php-fig.org/psr/psr-7/) document. You can use it on any framework which is compatible with the PSR-7 standard.
 
 ## Install
 
 ```php
-composer require shieldon/psr7
+composer require shieldon/psr-http
 ```
 
 ## Run test
@@ -16,8 +16,8 @@ composer install
 composer test
 ```
 
-The Shieldon PSR-7 implementation requires at least PHP 7.1 to run.
-The usages of every method can be found in the [unit tests](https://github.com/terrylinooo/psr7/tree/master/tests/Psr7).
+The Shieldon HTTP implementation requires at least PHP 7.1 to run.
+The usages of every method can be found in the [unit tests](https://github.com/terrylinooo/psr-http/tree/master/tests/Psr7).
 
 ## PSR-17 Factories
 
