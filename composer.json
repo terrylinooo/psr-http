@@ -1,8 +1,8 @@
 {
-    "name": "shieldon/psr7",
-    "description": "Implementing PSR-7 on Shieldon 2.x",
-    "keywords": ["php", "psr7"],
-    "homepage": "https://github.com/terrylinooo/psr7",
+    "name": "shieldon/psr-http",
+    "description": "HTTP implementation for PSR standard.",
+    "keywords": ["php-http", "psr7", "psr-15", "psr-17"],
+    "homepage": "https://github.com/terrylinooo/psr-http",
     "license": "MIT",
     "authors": [
         {
