@@ -16,7 +16,9 @@
     "require": {
         "php": ">=7.1.0",
         "psr/http-factory": "^1.0",
-        "psr/http-message": "^1.0"
+        "psr/http-message": "^1.0",
+        "psr/http-server-handler": "^1.0",
+        "psr/http-server-middleware": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^7"
@@ -30,7 +32,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Shieldon\\Psr7\\Tests\\": "tests/Psr7"
+            "Shieldon\\Test\\Psr7\\": "tests/Psr7",
+            "Shieldon\\Test\\Psr15\\": "tests/Psr15",
+            "Shieldon\\Test\\Psr17\\": "tests/Psr17"
         }
     },
     "config": {

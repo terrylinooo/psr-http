@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Shieldon\Psr7;
+namespace Shieldon\Test\Psr7;
 
 use PHPUnit\Framework\TestCase;
 
@@ -16,6 +16,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\UriInterface;
 use Shieldon\Psr7\Request;
+use Shieldon\Psr7\Uri;
 use InvalidArgumentException;
 
 class RequestTest extends TestCase

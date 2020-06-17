@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Shieldon\Psr17;
+namespace Shieldon\Test\Psr17;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;

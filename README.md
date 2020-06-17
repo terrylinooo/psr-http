@@ -872,7 +872,7 @@ echo $attributes['ip_address'];
 #### getAttribute(`$name`, `$default`)
 
 - ***param*** `string` name `*` *The attribute name.*
-- ***param*** `mixed` filesParams `= null` *Default value to return if the attribute does not exist.*
+- ***param*** `mixed` default `= null` *Default value to return if the attribute does not exist.*
 - ***return*** `mixed`
 
 Example: 
@@ -1739,7 +1739,7 @@ echo $uri;
 // Outputs: http://example.com:8888/demo/#section-1
 ```
 
-## PSR-15 Middwares
+## PSR-15 Middleware
 
 Ongoing...
 

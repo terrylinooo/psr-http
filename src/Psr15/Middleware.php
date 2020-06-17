@@ -25,5 +25,8 @@ abstract class Middleware implements MiddlewareInterface
     /**
      * {@inheritdoc}
      */
-    abstract function process(ServerRequestInterface  $request, RequestHandlerInterface $handler): ResponseInterface;
+    abstract function process(
+        ServerRequestInterface  $request,
+        RequestHandlerInterface $handler
+    ): ResponseInterface;
 }

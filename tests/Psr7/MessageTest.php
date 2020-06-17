@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Shieldon\Psr7;
+namespace Shieldon\Test\Psr7;
 
 use PHPUnit\Framework\TestCase;
 

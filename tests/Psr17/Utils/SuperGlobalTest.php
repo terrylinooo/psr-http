@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Shieldon\Psr17\Utils;
+namespace Shieldon\Test\Psr17\Utils;
 
 use PHPUnit\Framework\TestCase;
 use Shieldon\Psr17\Utils\SuperGlobal;
