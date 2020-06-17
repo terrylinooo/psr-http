@@ -16,6 +16,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\UriInterface;
 use Shieldon\Psr7\Request;
+use Shieldon\Psr7\Stream;
 use Shieldon\Psr7\Uri;
 use InvalidArgumentException;
 

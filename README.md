@@ -1,8 +1,8 @@
 # PHP PSR-7, PSR-15, PSR-17 Implementation and Examples
 
-[![Build Status](https://travis-ci.org/terrylinooo/psr7.svg?branch=master)](https://travis-ci.org/terrylinooo/psr-http) [![codecov](https://img.shields.io/codecov/c/github/terrylinooo/psr7.svg)](https://codecov.io/gh/terrylinooo/psr-http) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://travis-ci.org/terrylinooo/psr-http.svg?branch=master)](https://travis-ci.org/terrylinooo/psr-http) [![codecov](https://img.shields.io/codecov/c/github/terrylinooo/psr-http.svg)](https://codecov.io/gh/terrylinooo/psr-http) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This library is a PSR HTTP implementation used by [Shieldon](https://github.com/terrylinooo/shieldon) firewall 2 version, following up the PSR-7 [HTTP message interfaces](https://www.php-fig.org/psr/psr-7/) document. You can use it on any framework which is compatible with the PSR-7 standard.
+This library is a PSR HTTP implementation with detailed examples, following up the PSR-7 ([HTTP Message Interfaces](https://www.php-fig.org/psr/psr-7/)), PSR-15 ([HTTP Server Request Handlers](https://www.php-fig.org/psr/psr-15/)) and PSR-17 ([HTTP Factories](https://www.php-fig.org/psr/psr-17/)) documents. You can use it on any framework which is compatible with those PSR standards.
 
 ## Install
 
@@ -16,17 +16,39 @@ composer install
 composer test
 ```
 
+## Table of Contents
+
+- **PSR-17**: *HTTP Factories*
+    - [RequestFactory](https://github.com/terrylinooo/psr-http#requestfactory)
+    - [ServerRequestFactory](https://github.com/terrylinooo/psr-http#serverrequestfactory)
+    - [ResponseFactory](https://github.com/terrylinooo/psr-http#responsefactory)
+    - [StreamFactory](https://github.com/terrylinooo/psr-http#streamfactory)
+    - [UploadedFileFactory](https://github.com/terrylinooo/psr-http#uploadedfilefactory)
+    - [UriFactory](https://github.com/terrylinooo/psr-http#urifactory)
+- **PSR-7**: *HTTP Message Interfaces*
+    - [Message](https://github.com/terrylinooo/psr-http#message)
+    - [Request](https://github.com/terrylinooo/psr-http#request) *(externds Message)*
+    - [ServerRequest](https://github.com/terrylinooo/psr-http#serverrequest) *(externds Request)*
+    - [Response](https://github.com/terrylinooo/psr-http#response)
+    - [Stream](https://github.com/terrylinooo/psr-http#stream)
+    - [UploadedFile](https://github.com/terrylinooo/psr-http#uploadedfile)
+    - [Uri](https://github.com/terrylinooo/psr-http#uri)
+- **PSR-15**: *HTTP Server Request Handlers*
+    - [RequestHandler](https://github.com/terrylinooo/psr-http#requesthandler)
+    - [Middleware](https://github.com/terrylinooo/psr-http#middleware)
+
+
 The Shieldon HTTP implementation requires at least PHP 7.1 to run.
 The usages of every method can be found in the [unit tests](https://github.com/terrylinooo/psr-http/tree/master/tests/Psr7).
 
 ## PSR-17 Factories
 
-- [RequestFactory](https://github.com/terrylinooo/psr7#requestfactory)
-- [ServerRequestFactory](https://github.com/terrylinooo/psr7#serverrequestfactory)
-- [ResponseFactory](https://github.com/terrylinooo/psr7#responsefactory)
-- [StreamFactory](https://github.com/terrylinooo/psr7#streamfactory)
-- [UploadedFileFactory](https://github.com/terrylinooo/psr7#uploadedfilefactory)
-- [UriFactory](https://github.com/terrylinooo/psr7#urifactory)
+- [RequestFactory](https://github.com/terrylinooo/psr-http#requestfactory)
+- [ServerRequestFactory](https://github.com/terrylinooo/psr-http#serverrequestfactory)
+- [ResponseFactory](https://github.com/terrylinooo/psr-http#responsefactory)
+- [StreamFactory](https://github.com/terrylinooo/psr-http#streamfactory)
+- [UploadedFileFactory](https://github.com/terrylinooo/psr-http#uploadedfilefactory)
+- [UriFactory](https://github.com/terrylinooo/psr-http#urifactory)
 
 Here are some examples that show you the way creating PSR-7 instances from PSR-17 HTTP factories.
 
@@ -246,13 +268,13 @@ $uri = UriFactory::fromGlobal();
 
 ## PSR-7 Classes
 
-- [Message](https://github.com/terrylinooo/psr7#message)
-- [Request](https://github.com/terrylinooo/psr7#request) *(externds Message)*
-- [ServerRequest](https://github.com/terrylinooo/psr7#serverrequest) *(externds Request)*
-- [Response](https://github.com/terrylinooo/psr7#response)
-- [Stream](https://github.com/terrylinooo/psr7#stream)
-- [UploadedFile](https://github.com/terrylinooo/psr7#uploadedfile)
-- [Uri](https://github.com/terrylinooo/psr7#uri)
+- [Message](https://github.com/terrylinooo/psr-http#message)
+- [Request](https://github.com/terrylinooo/psr-http#request) *(externds Message)*
+- [ServerRequest](https://github.com/terrylinooo/psr-http#serverrequest) *(externds Request)*
+- [Response](https://github.com/terrylinooo/psr-http#response)
+- [Stream](https://github.com/terrylinooo/psr-http#stream)
+- [UploadedFile](https://github.com/terrylinooo/psr-http#uploadedfile)
+- [Uri](https://github.com/terrylinooo/psr-http#uri)
 
 Note: 
 
@@ -1741,7 +1763,93 @@ echo $uri;
 
 ## PSR-15 Middleware
 
-Ongoing...
+- RequestHandler
+- Middleware
+
+### RequestHandler
+
+- add
+- handle
+
+#### __construct(`$fallbackHandler`)
+
+- ***param*** `RequestHandlerInterface` fallbackHandler `*` *The request handler.*
+
+Example:
+
+```php
+$finalHandler = new FinalHandler();
+
+$app = new RequestHandler($finalHandler);
+$app->add(new ApiMiddleware());
+$app->add(new StringMiddleware());
+
+$response = $app->handle(ServerRequestFactory::fromGlobal());
+```
+
+#### add(`$middleware`)
+
+- ***param*** `MiddlewareInterface` middleware `*` *The middleware.*
+- ***return*** `void`
+
+Example:
+
+```php
+$app->add(new ApiMiddleware());
+```
+
+#### handle(`request`)
+
+- ***param*** `ServerRequestInterface` request `*` *The server request.*
+- ***return*** `ResponseInterface`
+
+Example:
+
+```php
+$response = $app->handle(ServerRequestFactory::fromGlobal());
+```
+
+### Middleware
+
+- process
+
+#### __construct
+
+None
+
+#### process(`$request`, `$handler`)
+
+- ***param*** `ServerRequestInterface` request `*` *The server request.*
+- ***param*** `RequestHandlerInterface` handler `*` *The request handler.*
+- ***return*** `ResponseInterface`
+
+Example:
+
+```php
+class ApiMiddleware extends Middleware
+{
+    public function process(ServerRequestInterface  $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        $contentType = $request->getHeaderLine('Content-Type');
+        $key = $request->getHeaderLine('key');
+        $secret = $request->getHeaderLine('secret');
+
+        if ($contentType !== 'application/json') {
+            return (new Response)->withStatus(406, 'Content type is not accepted.');
+        }
+
+        if ($key !== '23492834234') {
+            return (new Response)->withStatus(401, 'API key is invalid.');
+        }
+
+        if ($secret !== '1a163782ee166156294d173fcf8b8e87') {
+            return (new Response)->withStatus(401, 'API secret is invalid.');
+        }
+
+        return $handler->handle($request);
+    }
+}
+```
 
 --- 
 
