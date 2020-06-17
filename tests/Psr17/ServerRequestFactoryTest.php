@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Shieldon\Psr7\Factory;
+namespace Shieldon\Psr17;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Shieldon\Psr7\Factory\ServerRequestFactory;
-use Shieldon\Psr7\Utils\SuperGlobal;
+use Shieldon\Psr17\ServerRequestFactory;
+use Shieldon\Psr17\Utils\SuperGlobal;
 
 class ServerRequestFactoryTest extends TestCase
 {

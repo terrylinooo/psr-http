@@ -10,15 +10,15 @@
 
 declare(strict_types=1);
 
-namespace Shieldon\Psr7\Factory;
+namespace Shieldon\Psr17;
 
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
-use Shieldon\Psr7\Factory\StreamFactory;
-use Shieldon\Psr7\Factory\UriFactory;
+use Shieldon\Psr17\StreamFactory;
+use Shieldon\Psr17\UriFactory;
+use Shieldon\Psr17\Utils\SuperGlobal;
 use Shieldon\Psr7\ServerRequest;
-use Shieldon\Psr7\Utils\SuperGlobal;
 
 use function str_replace;
 use function extract;

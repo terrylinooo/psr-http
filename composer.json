@@ -23,7 +23,9 @@
     },
     "autoload": {
         "psr-4": {
-            "Shieldon\\Psr7\\": "src/Psr7"
+            "Shieldon\\Psr7\\": "src/Psr7",
+            "Shieldon\\Psr15\\": "src/Psr15",
+            "Shieldon\\Psr17\\": "src/Psr17"
         }
     },
     "autoload-dev": {

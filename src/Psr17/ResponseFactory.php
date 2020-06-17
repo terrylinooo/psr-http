@@ -10,13 +10,13 @@
 
 declare(strict_types=1);
 
-namespace Shieldon\Psr7\Factory;
+namespace Shieldon\Psr17;
 
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
-use Shieldon\Psr7\Factory\StreamFactory;
+use Shieldon\Psr17\StreamFactory;
+use Shieldon\Psr17\Utils\SuperGlobal;
 use Shieldon\Psr7\Response;
-use Shieldon\Psr7\Utils\SuperGlobal;
 
 use function str_replace;
 use function extract;

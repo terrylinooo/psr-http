@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Shieldon\Psr7\Utils;
+namespace Shieldon\Psr17\Utils;
 
 use PHPUnit\Framework\TestCase;
-use Shieldon\Psr7\Utils\SuperGlobal;
+use Shieldon\Psr17\Utils\SuperGlobal;
 
 class SuperGlobalTest extends TestCase
 {

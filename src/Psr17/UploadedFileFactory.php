@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace Shieldon\Psr7\Factory;
+namespace Shieldon\Psr17;
 
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;

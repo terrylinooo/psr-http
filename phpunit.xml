@@ -4,11 +4,13 @@
     <testsuites>
         <testsuite name="Shieldon PSR-7 Test Suite">
             <directory>tests/Psr7/</directory>
+            <directory>tests/Psr15/</directory>
+            <directory>tests/Psr17/</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist>
-            <directory suffix=".php">src/Psr7/</directory>
+            <directory suffix=".php">src/</directory>
         </whitelist>
     </filter>
     <php>

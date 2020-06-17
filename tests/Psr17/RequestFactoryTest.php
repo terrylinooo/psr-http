@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Shieldon\Psr7\Factory;
+namespace Shieldon\Psr17;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
-use Shieldon\Psr7\Factory\RequestFactory;
+use Shieldon\Psr17\RequestFactory;
 
 class RequestFactoryTest extends TestCase
 {

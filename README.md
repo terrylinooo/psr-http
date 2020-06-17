@@ -1,13 +1,19 @@
-# PHP PSR-7 Tutorial, Implementation and Examples
+# PHP PSR-7, PSR-15. PSR-17 Implementation and Examples
 
 [![Build Status](https://travis-ci.org/terrylinooo/psr7.svg?branch=master)](https://travis-ci.org/terrylinooo/psr7) [![codecov](https://img.shields.io/codecov/c/github/terrylinooo/psr7.svg)](https://codecov.io/gh/terrylinooo/psr7) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This library is a PSR-7 implementation used by [Shieldon](https://github.com/terrylinooo/shieldon) firewall 2 version, following up the PSR-7 [HTTP message interfaces](https://www.php-fig.org/psr/psr-7/) document. You can use it on any framework which is compatible with the PSR-7 standard.
+This library is a PSR HTTP implementation used by [Shieldon](https://github.com/terrylinooo/shieldon) firewall 2 version, following up the PSR-7 [HTTP message interfaces](https://www.php-fig.org/psr/psr-7/) document. You can use it on any framework which is compatible with the PSR-7 standard.
 
 ## Install
 
 ```php
 composer require shieldon/psr7
+```
+
+## Run test
+```bash
+composer install
+composer test
 ```
 
 The Shieldon PSR-7 implementation requires at least PHP 7.1 to run.
@@ -41,7 +47,7 @@ None
 Example:
 
 ```php
-use Shieldon\Psr7\Factory\RequestFactory;
+use Shieldon\Psr17\RequestFactory;
 
 $requestFactory = new RequestFactory();
 $request = $requestFactory->createRequest('GET', 'https://www.google.com');
@@ -59,7 +65,7 @@ None
 Example:
 
 ```php
-use Shieldon\Psr7\Factory\ServerRequestFactory;
+use Shieldon\Psr17\ServerRequestFactory;
 
 $serverRequestFactory = new ServerRequestFactory();
 ```
@@ -108,7 +114,7 @@ None
 
 Example:
 ```php
-use Shieldon\Psr7\Factory\ResponseFactory;
+use Shieldon\Psr17\ResponseFactory;
 
 $responseFactory = new ResponseFactory();
 $response = $responseFactory->createResponse(200, 'OK');
@@ -1733,11 +1739,11 @@ echo $uri;
 // Outputs: http://example.com:8888/demo/#section-1
 ```
 
-## Run test
-```bash
-composer install
-composer test
-```
+## PSR-15 Middwares
+
+Ongoing...
+
+--- 
 
 ## Author
 

@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Shieldon\Psr7\Factory;
+namespace Shieldon\Psr17;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
-use Shieldon\Psr7\Factory\StreamFactory;
+use Shieldon\Psr17\StreamFactory;
 use InvalidArgumentException;
 use RuntimeException;
 

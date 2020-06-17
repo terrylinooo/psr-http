@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace Shieldon\Psr7\Utils;
+namespace Shieldon\Psr17\Utils;
 
 use function microtime;
 use function php_sapi_name;

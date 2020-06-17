@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Shieldon\Psr7\Factory;
+namespace Shieldon\Psr17;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\UploadedFileInterface;
-use Shieldon\Psr7\Factory\UploadedFileFactory;
-use Shieldon\Psr7\Factory\StreamFactory;
+use Shieldon\Psr17\UploadedFileFactory;
+use Shieldon\Psr17\StreamFactory;
 use ReflectionObject;
 use InvalidArgumentException;
 

@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace Shieldon\Psr7\Factory;
+namespace Shieldon\Psr17;
 
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
