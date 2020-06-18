@@ -19,29 +19,29 @@ composer test
 ## Table of Contents
 
 - **PSR-17**: *HTTP Factories*
-    - [RequestFactory](https://github.com/terrylinooo/psr-http#requestfactory)
-    - [ServerRequestFactory](https://github.com/terrylinooo/psr-http#serverrequestfactory)
-    - [ResponseFactory](https://github.com/terrylinooo/psr-http#responsefactory)
-    - [StreamFactory](https://github.com/terrylinooo/psr-http#streamfactory)
-    - [UploadedFileFactory](https://github.com/terrylinooo/psr-http#uploadedfilefactory)
-    - [UriFactory](https://github.com/terrylinooo/psr-http#urifactory)
+    - [RequestFactory](https://github.com/terrylinooo/psr-http/wiki/PSR-17:-RequestFactory-Example)
+    - [ServerRequestFactory](https://github.com/terrylinooo/psr-http/wiki/PSR-17:-ServerRequestFactory-Example)
+    - [ResponseFactory](https://github.com/terrylinooo/psr-http/wiki/PSR-17:-ResponseFactory-Example)
+    - [StreamFactory](https://github.com/terrylinooo/psr-http/wiki/PSR-17:-StreamFactory-Example)
+    - [UploadedFileFactory](https://github.com/terrylinooo/psr-http/wiki/PSR-17:-UploadedFileFactory-Example)
+    - [UriFactory](https://github.com/terrylinooo/psr-http/wiki/PSR-17:-UriFactory-Example)
 - **PSR-7**: *HTTP Message Interfaces*
-    - [Message](https://github.com/terrylinooo/psr-http#message)
-    - [Request](https://github.com/terrylinooo/psr-http#request) *(externds Message)*
-    - [ServerRequest](https://github.com/terrylinooo/psr-http#serverrequest) *(externds Request)*
-    - [Response](https://github.com/terrylinooo/psr-http#response)
-    - [Stream](https://github.com/terrylinooo/psr-http#stream)
-    - [UploadedFile](https://github.com/terrylinooo/psr-http#uploadedfile)
-    - [Uri](https://github.com/terrylinooo/psr-http#uri)
+    - [Message](https://github.com/terrylinooo/psr-http/wiki/PSR-7:-Message-Example)
+    - [Request](https://github.com/terrylinooo/psr-http/wiki/PSR-7:-Request-Example) *(externds Message)*
+    - [ServerRequest](https://github.com/terrylinooo/psr-http/wiki/PSR-7:-ServerRequest-Example) *(externds Request)*
+    - [Response](https://github.com/terrylinooo/psr-http/wiki/PSR-7:-Response-Example)
+    - [Stream](https://github.com/terrylinooo/psr-http/wiki/PSR-7:-Stream-Example)
+    - [UploadedFile](https://github.com/terrylinooo/psr-http/wiki/PSR-7:-UploadedFile-Example)
+    - [Uri](https://github.com/terrylinooo/psr-http/wiki/PSR-7:-Uri-Example)
 - **PSR-15**: *HTTP Server Request Handlers*
-    - [RequestHandler](https://github.com/terrylinooo/psr-http#requesthandler)
-    - [Middleware](https://github.com/terrylinooo/psr-http#middleware)
+    - [RequestHandler](https://github.com/terrylinooo/psr-http/wiki/PSR-15:-RequestHandler-Example)
+    - [Middleware](https://github.com/terrylinooo/psr-http/wiki/PSR-15:-Middleware-Example)
 
 
 The Shieldon HTTP implementation requires at least PHP 7.1 to run.
 The usages of every method can be found in the [unit tests](https://github.com/terrylinooo/psr-http/tree/master/tests/).
 
-## PSR-17 Factories
+## PSR-17: HTTP Factories
 
 - [RequestFactory](https://github.com/terrylinooo/psr-http#requestfactory)
 - [ServerRequestFactory](https://github.com/terrylinooo/psr-http#serverrequestfactory)
@@ -270,7 +270,7 @@ $uri = UriFactory::fromGlobal();
 
 ---
 
-## PSR-7 Classes
+## PSR-7: HTTP Message Interfaces
 
 - [Message](https://github.com/terrylinooo/psr-http#message)
 - [Request](https://github.com/terrylinooo/psr-http#request) *(externds Message)*
@@ -1767,7 +1767,7 @@ echo $uri;
 
 ---
 
-## PSR-15 Middleware
+## PSR-15: HTTP Server Request Handlers
 
 - RequestHandler
 - Middleware
