@@ -1,4 +1,4 @@
-# PSR-7, 15, 17 Implementation and Examples
+# PSR 7, 15, 17 Implementation and Examples
 
 [![Build Status](https://travis-ci.org/terrylinooo/psr-http.svg?branch=master)](https://travis-ci.org/terrylinooo/psr-http) [![codecov](https://img.shields.io/codecov/c/github/terrylinooo/psr-http.svg)](https://codecov.io/gh/terrylinooo/psr-http) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -139,8 +139,8 @@ If you are looking for combined examples, see [unit testing](https://github.com/
 
 ## Author
 
-Shieldon HTTP message library (PSR-7 implementation) is brought to you by [Terry L.](https://terryl.in) from Taiwan.
+Shieldon PSR HTTP library is brought to you by [Terry L.](https://terryl.in) from Taiwan.
 
 ## License
 
-Shieldon HTTP message library is an open-sourced software licensed under the **MIT** license.
+MIT

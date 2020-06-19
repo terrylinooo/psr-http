@@ -141,8 +141,9 @@ class Stream implements StreamInterface
     {
         if (isset($this->stream) && is_resource($this->stream)) {
             fclose($this->stream);
-            $this->detach();
         }
+
+        $this->detach();
     }
 
     /**
