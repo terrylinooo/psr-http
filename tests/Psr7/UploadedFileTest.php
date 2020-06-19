@@ -74,34 +74,6 @@ class UploadedFileTest extends TestCase
         unlink($targetPath);
     }
 
-    public function test_MoveTo_Mock_Sapi_Fpm()
-    {
-        $sourceFile = BOOTSTRAP_DIR . '/sample/shieldon_logo.png';
-        $cloneFile = save_testing_file('shieldon_logo_clone.png');
-        $targetPath = save_testing_file('shieldon_logo_moved_from_file.png');
-
-        // Clone a sample file for testing MoveTo method.
-        if (! copy($sourceFile, $cloneFile)) {
-            $this->assertTrue(false);
-        }
-
-        $uploadedFile = new UploadedFile(
-            $cloneFile,
-            'shieldon_logo.png',
-            'image/png',
-            100000,
-            0,
-            'unit-test-1'
-        );
-
-        $uploadedFile->moveTo($targetPath);
-
-        if (file_exists($targetPath)) {
-            $this->assertTrue(true);
-        }
-
-        unlink($targetPath);
-    }
 
     public function test_GetPrefixMethods()
     {
@@ -267,27 +239,6 @@ class UploadedFileTest extends TestCase
         // Exception: 
         // => The target path "/tmp/folder-not-exists/test.png" is not writable.
         $uploadedFile->moveTo(BOOTSTRAP_DIR . '/tmp/folder-not-exists/test.png');
-    }
-
-    public function test_Exception_MoveTo_FileCannotRename()
-    {
-        define('MOCK_RENAME_FALSE', true);
-
-        $this->expectException(RuntimeException::class);
-
-        $uploadedFile = new UploadedFile(
-            BOOTSTRAP_DIR . '/sample/shieldon_logo.png',
-            'shieldon_logo.png',
-            'image/png',
-            100000,
-            0
-        );
-
-        $targetPath = save_testing_file('shieldon_logo_moved_from_file.png');
-
-        // Exception: 
-        // => Could not rename the file to the target path "/tmp/shieldon_logo_moved_from_file.png".
-        $uploadedFile->moveTo($targetPath);
     }
 
     public function test_Exception_MoveTo_FileNotUploaded()

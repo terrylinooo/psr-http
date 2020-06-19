@@ -45,15 +45,21 @@ class UriFactory implements UriFactoryInterface
         $server = $_SERVER ?? [];
 
         $uri = '';
+        $user = '';
+        $host = '';
+        $pass = '';
+        $port = '';
+        $query = '';
+        $scheme = '';
 
         $uriComponents = [
+            'user' => 'PHP_AUTH_USER',
             'host' => 'HTTP_HOST',
             'pass' => 'PHP_AUTH_PW',
             'path' => 'REQUEST_URI',
             'port' => 'SERVER_PORT',
             'query' => 'QUERY_STRING',
             'scheme' => 'REQUEST_SCHEME',
-            'user' => 'PHP_AUTH_USER',
         ];
 
         foreach ($uriComponents as $key => $value) {

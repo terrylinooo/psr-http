@@ -167,44 +167,48 @@ class UploadedFile implements UploadedFileInterface
     public function moveTo($targetPath): void
     {
         if ($this->isMoved) {
+            // Throw exception on the second or subsequent call to the method.
             throw new RuntimeException(
                 'Uploaded file already moved'
             );
         }
 
-        if ($this->isFile()) {
+        if (! is_writable(dirname($targetPath))) {
+            // Throw exception if the $targetPath specified is invalid.
+            throw new RuntimeException(
+                sprintf(
+                    'The target path "%s" is not writable.',
+                    $targetPath
+                )
+            );
+        }
 
-            if (! is_writable(dirname($targetPath))) {
-                throw new RuntimeException(
-                    sprintf(
-                        'The target path "%s" is not writable.',
-                        $targetPath
-                    )
-                );
-            }
+        // Is a file..
+        if (is_string($this->file) && ! empty($this->file)) {
 
             if ($this->sapi === 'cli') {
 
-                if (! $this->rename($this->file, $targetPath)) {
+                if (! rename($this->file, $targetPath)) {
+
+                    // @codeCoverageIgnoreStart
+
+                    // Throw exception on any error during the move operation.
                     throw new RuntimeException(
                         sprintf(
                             'Could not rename the file to the target path "%s".',
                             $targetPath
                         )
                     );
+
+                    // @codeCoverageIgnoreEnd
                 }
             } else {
 
-                if (! $this->isUploadedFile($this->file)) {
-                    throw new RuntimeException(
-                        sprintf(
-                            '"%s" is invalid uploaded file.',
-                            $this->file
-                        )
-                    );
-                }
-
-                if (! $this->moveUploadedFile($this->file, $targetPath)) {
+                if (
+                    ! is_uploaded_file($this->file) || 
+                    ! move_uploaded_file($this->file, $targetPath)
+                ) {
+                    // Throw exception on any error during the move operation.
                     throw new RuntimeException(
                         sprintf(
                             'Could not move the file to the target path "%s".',
@@ -215,13 +219,16 @@ class UploadedFile implements UploadedFileInterface
             }
         }
 
-        if ($this->isStream()) {
+        // Is a stream...
+        if ($this->stream instanceof StreamInterface) {
             $content = $this->stream->getContents();
-            @file_put_contents($targetPath, $content, LOCK_EX);
+
+            file_put_contents($targetPath, $content, LOCK_EX);
 
             // @codeCoverageIgnoreStart
 
             if (! file_exists($targetPath)) {
+                // Throw exception on any error during the move operation.
                 throw new RuntimeException(
                     sprintf(
                         'Could not move the stream to the target path "%s".',
@@ -283,118 +290,17 @@ class UploadedFile implements UploadedFileInterface
      */
     public function getErrorMessage(): string
     {
-        switch ($this->error) {
+        $message = [
+            UPLOAD_ERR_INI_SIZE   => 'The uploaded file exceeds the upload_max_filesize directive in php.ini',
+            UPLOAD_ERR_FORM_SIZE  => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.',
+            UPLOAD_ERR_PARTIAL    => 'The uploaded file was only partially uploaded.',
+            UPLOAD_ERR_NO_FILE    => 'No file was uploaded.',
+            UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder.',
+            UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.',
+            UPLOAD_ERR_EXTENSION  => 'File upload stopped by extension.',
+            UPLOAD_ERR_OK         => 'There is no error, the file uploaded with success.',
+        ];
 
-            case UPLOAD_ERR_OK:
-                $message = 'There is no error, the file uploaded with success.';
-                break;
-
-            case UPLOAD_ERR_INI_SIZE:
-                $message = 'The uploaded file exceeds the upload_max_filesize directive in php.ini';
-                break;
-    
-            case UPLOAD_ERR_FORM_SIZE:
-                $message = 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.';
-                break;
-
-            case UPLOAD_ERR_PARTIAL:
-                $message = 'The uploaded file was only partially uploaded.';
-                break;
-
-            case UPLOAD_ERR_NO_FILE:
-                $message = 'No file was uploaded.';
-                break;
-
-            case UPLOAD_ERR_NO_TMP_DIR:
-                $message = 'Missing a temporary folder.';
-                break;
-
-            case UPLOAD_ERR_CANT_WRITE:
-                $message = 'Failed to write file to disk.';
-                break;
-
-            case UPLOAD_ERR_EXTENSION:
-                $message = 'File upload stopped by extension.';
-                break;
-
-            default:
-                $message = 'Unknown upload error.';
-                break;
-        }
-
-        return $message;
-    }
-
-    /**
-     * Is stream?
-     *
-     * @return bool
-     */
-    protected function isStream(): bool
-    {
-        return ($this->stream instanceof StreamInterface);
-    }
-
-    /**
-     * Is file?
-     *
-     * @return bool
-     */
-    protected function isFile(): bool
-    {
-        return (is_string($this->file) && ! empty($this->file));
-    }
-
-    /**
-     * A wrapper for PHP native function `is_uploaded_file`
-     * For unit testing purpose.
-     *
-     * @param string $file
-     *
-     * @return bool
-     */
-    private function isUploadedFile(string $file): bool
-    {
-        if ($this->sapi === 'unit-test-1' || $this->sapi === 'unit-test-2') {
-            return true;
-        }
-    
-        return is_uploaded_file($file);
-    }
-
-    /**
-     * A wrapper for PHP native function `move_uploaded_file`
-     * For unit testing purpose.
-     *
-     * @param string $file
-     * @param string $targetPath
-     *
-     * @return bool
-     */
-    private function moveUploadedFile(string $file, string $targetPath): bool
-    {
-        if ($this->sapi === 'unit-test-1') {
-            return rename($file, $targetPath);
-        }
-
-        return move_uploaded_file($file, $targetPath);
-    }
-
-    /**
-     * A wrapper for PHP native function `rename`
-     * For unit testing purpose.
-     *
-     * @param string $file
-     * @param string $targetPath
-     *
-     * @return bool
-     */
-    private function rename(string $file, string $targetPath): bool
-    {
-        if (defined('MOCK_RENAME_FALSE')) {
-            return false;
-        }
-
-        return rename($file, $targetPath);
+        return $message[$this->error] ?? 'Unknown upload error.';
     }
 }
