@@ -1,6 +1,6 @@
 # PSR 7, 15, 17 Implementation and Examples
 
-[![Build Status](https://travis-ci.org/terrylinooo/psr-http.svg?branch=master)](https://travis-ci.org/terrylinooo/psr-http) [![codecov](https://img.shields.io/codecov/c/github/terrylinooo/psr-http.svg)](https://codecov.io/gh/terrylinooo/psr-http) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/terrylinooo/psr-http/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/terrylinooo/psr-http/?branch=master) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://travis-ci.org/terrylinooo/psr-http.svg?branch=master)](https://travis-ci.org/terrylinooo/psr-http) [![codecov](https://img.shields.io/codecov/c/github/terrylinooo/psr-http.svg)](https://codecov.io/gh/terrylinooo/psr-http) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/terrylinooo/psr-http/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/terrylinooo/psr-http/?branch=master) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 This library is a PSR HTTP implementation with detailed examples, following up the PSR (PHP Standard Recommendation) documents by one hundred percent.
 

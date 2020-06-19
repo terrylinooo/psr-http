@@ -13,6 +13,7 @@ namespace Shieldon\Test\Psr17;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 use Shieldon\Psr17\StreamFactory;
+use ReflectionObject;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -79,5 +80,19 @@ class StreamFactoryTest extends TestCase
         // Exception: 
         // => Invalid file opening mode "b"
         $stream =  $streamFactory->createStreamFromFile($sourceFile);
+    }
+
+    public function test_Exception_assertResource()
+    {
+        $this->expectException(RuntimeException::class);
+
+        $streamFactory = new StreamFactory();
+        $reflection = new ReflectionObject($streamFactory);
+        $assertParsedBody = $reflection->getMethod('assertResource');
+        $assertParsedBody->setAccessible(true);
+
+        // Exception: 
+        // => Unable to open "php://temp" resource.
+        $assertParsedBody->invokeArgs($streamFactory, ['test string']);
     }
 }

@@ -53,4 +53,25 @@ class RequestHandlerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('e04su3su;6', $response->getBody()->getContents());
     }
+
+    public function test_requestHandler_Condition_3()
+    {
+        // Without a fallback handler...
+        $app = new RequestHandler();
+
+        $app->add(new ApiMiddleware());
+        $app->add(new StringMiddleware());
+
+        $request = ServerRequestFactory::fromGlobal();
+
+        $request = $request->withHeader('Content-Type', 'application/json')->
+            withHeader('key', '23492834234')->
+            withHeader('secret', '1a163782ee166156294d173fcf8b8e87');
+
+
+        $response = $app->handle($request);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('', $response->getBody()->getContents());
+    }
 }
