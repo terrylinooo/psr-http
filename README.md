@@ -1,4 +1,4 @@
-# PHP PSR-7, PSR-15, PSR-17 Implementation and Examples
+# PSR-7, 15, 17 Implementation and Examples
 
 [![Build Status](https://travis-ci.org/terrylinooo/psr-http.svg?branch=master)](https://travis-ci.org/terrylinooo/psr-http) [![codecov](https://img.shields.io/codecov/c/github/terrylinooo/psr-http.svg)](https://codecov.io/gh/terrylinooo/psr-http) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
