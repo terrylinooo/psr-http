@@ -13,6 +13,7 @@ namespace Shieldon\Test\Psr17;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\UriInterface;
 use Shieldon\Psr17\UriFactory;
+use Shieldon\Psr17\Utils\SuperGlobal;
 
 class UriFactoryTest extends TestCase
 {
@@ -22,5 +23,28 @@ class UriFactoryTest extends TestCase
 
         $uri = $uriFactory->createUri();
         $this->assertTrue(($uri instanceof UriInterface));
+    }
+
+    public function test_fromGlobal()
+    {
+        SuperGlobal::mockCliEnvironment([
+            'PHP_AUTH_USER'  => 'terry',       // user
+            'HTTP_HOST'      => 'example.org', // host
+            'PHP_AUTH_PW'    => '1234',        // pass
+            'REQUEST_URI'    => '/test',       // path
+            'SERVER_PORT'    => '8080',        // port
+            'QUERY_STRING'   => 'foo=bar',     // query
+            'REQUEST_SCHEME' => 'https',       // scheme
+        ]);
+
+        $uri = uriFactory::fromGlobal();
+
+        $this->assertSame($uri->getScheme(), 'https');
+        $this->assertSame($uri->getHost(), 'example.org');
+        $this->assertSame($uri->getUserInfo(), 'terry:1234');  // string
+        $this->assertSame($uri->getPath(), '/test');           // string
+        $this->assertSame($uri->getPort(), 8080);              // int|null
+        $this->assertSame($uri->getQuery(), 'foo=bar');        // string
+        $this->assertSame($uri->getFragment(), '');            // string
     }
 }
