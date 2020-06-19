@@ -265,7 +265,7 @@ class Uri implements UriInterface
         $port = $this->filter('port', $port);
 
         $clone = clone $this;
-        $clone->port = $port;
+        $clone->port = (int) $port;
 
         return $clone;
     }

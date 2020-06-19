@@ -135,7 +135,7 @@ class Stream implements StreamInterface
      */
     public function close(): void
     {
-        if (isset($this->stream) && is_resource($this->stream)) {
+        if ($this->isStream()) {
             fclose($this->stream);
         }
 
@@ -147,7 +147,7 @@ class Stream implements StreamInterface
      */
     public function detach()
     {
-        if (! isset($this->stream) || ! $this->stream) {
+        if (! $this->isStream()) {
             return null;
         }
 
@@ -169,7 +169,7 @@ class Stream implements StreamInterface
      */
     public function getSize()
     {
-        if (! isset($this->stream) || ! $this->stream) {
+        if (! $this->isStream()) {
             return null;
         }
 
@@ -343,7 +343,7 @@ class Stream implements StreamInterface
      */
     public function getMetadata($key = null)
     {
-        if (! empty($this->stream)) {
+        if ($this->isStream()) {
             $this->meta = stream_get_meta_data($this->stream);
             
             if (! $key) {
@@ -405,10 +405,20 @@ class Stream implements StreamInterface
      */
     protected function assertPropertyStream(): void
     {
-        if (! isset($this->stream) || ! $this->stream) {
+        if (! $this->isStream()) {
             throw new RuntimeException(
                 'Stream does not exist.'
             );
         }
+    }
+
+    /**
+     * Check if stream exists or not.
+     *
+     * @return bool
+     */
+    protected function isStream(): bool
+    {
+        return (isset($this->stream) && is_resource($this->stream));
     }
 }

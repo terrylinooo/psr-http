@@ -67,18 +67,38 @@ class UriFactory implements UriFactoryInterface
             ${$key} = $server[$value] ?? '';
         }
 
-        $userInfo = $user ? $user . ($pass ? ":{$pass}" : '') : '';
+        $userInfo = $user;
 
-        $authority = ($userInfo ? "{$userInfo}@": '') 
-            . $host
-            . ($port ? ":{$port}" : '');
+        if ($pass) {
+            $userInfo .= ':' . $pass;
+        }
 
-        $uri = ($scheme ? "{$scheme}:" : '')
-            . ($authority ? "//{$authority}" : '')
-            . '/'
-            . ltrim($path, '/')
-            . ($query ? "?{$query}" : '');
+        $authority = '';
 
+        if ($userInfo) {
+            $authority .= $userInfo . '@';
+        }
+
+        $authority .= $host;
+
+        if ($port) {
+            $authority .= ':' . $port;
+        }
+
+        if ($scheme) {
+            $uri .= $scheme . ':';
+        }
+
+        if ($authority) {
+            $uri .= '//' . $authority;
+        }
+
+        $uri .= '/' . ltrim($path, '/');
+
+        if ($query) {
+            $uri .= '?' . $query;
+        }
+    
         return new Uri($uri);
     }
 }
