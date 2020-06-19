@@ -36,11 +36,7 @@ class StreamFactory implements StreamFactoryInterface
     {
         $resource = @fopen('php://temp', 'r+');
 
-        if (! is_resource($resource)) {
-            throw new RuntimeException(
-                'Unable to open "php://temp" resource.'
-            );
-        }
+        $this->assertResource($resource);
 
         fwrite($resource, $content);
         rewind($resource);
@@ -82,9 +78,27 @@ class StreamFactory implements StreamFactoryInterface
     public function createStreamFromResource($resource): StreamInterface
     {
         if (! is_resource($resource)) {
-            $resource = fopen('php://temp', 'r+');
+            $resource = @fopen('php://temp', 'r+');
         }
 
+        $this->assertResource($resource);
+
         return new Stream($resource);
+    }
+
+    /**
+     * Throw an exception if input is not a valid PHP resource.
+     *
+     * @param mixed $resource
+     *
+     * @return void
+     */
+    protected function assertResource($resource)
+    {
+        if (! is_resource($resource)) {
+            throw new RuntimeException(
+                'Unable to open "php://temp" resource.'
+            );
+        }
     }
 }
