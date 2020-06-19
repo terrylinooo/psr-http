@@ -14,6 +14,8 @@ namespace Shieldon\Psr7;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
+use Psr\Http\Message\UriInterface;
+use Psr\Http\Message\StreamInterface;
 use Shieldon\Psr7\UploadedFile;
 use Shieldon\Psr7\Request;
 use InvalidArgumentException;
@@ -286,6 +288,8 @@ class ServerRequest extends Request implements ServerRequestInterface
 
             } elseif (is_array($fileValue['tmp_name'])) {
 
+                $tmp = [];
+
                 // We want to find out how many levels of array it has.
                 foreach ($specFields as $i => $attr) {
                     $tmp[$i] = self::uploadedFileNestedFields($fileValue, $attr);
@@ -384,7 +388,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      *
      * @param string|array $values
      * 
-     * @return array
+     * @return array|uploadedFile
      */
     public static function uploadedFileSpecsConvert($values) 
     {

@@ -139,12 +139,8 @@ class Stream implements StreamInterface
      */
     public function close(): void
     {
-        if (isset($this->stream)) {
-
-            if (is_resource($this->stream)) {
-                fclose($this->stream);
-            }
-
+        if (isset($this->stream) && is_resource($this->stream)) {
+            fclose($this->stream);
             $this->detach();
         }
     }
@@ -196,11 +192,7 @@ class Stream implements StreamInterface
      */
     public function tell(): int
     {
-        if (! isset($this->stream) || ! $this->stream) {
-            throw new RuntimeException(
-                'Stream does not exist.'
-            );
-        }
+        $this->assertPropertyStream();
 
         $pointer = false;
 
@@ -235,9 +227,7 @@ class Stream implements StreamInterface
      */
     public function seek($offset, $whence = SEEK_SET): void
     {
-        if (! isset($this->stream) || ! $this->stream) {
-            throw new RuntimeException('Stream does not exist.');
-        }
+        $this->assertPropertyStream();
 
         if (! $this->seekable) {
             throw new RuntimeException(
@@ -295,11 +285,7 @@ class Stream implements StreamInterface
      */
     public function write($string): int
     {
-        if (! isset($this->stream) || ! $this->stream) {
-            throw new RuntimeException(
-                'Stream does not exist.'
-            );
-        }
+        $this->assertPropertyStream();
 
         $size = 0;
 
@@ -329,11 +315,7 @@ class Stream implements StreamInterface
      */
     public function read($length): string
     {
-        if (! isset($this->stream) || ! $this->stream) {
-            throw new RuntimeException(
-                'Stream does not exist.'
-            );
-        }
+        $this->assertPropertyStream();
 
         $string = false;
 
@@ -360,11 +342,7 @@ class Stream implements StreamInterface
      */
     public function getContents(): string
     {
-        if (! isset($this->stream) || ! $this->stream) {
-            throw new RuntimeException(
-                'Stream does not exist.'
-            );
-        }
+        $this->assertPropertyStream();
 
         $string = false;
 
@@ -436,6 +414,21 @@ class Stream implements StreamInterface
                     'Stream should be a resource, but "%s" provided.',
                     gettype($stream)
                 )
+            );
+        }
+    }
+
+
+    /**
+     * Throw an exception if the property does not exist.
+     *
+     * @return RuntimeException
+     */
+    protected function assertPropertyStream(): void
+    {
+        if (! isset($this->stream) || ! $this->stream) {
+            throw new RuntimeException(
+                'Stream does not exist.'
             );
         }
     }
