@@ -24,6 +24,7 @@ use function ftell;
 use function fwrite;
 use function gettype;
 use function is_resource;
+use function preg_match;
 use function sprintf;
 use function stream_get_contents;
 use function stream_get_meta_data;
@@ -31,6 +32,7 @@ use function stream_get_meta_data;
 use const SEEK_CUR;
 use const SEEK_END;
 use const SEEK_SET;
+use const PREG_OFFSET_CAPTURE;
 
 /*
  * Describes a data stream.
@@ -96,13 +98,7 @@ class Stream implements StreamInterface
             $this->readable = true;
             $this->writable = false;
 
-        } elseif (
-            // It probably contains t or b flag, so using "strpos" here.
-            strpos($meta['mode'], 'w') !== false ||
-            strpos($meta['mode'], 'a') !== false ||
-            strpos($meta['mode'], 'x') !== false ||
-            strpos($meta['mode'], 'c') !== false
-        ) {
+        } elseif (preg_match('/^[waxc][t|b]{0,1}$/', $meta['mode'], $matches, PREG_OFFSET_CAPTURE)) {
             $this->readable = false;
             $this->writable = true;
         }
@@ -179,10 +175,7 @@ class Stream implements StreamInterface
 
         if ($this->size === null) {
             $stats = fstat($this->stream);
-
-            if (isset($stats['size'])) {
-                $this->size = $stats['size'];
-            }
+            $this->size = $stats['size'] ?? null;
         }
 
         return $this->size;
@@ -239,34 +232,19 @@ class Stream implements StreamInterface
         $offset = (int) $offset;
         $whence = (int) $whence;
 
-        switch ($whence) {
+        $message = [
+            SEEK_CUR => 'Set position to current location plus offset.',
+            SEEK_END => 'Set position to end-of-stream plus offset.',
+            SEEK_SET => 'Set position equal to offset bytes.',
+        ];
 
-            case SEEK_SET:
-                $message = 'Set position equal to offset bytes.';
-                break;
-
-            // @codeCoverageIgnoreStart
-
-            case SEEK_CUR:
-                $message = 'Set position to current location plus offset.';
-                break;
-    
-            case SEEK_END:
-                $message = 'Set position to end-of-stream plus offset.';
-                break;
-
-            default:
-                $message = 'Unknown error.';
-                break;
-
-            // @codeCoverageIgnoreEnd
-        }
+        $errorMsg = $message[$whence] ?? 'Unknown error.';
 
         if (fseek($this->stream, $offset, $whence) === -1) {
             throw new RuntimeException(
                 sprintf(
                     '%s. Unable to seek to stream at position %s',
-                    $message,
+                    $errorMsg,
                     $offset
                 )
             );
