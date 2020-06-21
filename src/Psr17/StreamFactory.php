@@ -97,7 +97,7 @@ class StreamFactory implements StreamFactoryInterface
      *
      * @return StreamInterface
      */
-    public function fromNew(): StreamInterface
+    public static function fromNew(): StreamInterface
     {
         $resource = @fopen('php://temp', 'r+');
         self::assertResource($resource);

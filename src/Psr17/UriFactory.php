@@ -107,7 +107,7 @@ class UriFactory implements UriFactoryInterface
      *
      * @return UriInterface
      */
-    public function fromNew(): UriInterface
+    public static function fromNew(): UriInterface
     {
         return new Uri();
     }
