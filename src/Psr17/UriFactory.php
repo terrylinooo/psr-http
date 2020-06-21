@@ -105,7 +105,7 @@ class UriFactory implements UriFactoryInterface
     /**
      * Create a new URI.
      *
-     * @return StreamInterface
+     * @return UriInterface
      */
     public function fromNew(): UriInterface
     {

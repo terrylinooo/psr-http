@@ -82,7 +82,7 @@ class RequestHandler implements RequestHandlerInterface
      */
     protected function final(ServerRequestInterface $request): ResponseInterface
     {
-        if (! $this->fallbackHandler) {
+        if (!$this->fallbackHandler) {
             return new Response();
         }
 

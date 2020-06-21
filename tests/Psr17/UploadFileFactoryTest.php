@@ -29,7 +29,7 @@ class UploadFileFactoryTest extends TestCase
         $targetPath = save_testing_file('shieldon_logo_moved_from_file_2.png');
 
         // Clone a sample file for testing MoveTo method.
-        if (! copy($sourceFile, $cloneFile)) {
+        if (!copy($sourceFile, $cloneFile)) {
             $this->assertTrue(false);
         }
 

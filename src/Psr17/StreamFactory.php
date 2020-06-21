@@ -49,7 +49,7 @@ class StreamFactory implements StreamFactoryInterface
      */
     public function createStreamFromFile(string $filename, string $mode = 'r'): StreamInterface
     {
-        if ($mode === '' || ! preg_match('/^[rwaxce]{1}[bt]{0,1}[+]{0,1}+$/', $mode)) {
+        if ($mode === '' || !preg_match('/^[rwaxce]{1}[bt]{0,1}[+]{0,1}+$/', $mode)) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Invalid file opening mode "%s"',
@@ -60,7 +60,7 @@ class StreamFactory implements StreamFactoryInterface
 
         $resource = @fopen($filename, $mode);
 
-        if (! is_resource($resource)) {
+        if (!is_resource($resource)) {
             throw new RuntimeException(
                 sprintf(
                     'Unable to open file at "%s"',
@@ -77,7 +77,7 @@ class StreamFactory implements StreamFactoryInterface
      */
     public function createStreamFromResource($resource): StreamInterface
     {
-        if (! is_resource($resource)) {
+        if (!is_resource($resource)) {
             $resource = @fopen('php://temp', 'r+');
         }
 
@@ -114,7 +114,7 @@ class StreamFactory implements StreamFactoryInterface
      */
     protected static function assertResource($resource)
     {
-        if (! is_resource($resource)) {
+        if (!is_resource($resource)) {
             throw new RuntimeException(
                 'Unable to open "php://temp" resource.'
             );

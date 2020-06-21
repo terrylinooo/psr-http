@@ -359,7 +359,7 @@ class Message implements MessageInterface
         // digit  => 0-9
         // others => !#$%&\'*+-.^_`|~
 
-        if (! preg_match('/^[a-zA-Z0-9!#$%&\'*+-.^_`|~]+$/', $name)) {
+        if (!preg_match('/^[a-zA-Z0-9!#$%&\'*+-.^_`|~]+$/', $name)) {
             throw new InvalidArgumentException(
                 sprintf(
                     '"%s" is not valid header name, it must be an RFC 7230 compatible string.',
@@ -382,7 +382,7 @@ class Message implements MessageInterface
     {
         if (is_array($value)) {
             foreach ($value as $item) {
-                if (! is_scalar($item) || is_bool($item)) {
+                if (!is_scalar($item) || is_bool($item)) {
                     throw new InvalidArgumentException(
                         sprintf(
                             'The header values only accept string and number, but "%s" provided.',
@@ -402,7 +402,7 @@ class Message implements MessageInterface
 
                 // I THINK THAT obs-text SHOULD N0T BE USED.
                 // OR EVEN I CAN PASS CHINESE CHARACTERS, THAT'S WEIRD.
-                if (! preg_match('/^[ \t\x21-\x7e]+$/', $item)) {
+                if (!preg_match('/^[ \t\x21-\x7e]+$/', $item)) {
                     throw new InvalidArgumentException(
                         sprintf(
                             '"%s" is not valid header value, it must contains visible ASCII characters only.',
@@ -432,7 +432,7 @@ class Message implements MessageInterface
      */
     protected function assertProtocolVersion(string $version): void
     {
-        if (! in_array($version, $this->validProtocolVersions)) {
+        if (!in_array($version, $this->validProtocolVersions)) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Unsupported HTTP protocol version number. "%s" provided.',

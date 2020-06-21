@@ -152,7 +152,7 @@ class UploadedFile implements UploadedFileInterface
             );
         }
 
-        if (! $this->stream) {
+        if (!$this->stream) {
             throw new RuntimeException(
                 'No stream is available or can be created.'
             );
@@ -173,7 +173,7 @@ class UploadedFile implements UploadedFileInterface
             );
         }
 
-        if (! is_writable(dirname($targetPath))) {
+        if (!is_writable(dirname($targetPath))) {
             // Throw exception if the $targetPath specified is invalid.
             throw new RuntimeException(
                 sprintf(
@@ -184,11 +184,11 @@ class UploadedFile implements UploadedFileInterface
         }
 
         // Is a file..
-        if (is_string($this->file) && ! empty($this->file)) {
+        if (is_string($this->file) && !empty($this->file)) {
 
             if ($this->sapi === 'cli') {
 
-                if (! rename($this->file, $targetPath)) {
+                if (!rename($this->file, $targetPath)) {
 
                     // @codeCoverageIgnoreStart
 
@@ -205,8 +205,8 @@ class UploadedFile implements UploadedFileInterface
             } else {
 
                 if (
-                    ! is_uploaded_file($this->file) || 
-                    ! move_uploaded_file($this->file, $targetPath)
+                    !is_uploaded_file($this->file) || 
+                    !move_uploaded_file($this->file, $targetPath)
                 ) {
                     // Throw exception on any error during the move operation.
                     throw new RuntimeException(
@@ -227,7 +227,7 @@ class UploadedFile implements UploadedFileInterface
 
             // @codeCoverageIgnoreStart
 
-            if (! file_exists($targetPath)) {
+            if (!file_exists($targetPath)) {
                 // Throw exception on any error during the move operation.
                 throw new RuntimeException(
                     sprintf(

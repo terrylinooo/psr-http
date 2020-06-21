@@ -21,7 +21,7 @@ function save_testing_file(string $filename, string $dir = ''): string
         $dir = BOOTSTRAP_DIR . '/../tmp/' . $dir;
     }
 
-    if (! is_dir($dir)) {
+    if (!is_dir($dir)) {
         $originalUmask = umask(0);
         $result = @mkdir($dir, 0777, true);
         umask($originalUmask);

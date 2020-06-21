@@ -153,7 +153,7 @@ class Request extends Message implements RequestInterface
             $path = '/';
         }
 
-        if (! empty($query)) {
+        if (!empty($query)) {
             $path .= '?' . $query;
         }
 
@@ -165,7 +165,7 @@ class Request extends Message implements RequestInterface
      */
     public function withRequestTarget($requestTarget)
     {
-        if (! is_string($requestTarget)) {
+        if (!is_string($requestTarget)) {
             throw new InvalidArgumentException(
                 'A request target must be a string.'
             );
@@ -222,13 +222,13 @@ class Request extends Message implements RequestInterface
         if (
             // This method MUST update the Host header of the returned request by
             // default if the URI contains a host component.
-            (! $preserveHost && $host !== '') ||
+            (!$preserveHost && $host !== '') ||
 
             // When `$preserveHost` is set to `true`.
             // If the Host header is missing or empty, and the new URI contains
             // a host component, this method MUST update the Host header in the returned
             // request.
-            ($preserveHost && ! $this->hasHeader('Host') && $host !== '')
+            ($preserveHost && !$this->hasHeader('Host') && $host !== '')
         ) {
             $clone = clone $this;
             $clone->uri = $uri;
@@ -261,7 +261,7 @@ class Request extends Message implements RequestInterface
     {
         $this->method = strtoupper($method);
 
-        if (! in_array($this->method, $this->validMethods)) {
+        if (!in_array($this->method, $this->validMethods)) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Unsupported HTTP method. It must be compatible with RFC-7231 request method, but "%s" provided.',

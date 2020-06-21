@@ -42,7 +42,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $protocol = $server['SERVER_PROTOCOL'] ?? '1.1';
         $protocol = str_replace('HTTP/', '',  $protocol);
 
-        if (! ($uri instanceof UriInterface)) {
+        if (!($uri instanceof UriInterface)) {
             $uriFactory = new UriFactory();
             $uri = $uriFactory->createUri($uri);
         }

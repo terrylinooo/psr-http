@@ -48,7 +48,7 @@ class UploadedFileHelper
         ];
 
         foreach ($files as $fileKey => $fileValue) {
-            if (! isset($fileValue['tmp_name'])) {
+            if (!isset($fileValue['tmp_name'])) {
                 // @codeCoverageIgnoreStart
                 return [];
                 // @codeCoverageIgnoreEnd
@@ -138,7 +138,7 @@ class UploadedFileHelper
 
         if (is_array($values)) {
 
-            foreach($values as $key => $value) {
+            foreach ($values as $key => $value) {
 
                 // Restore the keys back to the original ones.
                 $key = rtrim($key, '_');

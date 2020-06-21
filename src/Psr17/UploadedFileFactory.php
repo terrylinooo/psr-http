@@ -35,7 +35,7 @@ class UploadedFileFactory implements UploadedFileFactoryInterface
         string          $clientMediaType = null
     ): UploadedFileInterface
     {
-        if (! $stream->isReadable()) {
+        if (!$stream->isReadable()) {
             throw new InvalidArgumentException(
                 'File is not readable.'
             );
@@ -66,7 +66,7 @@ class UploadedFileFactory implements UploadedFileFactoryInterface
         $filesParams = $_FILES ?? [];
         $uploadedFiles = [];
 
-        if (! empty($filesParams)) {
+        if (!empty($filesParams)) {
             $uploadedFiles = UploadedFileHelper::uploadedFileSpecsConvert(
                 UploadedFileHelper::uploadedFileParse($filesParams)
             );

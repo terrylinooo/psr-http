@@ -145,7 +145,7 @@ class Uri implements UriInterface
 
         $authority .= $this->getHost();
 
-        if (! empty($this->getPort())) {
+        if (!empty($this->getPort())) {
             $authority .= ':' . $this->getPort();
         }
 
@@ -159,7 +159,7 @@ class Uri implements UriInterface
     {
         $userInfo = $this->user;
 
-        if (! empty($this->pass)) {
+        if (!empty($this->pass)) {
             $userInfo .= ':' . $this->pass;
         }
 
@@ -468,7 +468,7 @@ class Uri implements UriInterface
             2 => 'https',
         ];
 
-        if (! in_array($scheme, $validSchemes)) {
+        if (!in_array($scheme, $validSchemes)) {
             throw new InvalidArgumentException(
                 sprintf(
                     'The string "%s" is not a valid scheme.',
@@ -490,7 +490,7 @@ class Uri implements UriInterface
      */
     protected function assertString($value, string $name = 'it'): void
     {
-        if (! is_string($value)) {
+        if (!is_string($value)) {
             throw new InvalidArgumentException(
                 sprintf(
                     ucfirst($name) . ' must be a string, but %s provided.',
@@ -513,7 +513,7 @@ class Uri implements UriInterface
     {
         $this->assertString($uri, 'uri');
 
-        if (! filter_var($uri, FILTER_VALIDATE_URL)) {
+        if (!filter_var($uri, FILTER_VALIDATE_URL)) {
             throw new InvalidArgumentException(
                 sprintf(
                     '"%s" is not a valid URI',
@@ -542,7 +542,7 @@ class Uri implements UriInterface
             return;
         }
 
-        if (! filter_var($host, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
+        if (!filter_var($host, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
             throw new InvalidArgumentException(
                 sprintf(
                     '"%s" is not a valid host',
@@ -564,8 +564,8 @@ class Uri implements UriInterface
     protected function assertPort($port): void
     {
         if (
-            ! is_null($port) && 
-            ! is_integer($port)
+            !is_null($port) && 
+            !is_integer($port)
         ) {
             throw new InvalidArgumentException(
                 sprintf(
@@ -575,7 +575,7 @@ class Uri implements UriInterface
             );
         }
 
-        if (! ($port > 0 && $port < 65535)) {
+        if (!($port > 0 && $port < 65535)) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Port number should be in a range of 0-65535, but %s provided.',

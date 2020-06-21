@@ -53,7 +53,7 @@ class UploadedFileTest extends TestCase
         $targetPath = save_testing_file('shieldon_logo_moved_from_file.png');
 
         // Clone a sample file for testing MoveTo method.
-        if (! copy($sourceFile, $cloneFile)) {
+        if (!copy($sourceFile, $cloneFile)) {
             $this->assertTrue(false);
         }
 
@@ -81,7 +81,7 @@ class UploadedFileTest extends TestCase
         $cloneFile = save_testing_file('shieldon_logo_clone.png');
 
         // Clone a sample file for testing MoveTo method.
-        if (! copy($sourceFile, $cloneFile)) {
+        if (!copy($sourceFile, $cloneFile)) {
             $this->assertTrue(false);
         }
 
@@ -188,7 +188,7 @@ class UploadedFileTest extends TestCase
         $targetPath = save_testing_file('shieldon_logo_moved_from_stream.png');
         $uploadedFile->moveTo($targetPath);
 
-        if (! file_exists($targetPath)) {
+        if (!file_exists($targetPath)) {
             // Remind us there is something wrong on this test.
             $this->assertTrue(false);
         }
