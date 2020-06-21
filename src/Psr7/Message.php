@@ -282,7 +282,7 @@ class Message implements MessageInterface
         $num = count($headers);
 
         if ($num > 1) {
-            $headers = array_merge(...array_map(function ($line) {
+            $headers = array_merge(...array_map(function($line) {
                 $name = trim($line[1]);
                 $field = trim($line[2]);
                 return [$name => $field];

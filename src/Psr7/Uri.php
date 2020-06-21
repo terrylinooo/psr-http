@@ -368,17 +368,17 @@ class Uri implements UriInterface
     protected function init(array $data = []): void
     {
         $components = [
-            'scheme', 
-            'user', 
+            'scheme',
+            'user',
             'pass',
             'host',
             'port',
-            'path', 
-            'query', 
+            'path',
+            'query',
             'fragment'
         ];
 
-        foreach($components as $v) {
+        foreach ($components as $v) {
             $this->{$v} = isset($data[$v]) ? $this->filter($v, $data[$v]) : '';
         }
 
