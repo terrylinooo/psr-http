@@ -74,7 +74,7 @@ echo $uri->getPath();
 $stream = StreamFactory::fromNew();
 ```
 
-Create an array with UploadedFile structure.
+*Create an array with UploadedFile structure.*
 
 ```php
 // Let's see the following example, 
