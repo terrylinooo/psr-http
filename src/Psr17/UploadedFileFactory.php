@@ -16,6 +16,7 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Shieldon\Psr7\UploadedFile;
+use Shieldon\Psr7\Utils\UploadedFileHelper;
 use InvalidArgumentException;
 
 /**
@@ -47,5 +48,30 @@ class UploadedFileFactory implements UploadedFileFactoryInterface
             $size,
             $error
         );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Non PSR-7 Methods.
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Create an array with UriInterface structure.
+     *
+     * @return array
+     */
+    public static function fromGlobal(): array
+    {
+        $filesParams = $_FILES ?? [];
+        $uploadedFiles = [];
+
+        if (! empty($filesParams)) {
+            $uploadedFiles = UploadedFileHelper::uploadedFileSpecsConvert(
+                UploadedFileHelper::uploadedFileParse($filesParams)
+            );
+        }
+
+        return $uploadedFiles;
     }
 }

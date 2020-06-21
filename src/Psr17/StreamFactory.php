@@ -36,7 +36,7 @@ class StreamFactory implements StreamFactoryInterface
     {
         $resource = @fopen('php://temp', 'r+');
 
-        $this->assertResource($resource);
+        self::assertResource($resource);
 
         fwrite($resource, $content);
         rewind($resource);
@@ -81,7 +81,26 @@ class StreamFactory implements StreamFactoryInterface
             $resource = @fopen('php://temp', 'r+');
         }
 
-        $this->assertResource($resource);
+        self::assertResource($resource);
+
+        return new Stream($resource);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Non PSR-7 Methods.
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Create a new Stream instance.
+     *
+     * @return StreamInterface
+     */
+    public function fromNew(): StreamInterface
+    {
+        $resource = @fopen('php://temp', 'r+');
+        self::assertResource($resource);
 
         return new Stream($resource);
     }
@@ -93,7 +112,7 @@ class StreamFactory implements StreamFactoryInterface
      *
      * @return void
      */
-    protected function assertResource($resource)
+    protected static function assertResource($resource)
     {
         if (! is_resource($resource)) {
             throw new RuntimeException(
@@ -101,4 +120,8 @@ class StreamFactory implements StreamFactoryInterface
             );
         }
     }
+
+
+
+
 }

@@ -4,9 +4,9 @@
 
 This library is a PSR HTTP implementation with detailed examples, following up the PSR (PHP Standard Recommendation) documents by one hundred percent.
 
-- [PSR-7](https://www.php-fig.org/psr/psr-7/) (HTTP Message Interfaces)
-- [PSR-15](https://www.php-fig.org/psr/psr-15/) (HTTP Server Request Handlers)
-- [PSR-17](https://www.php-fig.org/psr/psr-17/) (HTTP Factories)
+- **PSR-7** (HTTP Message Interfaces)
+- **PSR-15** (HTTP Server Request Handlers)
+- **PSR-17** (HTTP Factories)
 
 You can use it on any framework which is compatible with those PSRs.
 
@@ -16,30 +16,108 @@ You can use it on any framework which is compatible with those PSRs.
 composer require shieldon/psr-http
 ```
 
-## Run test
+## Test
 ```bash
 composer install
 composer test
+```
+
+## Quick Start
+
+The simplest way to start implemanting PSR-7 on your PHP applications, let's check out the examples below.
+
+*Create a server request.* 
+
+```php
+
+$serverRequest = ServerRequestFactory::fromGlobal();
+```
+
+*Create a  request.*
+
+```php
+$request = RequestFactory::fromNew();
+```
+
+*Create a server response*
+
+```php
+$response = ResponseFactory::fromNew();
+```
+
+
+*Create a URI.*
+
+```php
+// Create a URI contains visitor's information.
+
+/**
+ *  Assume a visior is viewing your website page, 
+ *  for example, https://yoursite/en/post1.html
+ */
+$uri = UriFactory::fromGlobal();
+
+echo $uri->getPath();
+// Outputs: /en/post1.html
+
+// Create a URI just a new instance.
+$uri = UriFactory::fromNew();
+
+echo $uri->getPath();
+// Outputs: 
+```
+
+*Create a stream instance.*
+
+```php
+// Create a stream just a new instance.
+$stream = StreamFactory::fromNew();
+```
+
+Create an array with UploadedFile structure.
+
+```php
+// Let's see the following example, 
+// assume we have a superglobal $_FILES looks like this.
+$_FILES = [
+    'foo' => [
+        'name' => 'example1.jpg',
+        'type' => 'image/jpeg',
+        'tmp_name' => '/tmp/php200A.tmp',
+        'error' => 0,
+        'size' => 100000,
+    ]
+];
+
+$UploadedFileArray = UploadedFileFactory::fromGlobal();
+
+echo $UploadedFileArray['foo']->getClientFilename();
+// Outputs: example1.jpg
 ```
 
 ## Table of Contents
 - ### **PSR-17**: *HTTP Factories*
     - #### [RequestFactory](https://github.com/terrylinooo/psr-http/wiki/PSR-17:-RequestFactory-Example)
         - [createRequest](https://github.com/terrylinooo/psr-http/wiki/RequestFactory:-createRequest-Example)
+        - [::fromNew](https://github.com/terrylinooo/psr-http/wiki/RequestFactory:-fromNew-Example)  `(Non-PSR)`
     - #### [ServerRequestFactory](https://github.com/terrylinooo/psr-http/wiki/PSR-17:-ServerRequestFactory-Example)
         - [createServerRequest](https://github.com/terrylinooo/psr-http/wiki/ServerRequestFactory:-createServerRequest-Example)
         - [::fromGlobal](https://github.com/terrylinooo/psr-http/wiki/ServerRequestFactory:-fromGlobal-Example) `(Non-PSR)`
     - #### [ResponseFactory](https://github.com/terrylinooo/psr-http/wiki/PSR-17:-ResponseFactory-Example)
         - [createResponse](https://github.com/terrylinooo/psr-http/wiki/ResponseFactory:-createResponse-Example)
+        - [::fromNew](https://github.com/terrylinooo/psr-http/wiki/ResponseFactory:-fromNew-Example)  `(Non-PSR)`
     - #### [StreamFactory](https://github.com/terrylinooo/psr-http/wiki/PSR-17:-StreamFactory-Example)
         - [createStream](https://github.com/terrylinooo/psr-http/wiki/StreamFactory:-createStream-Example)
         - [createStreamFromFile](https://github.com/terrylinooo/psr-http/wiki/StreamFactory:-createStreamFromFile-Example)
         - [createStreamFromResource](https://github.com/terrylinooo/psr-http/wiki/StreamFactory:-createStreamFromResource-Example)
+        - [::fromNew](https://github.com/terrylinooo/psr-http/wiki/UploadedFileFactory:-fromNew-Example)  `(Non-PSR)`
     - #### [UploadedFileFactory](https://github.com/terrylinooo/psr-http/wiki/PSR-17:-UploadedFileFactory-Example)
         - [createUploadedFile](https://github.com/terrylinooo/psr-http/wiki/UploadedFileFactory:-createUploadedFile-Example)
+        - [::fromGlobal](https://github.com/terrylinooo/psr-http/wiki/UploadedFileFactory:-fromGlobal-Example)  `(Non-PSR)`
     - #### [UriFactory](https://github.com/terrylinooo/psr-http/wiki/PSR-17:-UriFactory-Example)
         - [createUri](https://github.com/terrylinooo/psr-http/wiki/UriFactory:-createUri-Example)
         - [::fromGlobal](https://github.com/terrylinooo/psr-http/wiki/UriFactory:-fromGlobal-Example)  `(Non-PSR)`
+        - [::fromNew](https://github.com/terrylinooo/psr-http/wiki/UriFactory:-fromNew-Example)  `(Non-PSR)`
 - ### **PSR-7**: *HTTP Message Interfaces*
     - #### [Message](https://github.com/terrylinooo/psr-http/wiki/PSR-7:-Message-Example)
         - [getProtocolVersion](https://github.com/terrylinooo/psr-http/wiki/Message:-getProtocolVersion-Example)
@@ -144,3 +222,9 @@ Shieldon PSR HTTP library is brought to you by [Terry L.](https://terryl.in) fro
 ## License
 
 MIT
+
+## References
+
+- [PSR-7](https://www.php-fig.org/psr/psr-7/) (HTTP Message Interfaces)
+- [PSR-15](https://www.php-fig.org/psr/psr-15/) (HTTP Server Request Handlers)
+- [PSR-17](https://www.php-fig.org/psr/psr-17/) (HTTP Factories)

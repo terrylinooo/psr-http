@@ -48,4 +48,20 @@ class ResponseFactory implements ResponseFactoryInterface
             $reasonPhrase
         );
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Non PSR-7 Methods.
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Create a new Response.
+     *
+     * @return ResponseInterface
+     */
+    public static function fromNew(): ResponseInterface
+    {
+        return new Response();
+    }
 }

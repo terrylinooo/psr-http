@@ -48,6 +48,12 @@ class UploadedFileHelper
         ];
 
         foreach ($files as $fileKey => $fileValue) {
+            if (! isset($fileValue['tmp_name'])) {
+                // @codeCoverageIgnoreStart
+                return [];
+                // @codeCoverageIgnoreEnd
+            }
+
             if (is_string($fileValue['tmp_name']) || is_numeric($fileValue['tmp_name'])) {
                 $specTree[$fileKey] = $fileValue;
 

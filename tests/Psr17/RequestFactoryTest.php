@@ -23,4 +23,11 @@ class RequestFactoryTest extends TestCase
 
         $this->assertTrue(($request instanceof RequestInterface));
     }
+
+    public function test_createNew()
+    {
+        $request = RequestFactory::fromNew();
+
+        $this->assertTrue(($request instanceof RequestInterface));
+    }
 }

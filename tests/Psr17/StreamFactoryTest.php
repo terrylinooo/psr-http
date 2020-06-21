@@ -50,6 +50,13 @@ class StreamFactoryTest extends TestCase
         $this->assertTrue(($stream instanceof StreamInterface));
     }
 
+    public function test_fromNew()
+    {
+        $stream = StreamFactory::fromNew();
+
+        $this->assertTrue(($stream instanceof StreamInterface));
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Exceptions

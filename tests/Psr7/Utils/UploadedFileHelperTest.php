@@ -8,51 +8,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Shieldon\Test\Psr17;
+namespace Shieldon\Test\Psr7;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\UploadedFileInterface;
 use Shieldon\Psr7\UploadedFile;
-use Shieldon\Psr17\UploadedFileFactory;
-use Shieldon\Psr17\StreamFactory;
-use ReflectionObject;
-use InvalidArgumentException;
+use Shieldon\Psr7\Utils\UploadedFileHelper;
 
-class UploadFileFactoryTest extends TestCase
+class UploadedFileHelperTest extends TestCase
 {
-    public function test_createUploadedFile()
+    public function test_ParseUploadedFiles()
     {
-        $uploadedFileFactory = new UploadedFileFactory();
-
-        $sourceFile = BOOTSTRAP_DIR . '/sample/shieldon_logo.png';
-        $cloneFile = save_testing_file('shieldon_logo_clone_2.png');
-        $targetPath = save_testing_file('shieldon_logo_moved_from_file_2.png');
-
-        // Clone a sample file for testing MoveTo method.
-        if (! copy($sourceFile, $cloneFile)) {
-            $this->assertTrue(false);
-        }
-
-        $streamFactory = new StreamFactory();
-        $stream =  $streamFactory->createStreamFromFile($cloneFile);
-
-        $uploadedFileFactory = new UploadedFileFactory();
-
-        $uploadedFile = $uploadedFileFactory->createUploadedFile($stream);
-        $this->assertTrue(($uploadedFile instanceof UploadedFileInterface));
-
-        $uploadedFile->moveTo($targetPath);
-
-        if (file_exists($targetPath)) {
-            $this->assertTrue(true);
-        }
-
-        unlink($targetPath);
-    }
-
-    public function test_createFromGlobal()
-    {
-        $_FILES = [
+        $files = [
             
             // <input type="file" name="file1">
 
@@ -147,7 +113,117 @@ class UploadFileFactoryTest extends TestCase
             ],
         ];
 
-        $results = UploadedFileFactory::fromGlobal();
+        $expectedFiles = [
+            'files1' => [
+                'name' => 'example1.jpg',
+                'type' => 'image/jpeg',
+                'tmp_name' => '/tmp/php200A.tmp',
+                'error' => 0,
+                'size' => 100000,
+            ],
+            'files2' => [
+                'a' => [
+                    'tmp_name' => '/tmp/php343C.tmp',
+                    'name' => 'example21.jpg',
+                    'type' => 'image/jpeg',
+                    'error' => 0,
+                    'size' => 125100,
+                ],
+                'b' => [
+                    'tmp_name' => '/tmp/php343D.tmp',
+                    'name' => 'example22.jpg',
+                    'type' => 'image/jpeg',
+                    'error' => 0,
+                    'size' => 145000,
+                ],
+            ],
+            'files3' => [
+                0 => [
+                    'tmp_name' => '/tmp/php310C.tmp',
+                    'name' => 'example31.jpg',
+                    'type' => 'image/jpeg',
+                    'error' => 0,
+                    'size' => 200000,
+                ],
+                1 => [
+                    'tmp_name' => '/tmp/php313D.tmp',
+                    'name' => 'example32.jpg',
+                    'type' => 'image/jpeg',
+                    'error' => 0,
+                    'size' => 300000,
+                ],
+            ],
+            'files4' => [
+                'details' => [
+                    'avatar' => [
+                        'tmp_name' => '/tmp/phpmFLrzD',
+                        'name' => 'my-avatar.png',
+                        'type' => 'image/png',
+                        'error' => 0,
+                        'size' => 90996,
+                    ],
+                ],
+            ],
+        ];
+
+        $results = UploadedFileHelper::uploadedFileParse($files);
+
+        $this->assertEquals($results, $expectedFiles);
+    }
+    public function test_UploadedFileSpecsConvert()
+    {
+        $formattedFiles = [
+            'files1' => [
+                'name' => 'example1.jpg',
+                'type' => 'image/jpeg',
+                'tmp_name' => '/tmp/php200A.tmp',
+                'error' => 0,
+                'size' => 100000,
+            ],
+            'files2' => [
+                'a' => [
+                    'tmp_name' => '/tmp/php343C.tmp',
+                    'name' => 'example21.jpg',
+                    'type' => 'image/jpeg',
+                    'error' => 0,
+                    'size' => 125100,
+                ],
+                'b' => [
+                    'tmp_name' => '/tmp/php343D.tmp',
+                    'name' => 'example22.jpg',
+                    'type' => 'image/jpeg',
+                    'error' => 0,
+                    'size' => 145000,
+                ],
+            ],
+            'files3' => [
+                0 => [
+                    'tmp_name' => '/tmp/php310C.tmp',
+                    'name' => 'example31.jpg',
+                    'type' => 'image/jpeg',
+                    'error' => 0,
+                    'size' => 200000,
+                ],
+                1 => [
+                    'tmp_name' => '/tmp/php313D.tmp',
+                    'name' => 'example32.jpg',
+                    'type' => 'image/jpeg',
+                    'error' => 0,
+                    'size' => 300000,
+                ],
+            ],
+            'files4' => [
+                'details' => [
+                    'avatar' => [
+                        'tmp_name' => '/tmp/phpmFLrzD',
+                        'name' => 'my-avatar.png',
+                        'type' => 'image/png',
+                        'error' => 0,
+                        'size' => 90996,
+                    ],
+                ],
+            ],
+        ];
 
         $expectedFiles = [
             'files1' => new UploadedFile(
@@ -202,35 +278,8 @@ class UploadFileFactoryTest extends TestCase
             ],
         ];
 
+        $results = UploadedFileHelper::uploadedFileSpecsConvert($formattedFiles);
+
         $this->assertEquals($results, $expectedFiles);
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Exceptions
-    |--------------------------------------------------------------------------
-    */
-
-    public function test_Exception_FileIsNotReadable()
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $uploadedFileFactory = new UploadedFileFactory();
-
-        $sourceFile = BOOTSTRAP_DIR . '/sample/shieldon_logo.png';
-
-        $streamFactory = new StreamFactory();
-        $stream = $streamFactory->createStreamFromFile($sourceFile);
-
-        $reflection = new ReflectionObject($stream);
-        $readable = $reflection->getProperty('readable');
-        $readable->setAccessible(true);
-        $readable->setValue($stream, false);
-
-        $uploadedFileFactory = new UploadedFileFactory();
-
-        // Exception: 
-        // => File is not readable.
-        $uploadedFile = $uploadedFileFactory->createUploadedFile($stream);
     }
 }

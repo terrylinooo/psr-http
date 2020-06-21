@@ -47,4 +47,10 @@ class UriFactoryTest extends TestCase
         $this->assertSame($uri->getQuery(), 'foo=bar');        // string
         $this->assertSame($uri->getFragment(), '');            // string
     }
+
+    public function test_fromNew()
+    {
+        $uri = uriFactory::fromNew();
+        $this->assertTrue(($uri instanceof UriInterface));
+    }
 }

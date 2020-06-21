@@ -101,4 +101,14 @@ class UriFactory implements UriFactoryInterface
     
         return new Uri($uri);
     }
+
+    /**
+     * Create a new URI.
+     *
+     * @return StreamInterface
+     */
+    public function fromNew(): UriInterface
+    {
+        return new Uri();
+    }
 }

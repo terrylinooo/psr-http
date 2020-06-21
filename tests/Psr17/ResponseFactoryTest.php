@@ -23,4 +23,11 @@ class ResponseFactoryTest extends TestCase
 
         $this->assertTrue(($response instanceof ResponseInterface));
     }
+
+    public function test_createNew()
+    {
+        $response = ResponseFactory::fromNew();
+
+        $this->assertTrue(($response instanceof ResponseInterface));
+    }
 }

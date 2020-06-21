@@ -51,4 +51,20 @@ class RequestFactory implements RequestFactoryInterface
             $protocol
         );
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Non PSR-7 Methods.
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Create a new Request.
+     *
+     * @return RequestInterface
+     */
+    public static function fromNew(): RequestInterface
+    {
+        return new Request();
+    }
 }
