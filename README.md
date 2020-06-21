@@ -89,9 +89,9 @@ $_FILES = [
     ]
 ];
 
-$UploadedFileArray = UploadedFileFactory::fromGlobal();
+$uploadFileArr = UploadedFileFactory::fromGlobal();
 
-echo $UploadedFileArray['foo']->getClientFilename();
+echo $uploadFileArr['foo']->getClientFilename();
 // Outputs: example1.jpg
 ```
 

@@ -205,6 +205,25 @@ class UploadFileFactoryTest extends TestCase
         $this->assertEquals($results, $expectedFiles);
     }
 
+    public function testExample()
+    {
+        $_FILES = [
+            'foo' => [
+                'name' => 'example1.jpg',
+                'type' => 'image/jpeg',
+                'tmp_name' => '/tmp/php200A.tmp',
+                'error' => 0,
+                'size' => 100000,
+            ]
+        ];
+        
+        $uploadFileArr = UploadedFileFactory::fromGlobal();
+        
+        $filename = $uploadFileArr['foo']->getClientFilename();
+
+        $this->assertEquals('example1.jpg', $filename);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Exceptions
