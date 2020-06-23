@@ -55,7 +55,7 @@ class ServerRequestTest extends TestCase
 
         $this->assertSame($serverParams, []);
         $this->assertSame($cookieParams, []);
-        $this->assertSame($parsedBody, []);
+        $this->assertSame($parsedBody, null);
         $this->assertSame($queryParams, []);
         $this->assertSame($uploadedFiles, []);
         $this->assertSame($attributes, []);;
@@ -69,7 +69,7 @@ class ServerRequestTest extends TestCase
 
         $this->assertSame($serverRequest->getServerParams(), []);
         $this->assertSame($serverRequest->getCookieParams(), []);
-        $this->assertSame($serverRequest->getParsedBody(), []);
+        $this->assertSame($serverRequest->getParsedBody(), null);
         $this->assertSame($serverRequest->getQueryParams(), []);
         $this->assertSame($serverRequest->getUploadedFiles(), []);
         $this->assertSame($serverRequest->getAttributes(), []);;

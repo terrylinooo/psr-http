@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Shieldon\Psr7;
 
 use Psr\Http\Message\UriInterface;
+use Shieldon\Psr7\Utils\UriHelper;
 use InvalidArgumentException;
 
 use function filter_var;
@@ -116,12 +117,8 @@ class Uri implements UriInterface
      */
     public function __construct($uri = '')
     {
-        $this->init();
-
-        if ($uri !== '') {
-            $this->assertValidUri($uri);
-            $this->init(parse_url($uri));
-        }
+        $this->assertString($uri, 'uri');
+        $this->init(parse_url($uri));
     }
 
     /**
@@ -145,7 +142,7 @@ class Uri implements UriInterface
 
         $authority .= $this->getHost();
 
-        if (!empty($this->getPort())) {
+        if (! is_null($this->getPort())) {
             $authority .= ':' . $this->getPort();
         }
 
@@ -159,7 +156,7 @@ class Uri implements UriInterface
     {
         $userInfo = $this->user;
 
-        if (!empty($this->pass)) {
+        if ($this->pass !== '') {
             $userInfo .= ':' . $this->pass;
         }
 
@@ -213,7 +210,7 @@ class Uri implements UriInterface
     {
         $this->assertScheme($scheme);
 
-        $scheme = $this->filter('scheme', $scheme);
+        $scheme = $this->filter('scheme', ['scheme' => $scheme]);
 
         $clone = clone $this;
         $clone->scheme = $scheme;
@@ -226,11 +223,11 @@ class Uri implements UriInterface
     public function withUserInfo($user, $pass = null)
     {
         $this->assertString($user, 'user');
-        $user = $this->filter('user', $user);
+        $user = $this->filter('user', ['user' => $user]);
 
         if ($pass) {
             $this->assertString($pass, 'pass');
-            $pass = $this->filter('pass', $pass);
+            $pass = $this->filter('pass', ['pass' => $pass]);
         }
 
         $clone = clone $this;
@@ -247,7 +244,7 @@ class Uri implements UriInterface
     {
         $this->assertHost($host);
 
-        $host = $this->filter('host', $host);
+        $host = $this->filter('host', ['host' => $host]);
 
         $clone = clone $this;
         $clone->host = $host;
@@ -262,10 +259,10 @@ class Uri implements UriInterface
     {
         $this->assertPort($port);
 
-        $port = $this->filter('port', $port);
+        $port = $this->filter('port', ['port' => $port]);
 
         $clone = clone $this;
-        $clone->port = (int) $port;
+        $clone->port = $port;
 
         return $clone;
     }
@@ -277,7 +274,7 @@ class Uri implements UriInterface
     {
         $this->assertString($path, 'path');
 
-        $path = $this->filter('path', $path);
+        $path = $this->filter('path', ['path' => $path]);
 
         $clone = clone $this;
         $clone->path = '/' . rawurlencode(ltrim($path, '/'));
@@ -292,7 +289,7 @@ class Uri implements UriInterface
     {
         $this->assertString($query, 'query');
 
-        $query = $this->filter('query', $query);
+        $query = $this->filter('query', ['query' => $query]);
 
         // & => %26
         // ? => %3F
@@ -310,10 +307,10 @@ class Uri implements UriInterface
     {
         $this->assertString($fragment, 'fragment');
 
-        $fragment = $this->filter('fragment', $fragment);
+        $fragment = $this->filter('fragment', ['fragment' => $fragment]);
 
         $clone = clone $this;
-        $clone->fragment = rawurlencode($fragment);
+        $clone->fragment = $fragment;
 
         return $clone;
     }
@@ -326,12 +323,12 @@ class Uri implements UriInterface
         $uri = '';
 
         // If a scheme is present, it MUST be suffixed by ":".
-        if ($this->getScheme()) {
+        if ($this->getScheme() !== '') {
             $uri .= $this->getScheme() . ':';
         }
 
         // If an authority is present, it MUST be prefixed by "//".
-        if ($this->getAuthority()) {
+        if ($this->getAuthority() !== '') {
             $uri .= '//' . $this->getAuthority();
         }
 
@@ -340,12 +337,12 @@ class Uri implements UriInterface
         $uri .= '/' . ltrim($this->getPath(), '/');
 
         // If a query is present, it MUST be prefixed by "?".
-        if ($this->getQuery()) {
+        if ($this->getQuery() !== '') {
             $uri .= '?' . $this->getQuery();
         }
 
         // If a fragment is present, it MUST be prefixed by "#".
-        if ($this->getFragment()) {
+        if ($this->getFragment() !== '') {
             $uri .= '#' . $this->getFragment();
         }
 
@@ -379,11 +376,8 @@ class Uri implements UriInterface
         ];
 
         foreach ($components as $v) {
-            $this->{$v} = isset($data[$v]) ? $this->filter($v, $data[$v]) : '';
+            $this->{$v} = $this->filter($v, $data);
         }
-
-        // According to PSR-7, return null or int for the URI port.
-        $this->port = isset($data['port']) ? (int) $data['port'] : null;
     }
 
     /**
@@ -393,13 +387,30 @@ class Uri implements UriInterface
      * Implementations ensure the correct encoding as outlined.
      * @see https://tools.ietf.org/html/rfc3986#section-2.2
      *
-     * @param string          $key
-     * @param string|int|null $value
+     * @param string $key  The part of URI.
+     * @param array  $data Data parsed from a given URL.
      *
-     * @return string
+     * @return string|int|null
      */
-    protected function filter(string $key, $value)
+    protected function filter(string $key, $data)
     {
+        $notExists = [
+            'scheme' => '',
+            'user' => '',
+            'pass' => '',
+            'host' => '',
+            'port' => null,
+            'path' => '',
+            'query' => '',
+            'fragment' => '',
+        ];
+
+        if (!isset($data[$key])) {
+            return $notExists[$key];
+        }
+
+        $value = $data[$key];
+         
         // gen-delims  = ":" / "/" / "?" / "#" / "[" / "]" / "@"
         // $genDelims = ':/\?#\[\]@';
  
@@ -416,6 +427,10 @@ class Uri implements UriInterface
         $regex = '';
 
         switch ($key) {
+            case 'host':
+            case 'scheme':
+                return strtolower($value);
+                break;
 
             case 'query':
             case 'fragment':
@@ -433,7 +448,20 @@ class Uri implements UriInterface
                 $regex = '/(?:[^%' . $unReserved . $subDelims . ']+|' . $encodePattern . ')/';
                 break;
 
+            case 'port':
+                if ($this->scheme === 'http' && (int) $value !== 80) {
+                    return (int) $value;
+                }
+                if ($this->scheme === 'https' && (int) $value !== 443) {
+                    return (int) $value;
+                } 
+                if ($this->scheme === '') {
+                    return (int) $value;
+                }
+                return null;
+
             default:
+                break;
         }
 
         if ($regex) {
@@ -501,29 +529,6 @@ class Uri implements UriInterface
     }
 
     /**
-     * Throw exception for the invalid URI string.
-     *
-     * @param string $uri The URI string.
-     * 
-     * @return void
-     * 
-     * @throws InvalidArgumentException
-     */
-    protected function assertValidUri($uri): void
-    {
-        $this->assertString($uri, 'uri');
-
-        if (!filter_var($uri, FILTER_VALIDATE_URL)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    '"%s" is not a valid URI',
-                    $uri
-                )
-            );
-        }
-    }
-
-    /**
      * Throw exception for the invalid host string.
      *
      * @param string $host The host string to of a URI.
@@ -536,7 +541,7 @@ class Uri implements UriInterface
     {
         $this->assertString($host);
 
-        if ($host === '') {
+        if (empty($host)) {
             // Note: An empty host value is equivalent to removing the host.
             // So that if the host is empty, ignore the following check.
             return;

@@ -112,9 +112,10 @@ class Request extends Message implements RequestInterface
         array  $headers = []   ,
         string $version = '1.1'
     ) {
-        $this->assertMethod($method);
         $this->method = $method;
 
+        $this->assertMethod($method);
+  
         $this->assertProtocolVersion($version);
         $this->protocolVersion = $version;
 
@@ -199,7 +200,7 @@ class Request extends Message implements RequestInterface
         $this->assertMethod($method);
 
         $clone = clone $this;
-        $clone->method = strtoupper($method);
+        $clone->method = $method;
 
         return $clone;
     }
@@ -219,6 +220,9 @@ class Request extends Message implements RequestInterface
     {
         $host = $uri->getHost();
 
+        $clone = clone $this;
+        $clone->uri = $uri;
+
         if (
             // This method MUST update the Host header of the returned request by
             // default if the URI contains a host component.
@@ -230,16 +234,12 @@ class Request extends Message implements RequestInterface
             // request.
             ($preserveHost && !$this->hasHeader('Host') && $host !== '')
         ) {
-            $clone = clone $this;
-            $clone->uri = $uri;
-
             $headers = $this->getHeaders();
             $headers['host'] = $host;
             $clone->setHeaders($headers);
-            return $clone;
         }
 
-        return $this;
+        return $clone;
     }
 
     /*
@@ -257,11 +257,18 @@ class Request extends Message implements RequestInterface
      * 
      * @throws InvalidArgumentException
      */
-    protected function assertMethod(string $method): void
+    protected function assertMethod($method): void
     {
-        $this->method = strtoupper($method);
+        if (!is_string($method)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'HTTP method must be a string.',
+                    $method
+                )
+            );
+        }
 
-        if (!in_array($this->method, $this->validMethods)) {
+        if (!in_array(strtoupper($this->method), $this->validMethods)) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Unsupported HTTP method. It must be compatible with RFC-7231 request method, but "%s" provided.',

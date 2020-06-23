@@ -66,6 +66,15 @@ class Message implements MessageInterface
      */
     protected $headers = [];
 
+
+    /**
+     * A map of header name for lower case and original case.
+     * In `lower => original` format.
+     *
+     * @var array
+     */
+    protected $headerNameMapping = [];
+
     /**
      * Valid HTTP version numbers.
      *
@@ -101,7 +110,18 @@ class Message implements MessageInterface
      */
     public function getHeaders(): array
     {
-        return $this->headers;
+        $headers = $this->headers;
+
+        foreach ($this->headerNameMapping as $origin) {
+            $name = strtolower($origin);
+            if (isset($headers[$name])) {
+                $value = $headers[$name];
+                unset($headers[$name]);
+                $headers[$origin] = $value;
+            }
+        }
+
+        return $headers;
     }
 
     /**
@@ -133,7 +153,7 @@ class Message implements MessageInterface
      */
     public function getHeaderLine($name): string
     {
-        return implode(', ', $this->getHeader(strtolower($name)));
+        return implode(', ', $this->getHeader($name));
     }
 
     /**
@@ -141,14 +161,14 @@ class Message implements MessageInterface
      */
     public function withHeader($name, $value)
     {
+        $origName = $name;
+
         $name = $this->normalizeHeaderFieldName($name);
         $value = $this->normalizeHeaderFieldValue($value);
 
-        $this->assertHeaderFieldName($name);
-        $this->assertHeaderFieldValue($value);
-
         $clone = clone $this;
         $clone->headers[$name] = $value;
+        $clone->headerNameMapping[$name] = $origName;
 
         return $clone;
     }
@@ -158,13 +178,13 @@ class Message implements MessageInterface
      */
     public function withAddedHeader($name, $value)
     {
+        $origName = $name;
+
         $name = $this->normalizeHeaderFieldName($name);
         $value = $this->normalizeHeaderFieldValue($value);
 
-        $this->assertHeaderFieldName($name);
-        $this->assertHeaderFieldValue($value);
-
         $clone = clone $this;
+        $clone->headerNameMapping[$name] = $origName;
 
         if (isset($clone->headers[$name])) {
             $clone->headers[$name] = array_merge($this->headers[$name], $value);
@@ -180,10 +200,12 @@ class Message implements MessageInterface
      */
     public function withoutHeader($name)
     {
+        $origName = $name;
         $name = strtolower($name);
 
         $clone = clone $this;
         unset($clone->headers[$name]);
+        unset($clone->headerNameMapping[$name]);
 
         return $clone;
     }
@@ -223,18 +245,19 @@ class Message implements MessageInterface
     protected function setHeaders(array $headers): void
     {
         $arr = [];
+        $origArr = [];
 
         foreach ($headers as $name => $value) {
+            $origName = $name;
             $name = $this->normalizeHeaderFieldName($name);
             $value = $this->normalizeHeaderFieldValue($value);
-
-            $this->assertHeaderFieldName($name);
-            $this->assertHeaderFieldValue($value);
-            
+  
             $arr[$name] = $value;
+            $origArr[$origName] = $value;
         }
 
         $this->headers = $arr;
+        $this->origHeaders = $origArr;
     }
 
     /**
@@ -306,8 +329,10 @@ class Message implements MessageInterface
      *
      * @return string
      */
-    protected function normalizeHeaderFieldName(string $name): string
+    protected function normalizeHeaderFieldName($name): string
     {
+        $this->assertHeaderFieldName($name);
+        
         return trim(strtolower($name));
     }
 
@@ -320,24 +345,23 @@ class Message implements MessageInterface
      */
     protected function normalizeHeaderFieldValue($value)
     {
+        $this->assertHeaderFieldValue($value);
+
         $result = false;
 
         if (is_string($value)) {
             $result = [trim($value)];
 
         } elseif (is_array($value)) {
-            foreach ($value as $k => $v) {
+            foreach ($value as $v) {
                 if (is_string($v)) {
-                    $value[$k] = trim($v);
+                    $value[] = trim($v);
                 }
             }
             $result = $value;
 
         } elseif (is_float($value) || is_integer($value)) {
             $result = [(string) $value];
-
-        } else {
-            $this->assertHeaderFieldValue($value);
         }
 
         return $result;
@@ -352,8 +376,16 @@ class Message implements MessageInterface
      * 
      * @throws InvalidArgumentException
      */
-    protected function assertHeaderFieldName(string $name): void
+    protected function assertHeaderFieldName($name): void
     {
+        if (!is_string($name)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Header field name must be a string, but "%s" given.',
+                    gettype($name)
+                )
+            );
+        }
         // see https://tools.ietf.org/html/rfc7230#section-3.2.6
         // alpha  => a-zA-Z
         // digit  => 0-9
@@ -380,8 +412,23 @@ class Message implements MessageInterface
      */
     protected function assertHeaderFieldValue($value = null): void
     {
+        if (is_scalar($value) && !is_bool($value)) {
+            $value = [(string) $value];
+        }
+
+        if (empty($value)) {
+            throw new InvalidArgumentException(
+                'Empty array is not allowed.'
+            );
+        }
+
         if (is_array($value)) {
             foreach ($value as $item) {
+
+                if ($item === '') {
+                    return;
+                }
+
                 if (!is_scalar($item) || is_bool($item)) {
                     throw new InvalidArgumentException(
                         sprintf(

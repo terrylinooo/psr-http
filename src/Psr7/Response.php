@@ -211,7 +211,7 @@ class Response extends Message implements ResponseInterface
      */
     protected function assertStatus($code)
     {
-        if (!is_integer($code)) {
+        if (! is_integer($code)) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Status code should be an integer value, but "%s" provided.',
@@ -220,7 +220,7 @@ class Response extends Message implements ResponseInterface
             );
         }
 
-        if (!($code > 100 && $code < 599)) {
+        if (! ($code > 100 && $code < 599)) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Status code should be in a range of 100-599, but "%s" provided.',
@@ -245,7 +245,7 @@ class Response extends Message implements ResponseInterface
             return;
         }
 
-        if (!is_string($reasonPhrase)) {
+        if (! is_string($reasonPhrase)) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Reason phrase must be a string, but "%s" provided.',

@@ -148,9 +148,9 @@ class UriTest extends TestCase
         
         $this->assertSame($newUri->getScheme(), 'http');
         $this->assertSame($newUri->getHost(), 'freedom.com');
-        $this->assertSame($newUri->getUserInfo(), 'people');
+        $this->assertSame($newUri->getUserInfo(), 'people:');
         $this->assertSame($newUri->getPath(), '/%25E5%25A4%25A9%25E5%25AE%2589%25E9%2596%2580');
-        $this->assertSame($newUri->getPort(), 80);
+        $this->assertSame($newUri->getPort(), null);
         $this->assertSame($newUri->getQuery(), 'chineseChars=%E5%85%AD%E5%9B%9B');
         $this->assertSame($newUri->getFragment(), '19890604');
     }
@@ -189,21 +189,6 @@ class UriTest extends TestCase
         // Exception: 
         // => It must be a string, but integer provided.
         $assertString->invokeArgs($uri, [1234]);
-    }
-
-    public function test_Exception_AssertValidUri()
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $uri = new Uri();
-
-        $reflection = new ReflectionObject($uri);
-        $assertValidUri = $reflection->getMethod('assertValidUri');
-        $assertValidUri->setAccessible(true);
-
-        // Exception: 
-        // => "https://www.example_test.com" is not a valid URI
-        $assertValidUri->invokeArgs($uri, ['https://www.example_test.com']);
     }
 
     public function test_Exception_AssertHost()

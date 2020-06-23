@@ -77,7 +77,8 @@ class RequestTest extends TestCase
         $new3Request = $new2Request->withUri(new Uri('https://www.facebook.com'), true);
 
         // Preserve Host
-        $this->assertSame($new3Request->getUri()->getHost(), 'play.google.com');
+        $this->assertSame($new3Request->getHeaderLine('host'), 'play.google.com');
+        $this->assertSame($new3Request->getUri()->getHost(), 'www.facebook.com');
     }
 
     public function test_setBody()
