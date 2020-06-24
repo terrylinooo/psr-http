@@ -4,23 +4,19 @@
 
 This library is a PSR HTTP implementation created for Shieldon firewall 2, following up the PSR (PHP Standard Recommendation) documents by one hundred percent.
 
-### Test Status 
+- **PSR-7** (HTTP Message Interfaces)
+- **PSR-15** (HTTP Server Request Handlers)
+- **PSR-17** (HTTP Factories)
+
+### Test Status
+
+Shiledon PSR-HTTP library is strictly tested by unit tests contain almost all condictions that might be happened, if you find any bug or something that can improve this library, please let me know.
 
 | Test suite | Status |
 | --- | --- |
 | Repository built-in tests | [![Build Status](https://travis-ci.org/terrylinooo/psr-http.svg?branch=master)](https://travis-ci.org/terrylinooo/psr-http) 
 | [PSR-7 integration tests](https://github.com/terrylinooo/psr7-integration-tests) | [![Build Status](https://travis-ci.org/terrylinooo/psr7-integration-tests.svg?branch=shieldon-psr-http)](https://travis-ci.org/terrylinooo/psr7-integration-tests) 
 
-
-
-
-
-
-All methods are also well-tested by [PSR 7 Intergation Tests](https://github.com/terrylinooo/psr7-integration-tests).
-
-- **PSR-7** (HTTP Message Interfaces)
-- **PSR-15** (HTTP Server Request Handlers)
-- **PSR-17** (HTTP Factories)
 
 You can use it on any framework which is compatible with those PSRs.
 
