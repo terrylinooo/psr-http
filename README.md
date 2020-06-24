@@ -1,8 +1,22 @@
 # PSR 7, 15, 17 Implementation and Examples
 
-[![Build Status](https://travis-ci.org/terrylinooo/psr-http.svg?branch=master)](https://travis-ci.org/terrylinooo/psr-http) [![codecov](https://img.shields.io/codecov/c/github/terrylinooo/psr-http.svg)](https://codecov.io/gh/terrylinooo/psr-http) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/terrylinooo/psr-http/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/terrylinooo/psr-http/?branch=master) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![codecov](https://img.shields.io/codecov/c/github/terrylinooo/psr-http.svg)](https://codecov.io/gh/terrylinooo/psr-http) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/terrylinooo/psr-http/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/terrylinooo/psr-http/?branch=master) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-This library is a PSR HTTP implementation with detailed examples, following up the PSR (PHP Standard Recommendation) documents by one hundred percent.
+This library is a PSR HTTP implementation created for Shieldon firewall 2, following up the PSR (PHP Standard Recommendation) documents by one hundred percent.
+
+### Test Status 
+
+| Test suite | Status |
+| --- | --- |
+| Repository built-in tests | [![Build Status](https://travis-ci.org/terrylinooo/psr-http.svg?branch=master)](https://travis-ci.org/terrylinooo/psr-http) 
+| [PSR-7 integration tests](https://github.com/terrylinooo/psr7-integration-tests) | [![Build Status](https://travis-ci.org/terrylinooo/psr7-integration-tests.svg?branch=shieldon-psr-http)](https://travis-ci.org/terrylinooo/psr7-integration-tests) 
+
+
+
+
+
+
+All methods are also well-tested by [PSR 7 Intergation Tests](https://github.com/terrylinooo/psr7-integration-tests).
 
 - **PSR-7** (HTTP Message Interfaces)
 - **PSR-15** (HTTP Server Request Handlers)
@@ -122,6 +136,7 @@ echo $uploadFileArr['foo']->getClientFilename();
     - #### [Message](https://github.com/terrylinooo/psr-http/wiki/PSR-7:-Message-Example)
         - [getProtocolVersion](https://github.com/terrylinooo/psr-http/wiki/Message:-getProtocolVersion-Example)
         - [withProtocolVersion](https://github.com/terrylinooo/psr-http/wiki/Message:-withProtocolVersion-Example)
+        - [setHeaders](https://github.com/terrylinooo/psr-http/wiki/Message:-setHeaders-Example) `(Non-PSR)`
         - [getHeaders](https://github.com/terrylinooo/psr-http/wiki/Message:-getHeaders-Example)
         - [hasHeader](https://github.com/terrylinooo/psr-http/wiki/Message:-hasHeader-Example)
         - [getHeader](https://github.com/terrylinooo/psr-http/wiki/Message:-getHeader-Example)
@@ -184,6 +199,7 @@ echo $uploadFileArr['foo']->getClientFilename();
         - [getError](https://github.com/terrylinooo/psr-http/wiki/UploadedFile:-getError-Example)
         - [getClientFilename](https://github.com/terrylinooo/psr-http/wiki/UploadedFile:-getClientFilename-Example)
         - [getClientMediaType](https://github.com/terrylinooo/psr-http/wiki/UploadedFile:-getClientMediaType-Example)
+        - [getErrorMessage](https://github.com/terrylinooo/psr-http/wiki/UploadedFile:-getErrorMessage-Example) `(Non-PSR)`
     - #### [Uri](https://github.com/terrylinooo/psr-http/wiki/PSR-7:-Uri-Example)
         - [__construct](https://github.com/terrylinooo/psr-http/wiki/Uri:-__construct-Example) `(Non-PSR)`
         - [getScheme](https://github.com/terrylinooo/psr-http/wiki/Uri:-getScheme-Example) 

@@ -155,10 +155,13 @@ class UriTest extends TestCase
         $this->assertSame($newUri->getFragment(), '19890604');
     }
 
-    public function test_getHeaders()
+    public function test_filterPort()
     {
+        $uri = new Uri('http://example.com:80');
+        $this->assertSame($uri->getPort(), null);
 
-
+        $uri = new Uri('//example.com:80');
+        $this->assertSame($uri->getPort(), 80);
     }
 
     /*

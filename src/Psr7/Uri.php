@@ -460,8 +460,7 @@ class Uri implements UriInterface
                 }
                 return null;
 
-            default:
-                break;
+            // endswitch
         }
 
         if ($regex) {
@@ -474,7 +473,11 @@ class Uri implements UriInterface
             );
         }
 
+        // @codeCoverageIgnoreStart
+
         return $value;
+
+        // @codeCoverageIgnoreEnd
     }
 
     /**
