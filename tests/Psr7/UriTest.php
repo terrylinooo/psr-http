@@ -155,6 +155,12 @@ class UriTest extends TestCase
         $this->assertSame($newUri->getFragment(), '19890604');
     }
 
+    public function test_getHeaders()
+    {
+
+
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Exceptions

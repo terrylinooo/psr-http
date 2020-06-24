@@ -83,8 +83,8 @@ class MessageTest extends TestCase
         ];
 
         $expectedArray = [
-            'user-agent' => ['Mozilla/5.0 (Windows NT 10.0; Win64; x64)'],
-            'custom-value' => ['1234'],
+            'User-Agent' => ['Mozilla/5.0 (Windows NT 10.0; Win64; x64)'],
+            'Custom-Value' => ['1234'],
         ];
 
         $reflection = new ReflectionObject($message);
@@ -181,6 +181,22 @@ EOF;
         $this->assertSame($headers, []);
     }
 
+    public function test_WithAddedHeaderArrayValueAndKeys()
+    {
+        $message = new Message();
+        $message = $message->withAddedHeader('content-type', ['foo' => 'text/html']);
+        $message = $message->withAddedHeader('content-type', ['foo' => 'text/plain', 'bar' => 'application/json']);
+
+        $headerLine = $message->getHeaderLine('content-type');
+        $this->assertRegExp('|text/html|', $headerLine);
+        $this->assertRegExp('|text/plain|', $headerLine);
+        $this->assertRegExp('|application/json|', $headerLine);
+
+        $message = $message->withAddedHeader('foo', '');
+        $headerLine = $message->getHeaderLine('foo');
+        $this->assertSame('', $headerLine);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Exceptions
@@ -196,6 +212,17 @@ EOF;
         // Exception:
         // => "hello-wo)rld" is not valid header name, it must be an RFC 7230 compatible string.
         $newMessage = $message->withHeader('hello-wo)rld', 'ok');
+    }
+
+    public function test_Exception_AssertHeaderFieldName_2()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $message = new Message();
+
+        // Exception:
+        // => "hello-wo)rld" is not valid header name, it must be an RFC 7230 compatible string.
+        $newMessage = $message->withHeader(['test'], 'ok');
     }
 
     public function test_Exception_AssertHeaderFieldValue_Booolean()

@@ -253,11 +253,11 @@ class Message implements MessageInterface
             $value = $this->normalizeHeaderFieldValue($value);
   
             $arr[$name] = $value;
-            $origArr[$origName] = $value;
+            $origArr[$name] = $origName;
         }
 
         $this->headers = $arr;
-        $this->origHeaders = $origArr;
+        $this->headerNameMapping = $origArr;
     }
 
     /**

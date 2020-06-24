@@ -99,7 +99,18 @@ class RequestTest extends TestCase
     |--------------------------------------------------------------------------
     */
 
-    public function test_Exception_assertMethod()
+    public function test_Exception_assertMethod_1()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $request = new Request('GET', 'https://terryl.in/', '', [], '1.1');
+
+
+        // Exception:
+        // => HTTP method must be a string.
+        $newRequest = $request->withMethod(['POST']);
+    }
+
+    public function test_Exception_assertMethod_2()
     {
         $this->expectException(InvalidArgumentException::class);
 
