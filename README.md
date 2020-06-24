@@ -38,7 +38,7 @@ composer test
 
 ## Quick Start
 
-The simplest way to start implemanting PSR-7 on your PHP applications, let's check out the examples below.
+The simplest way to start implementing PSR-7 on your PHP applications, let's check out the examples below.
 
 *Create a server request.* 
 
