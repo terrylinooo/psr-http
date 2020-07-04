@@ -10,7 +10,7 @@ This library is a PSR HTTP implementation created for Shieldon firewall 2, follo
 
 ### Test Status
 
-Shiledon PSR-HTTP library is strictly tested by unit tests contain almost all condictions that might be happened, if you find any bug or something that can improve this library, please let me know.
+Shiledon PSR-HTTP library is strictly tested by unit tests contain almost all conditions that might be happened, if you find any bug or something that can improve this library, please let me know.
 
 | Test suite | Status |
 | --- | --- |
