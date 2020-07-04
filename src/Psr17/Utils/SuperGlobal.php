@@ -95,7 +95,11 @@ class SuperGlobal
             'SERVER_PROTOCOL' => 'HTTP/1.1',
         ];
 
-        $_SERVER = array_merge($defaultServerParams, $server);
+        if (defined('NO_MOCK_ENV')) {
+            $defaultServerParams = [];
+        }
+
+        $_SERVER = array_merge($defaultServerParams, $_SERVER, $server);
     }
 
     // @codeCoverageIgnoreEnd
