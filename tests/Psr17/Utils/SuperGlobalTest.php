@@ -10,14 +10,13 @@
 
 namespace Shieldon\Test\Psr17\Utils;
 
-use PHPUnit\Framework\TestCase;
-use Shieldon\Psr17\Utils\SuperGlobal;
-
-class SuperGlobalTest extends TestCase
+class SuperGlobalTest extends \PHPUnit\Framework\TestCase
 {
     public function test_Static_extract()
     {
-        $data = SuperGlobal::extract();
+        $_SERVER = [];
+
+        $data = \Shieldon\Psr17\Utils\SuperGlobal::extract();
 
         $array = [
             'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9',

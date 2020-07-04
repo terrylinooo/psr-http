@@ -96,7 +96,7 @@ class SuperGlobal
         ];
 
         if (defined('NO_MOCK_ENV')) {
-            $defaultServerParams = [];
+           $defaultServerParams = [];
         }
 
         $_SERVER = array_merge($defaultServerParams, $_SERVER, $server);
