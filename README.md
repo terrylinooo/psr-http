@@ -159,7 +159,7 @@ echo $uploadFileArr['foo']->getClientFilename();
         - [withQueryParams](https://github.com/terrylinooo/psr-http/wiki/ServerRequest:-withQueryParams-Example)	
         - [getUploadedFiles](https://github.com/terrylinooo/psr-http/wiki/ServerRequest:-getUploadedFiles-Example)	
         - [withUploadedFiles](https://github.com/terrylinooo/psr-http/wiki/ServerRequest:-withUploadedFiles-Example)	
-        - [getParsedBody](https://github.com/terrylinooo/psr-http/wiki/ServerRequest:-getParsedBody-Example)
+        - [getParsedBody](https://github.com/terrylinooo/psr-http/wiki/ServerRequest:-getParsedBody-Example) (See explanation below)
         - [withParsedBody](https://github.com/terrylinooo/psr-http/wiki/ServerRequest:-withParsedBody-Example)	
         - [getAttributes](https://github.com/terrylinooo/psr-http/wiki/ServerRequest:-getAttributes-Example)	
         - [getAttribute](https://github.com/terrylinooo/psr-http/wiki/ServerRequest:-getAttribute-Example)
@@ -224,6 +224,37 @@ echo $uploadFileArr['foo']->getClientFilename();
 
 
 If you are looking for combined examples, see [unit testing](https://github.com/terrylinooo/psr-http/tree/master/tests).
+
+### The Behavior of Handling Request Body
+
+Shieldon PSR-HTTP is ready for RESTful, the following content explains how PRS-HTTP deals with the request body.
+
+- **A.** The `getParsedBody` method returns an array of the superglobal *$_POST* if the request request method is `POST` and the Content-Type is one of the following type:
+    - `multipart/form-data`
+    - `application/x-www-form-urlencode`
+    
+
+- **B.** The `getParsedBody` method returns a JSON object if the request fit to the following conditions.
+    - The request Content-Type is `application/json`
+    - The request body is a valid *JSON-formatted* string.
+    - The request method is not `GET`.
+
+- **C.** The `getParsedBody` method returns a array parsed from HTTP build query:
+    - The condition is neither A or B.
+    - The request method is not `GET`.
+
+- **D.** The `getParsedBody` method returns `null` if the condition is not one of above.
+
+#### Summary
+
+| Condition| Method | Content-type | Parsed-body |
+| --- | --- | --- | --- |
+| A | POST | multipart/form-data<br />application/x-www-form-urlencode | array |
+| B | ALL excepts GET | application/json | object  |
+| C | ALL excepts GET | Not A or B | array |
+| D | - | - | null |
+
+Hope this helps.
 
 --- 
 

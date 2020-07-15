@@ -75,7 +75,6 @@ class ServerRequestTest extends TestCase
         $this->assertSame($serverRequest->getAttributes(), []);;
 
         // Test 2
-
         $serverRequest = self::getServerRequest(
             'POST', 
             ['foo' => 'bar'],

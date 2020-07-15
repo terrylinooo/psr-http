@@ -19,12 +19,19 @@ use Psr\Http\Message\StreamInterface;
 use Shieldon\Psr7\Request;
 use Shieldon\Psr7\Utils\UploadedFileHelper;
 use InvalidArgumentException;
-
+use function file_get_contents;
+use function gettype;
 use function is_array;
 use function is_null;
 use function is_object;
+use function json_decode;
+use function json_last_error;
+use function parse_str;
+use function preg_split;
 use function sprintf;
-use function gettype;
+use function strtolower;
+use function strtoupper;
+use const JSON_ERROR_NONE;
 
 /*
  * Representation of an incoming, server-side HTTP request.
@@ -111,9 +118,7 @@ class ServerRequest extends Request implements ServerRequestInterface
         $this->queryParams  = $getParams;
         $this->attributes   = [];
 
-        if (!empty($postParams)) {
-            $this->parsedBody = $postParams;
-        }
+        $this->determineParsedBody($postParams);
 
         // This property will be assigned to a parsed array that contains 
         // the UploadedFile instance(s) as the $filesParams is given.
@@ -306,6 +311,69 @@ class ServerRequest extends Request implements ServerRequestInterface
                     gettype($data)
                 )
             );
+        }
+    }
+
+    /**
+     * Confirm the content type and post values whether fit the requirement.
+     *
+     * @param array $postParams 
+     * @return void
+     */
+    protected function determineParsedBody(array $postParams)
+    {
+        $headerContentType = $this->getHeaderLine('Content-Type');
+        $contentTypeArr = preg_split('/\s*[;,]\s*/', $headerContentType);
+        $contentType = strtolower($contentTypeArr[0]);
+        $httpMethod = strtoupper($this->getMethod());
+
+        // Is it a form submit or not.
+        $isForm = false;
+
+        if ($httpMethod === 'POST' && !empty($postParams)) {
+
+            // If the request Content-Type is either application/x-www-form-urlencoded
+            // or multipart/form-data, and the request method is POST, this method MUST
+            // return the contents of $_POST.
+            $postRequiredContentTypes = [
+                '', // For unit testing purpose.
+                'application/x-www-form-urlencoded',
+                'multipart/form-data',
+            ];
+
+            if (in_array($contentType, $postRequiredContentTypes)) {
+                $this->parsedBody = $postParams ?: null;
+                $isForm = true;
+            }
+        }
+
+        // Maybe other http methods such as PUT, DELETE, etc...
+        if ($httpMethod !== 'GET' && !$isForm) {
+
+            // If it a JSON formatted string?
+            $isJson = false;
+
+            // Receive content from PHP stdin input, if exists.
+            $rawText = file_get_contents('php://input');
+
+            if (!empty($rawText)) {
+
+                if ($contentType === 'application/json') {
+                    $jsonParsedBody = json_decode($rawText);
+                    $isJson = (json_last_error() === JSON_ERROR_NONE);
+                }
+
+                // Condition 1 - It's a JSON, now the body is a JSON object.
+                if ($isJson) {
+                    $this->parsedBody = $jsonParsedBody ?: null;
+                }
+
+                // Condition 2 - It's not a JSON, might be a http build query.
+                if (!$isJson) {
+                    parse_str($rawText, $parsedStr);
+                    $this->parsedBody = $parsedStr ?: null;
+                }
+            }
         }
     }
 }

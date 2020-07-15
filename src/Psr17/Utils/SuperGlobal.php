@@ -35,6 +35,18 @@ class SuperGlobal
             self::mockCliEnvironment();
         }
 
+        // Here we add the HTTP prefix by ourselves...
+        $headerParamsWithoutHttpPrefix = [
+            'CONTENT_TYPE',
+            'CONTENT_LENGTH',
+        ];
+
+        foreach ($headerParamsWithoutHttpPrefix as $value) {
+            if (isset($_SERVER[$value])) {
+                $_SERVER['HTTP_' . $value] = $_SERVER[$value];
+            }
+        }
+
         $headerParams = [];
         $serverParams = $_SERVER ?? [];
         $cookieParams = $_COOKIE ?? [];
