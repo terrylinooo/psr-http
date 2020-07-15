@@ -347,6 +347,7 @@ class ServerRequest extends Request implements ServerRequestInterface
             }
         }
 
+        // @codeCoverageIgnoreStart
         // Maybe other http methods such as PUT, DELETE, etc...
         if ($httpMethod !== 'GET' && !$isForm) {
 
@@ -375,5 +376,8 @@ class ServerRequest extends Request implements ServerRequestInterface
                 }
             }
         }
+
+        // This part is manually tested by using PostMan.
+        // @codeCoverageIgnoreEnd
     }
 }
