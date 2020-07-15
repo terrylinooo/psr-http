@@ -150,7 +150,7 @@ class Stream implements StreamInterface
      */
     public function detach()
     {
-        if (! $this->isStream()) {
+        if (!$this->isStream()) {
             return null;
         }
 
@@ -172,7 +172,7 @@ class Stream implements StreamInterface
      */
     public function getSize()
     {
-        if (! $this->isStream()) {
+        if (!$this->isStream()) {
             return null;
         }
 
@@ -226,7 +226,7 @@ class Stream implements StreamInterface
     {
         $this->assertPropertyStream();
 
-        if (! $this->seekable) {
+        if (!$this->seekable) {
             throw new RuntimeException(
                 'Stream is not seekable.'
             );
@@ -349,7 +349,7 @@ class Stream implements StreamInterface
         if ($this->isStream()) {
             $this->meta = stream_get_meta_data($this->stream);
             
-            if (! $key) {
+            if (!$key) {
                 return $this->meta;
             }
 
@@ -390,7 +390,7 @@ class Stream implements StreamInterface
      */
     protected function assertStream($stream): void
     {
-        if (! is_resource($stream)) {
+        if (!is_resource($stream)) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Stream should be a resource, but "%s" provided.',
@@ -408,7 +408,7 @@ class Stream implements StreamInterface
      */
     protected function assertPropertyStream(): void
     {
-        if (! $this->isStream()) {
+        if (!$this->isStream()) {
             throw new RuntimeException(
                 'Stream does not exist.'
             );

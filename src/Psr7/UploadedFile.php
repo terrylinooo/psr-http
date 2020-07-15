@@ -14,6 +14,7 @@ namespace Shieldon\Psr7;
 
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
+use Shieldon\Psr7\Stream;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -54,6 +55,13 @@ class UploadedFile implements UploadedFileInterface
      * @var StreamInterface|null
      */
     protected $stream;
+
+    /**
+     * Is file copy to stream when first time calling getStream().
+     *
+     * @var bool
+     */
+    protected $isFileToStream = false;
 
     /**
      * The file size based on the "size" key in the $_FILES array.
@@ -152,7 +160,15 @@ class UploadedFile implements UploadedFileInterface
             );
         }
 
-        if (! $this->stream) {
+        if (!$this->isFileToStream && !$this->stream) {
+            $resource = @fopen($this->file, 'r');
+            if (is_resource($resource)) {
+                $this->stream = new Stream($resource);
+            }
+            $this->isFileToStream = true;
+        }
+
+        if (!$this->stream) {
             throw new RuntimeException(
                 'No stream is available or can be created.'
             );
@@ -173,7 +189,7 @@ class UploadedFile implements UploadedFileInterface
             );
         }
 
-        if (! is_writable(dirname($targetPath))) {
+        if (!is_writable(dirname($targetPath))) {
             // Throw exception if the $targetPath specified is invalid.
             throw new RuntimeException(
                 sprintf(
@@ -188,7 +204,7 @@ class UploadedFile implements UploadedFileInterface
 
             if ($this->sapi === 'cli') {
 
-                if (! rename($this->file, $targetPath)) {
+                if (!rename($this->file, $targetPath)) {
 
                     // @codeCoverageIgnoreStart
 
@@ -217,17 +233,15 @@ class UploadedFile implements UploadedFileInterface
                     );
                 }
             }
-        }
 
-        // Is a stream...
-        if ($this->stream instanceof StreamInterface) {
+        } elseif ($this->stream instanceof StreamInterface) {
             $content = $this->stream->getContents();
 
             file_put_contents($targetPath, $content, LOCK_EX);
 
             // @codeCoverageIgnoreStart
 
-            if (! file_exists($targetPath)) {
+            if (!file_exists($targetPath)) {
                 // Throw exception on any error during the move operation.
                 throw new RuntimeException(
                     sprintf(

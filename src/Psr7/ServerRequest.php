@@ -124,7 +124,7 @@ class ServerRequest extends Request implements ServerRequestInterface
         // the UploadedFile instance(s) as the $filesParams is given.
         $this->uploadedFiles = [];
 
-        if (! empty($filesParams)) {
+        if (!empty($filesParams)) {
             $this->uploadedFiles = UploadedFileHelper::uploadedFileSpecsConvert(
                 UploadedFileHelper::uploadedFileParse($filesParams)
             );
@@ -280,7 +280,7 @@ class ServerRequest extends Request implements ServerRequestInterface
         foreach ($values as $value) {
             if (is_array($value)) {
                 $this->assertUploadedFiles($value);
-            } elseif (! ($value instanceof UploadedFileInterface)) {
+            } elseif (!($value instanceof UploadedFileInterface)) {
                 throw new InvalidArgumentException(
                     'Invalid PSR-7 array structure for handling UploadedFile.'
                 );
