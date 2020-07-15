@@ -2,7 +2,7 @@
 
 [![codecov](https://img.shields.io/codecov/c/github/terrylinooo/psr-http.svg)](https://codecov.io/gh/terrylinooo/psr-http) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/terrylinooo/psr-http/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/terrylinooo/psr-http/?branch=master) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-This library is a PSR HTTP implementation created for Shieldon firewall 2, following up the PSR (PHP Standard Recommendation) documents by one hundred percent.
+This library is a PSR HTTP implementation created for [Shieldon firewall 2](https://github.com/terrylinooo/shieldon) , following up the PSR (PHP Standard Recommendation) documents by one hundred percent.
 
 - **PSR-7** (HTTP Message Interfaces)
 - **PSR-15** (HTTP Server Request Handlers)
@@ -229,21 +229,23 @@ If you are looking for combined examples, see [unit testing](https://github.com/
 
 Shieldon PSR-HTTP is ready for RESTful, the following content explains how PRS-HTTP deals with the request body.
 
-- **A.** The `getParsedBody` method returns an array of the superglobal *$_POST* if the request request method is `POST` and the Content-Type is one of the following type:
+The `getParsedBody` method will return:
+
+- **(A)** An array of the superglobal *$_POST* if the request request method is `POST` and the Content-Type is one of the following types:
     - `multipart/form-data`
     - `application/x-www-form-urlencode`
     
 
-- **B.** The `getParsedBody` method returns a JSON object if the request fit to the following conditions.
+- **(B)** A JSON object if the request fit to the following conditions.
     - The request Content-Type is `application/json`
     - The request body is a valid *JSON-formatted* string.
     - The request method is not `GET`.
 
-- **C.** The `getParsedBody` method returns a array parsed from HTTP build query:
+- **(C)** An array parsed from HTTP build query:
     - The condition is neither A or B.
     - The request method is not `GET`.
 
-- **D.** The `getParsedBody` method returns `null` if the condition is not one of above.
+- **(D)** `null` if the condition is none of above.
 
 #### Summary
 
@@ -251,7 +253,7 @@ Shieldon PSR-HTTP is ready for RESTful, the following content explains how PRS-H
 | --- | --- | --- | --- |
 | A | POST | multipart/form-data<br />application/x-www-form-urlencode | array |
 | B | ALL excepts GET | application/json | object  |
-| C | ALL excepts GET | Not A or B | array |
+| C | ALL excepts GET | All excepts A or B | array |
 | D | - | - | null |
 
 Hope this helps.
