@@ -98,7 +98,7 @@ class UriFactory implements UriFactoryInterface
         if ($query) {
             $uri .= '?' . $query;
         }
-    
+
         return new Uri($uri);
     }
 

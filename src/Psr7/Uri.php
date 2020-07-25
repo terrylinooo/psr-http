@@ -118,7 +118,7 @@ class Uri implements UriInterface
     public function __construct($uri = '')
     {
         $this->assertString($uri, 'uri');
-        $this->init(parse_url($uri));
+        $this->init((array) parse_url($uri));
     }
 
     /**

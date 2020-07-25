@@ -330,7 +330,7 @@ class ServerRequest extends Request implements ServerRequestInterface
         // Is it a form submit or not.
         $isForm = false;
 
-        if ($httpMethod === 'POST' && !empty($postParams)) {
+        if ($httpMethod === 'POST') {
 
             // If the request Content-Type is either application/x-www-form-urlencoded
             // or multipart/form-data, and the request method is POST, this method MUST
@@ -342,7 +342,7 @@ class ServerRequest extends Request implements ServerRequestInterface
             ];
 
             if (in_array($contentType, $postRequiredContentTypes)) {
-                $this->parsedBody = $postParams ?: null;
+                $this->parsedBody = $postParams ?? null;
                 $isForm = true;
             }
         }
