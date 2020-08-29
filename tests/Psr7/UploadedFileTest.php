@@ -16,6 +16,7 @@ use Shieldon\Psr7\UploadedFile;
 use Shieldon\Psr7\Stream;
 
 use InvalidArgumentException;
+use Psr\Http\Message\StreamInterface;
 use RuntimeException;
 use ReflectionObject;
 
@@ -74,7 +75,6 @@ class UploadedFileTest extends TestCase
         unlink($targetPath);
     }
 
-
     public function test_GetPrefixMethods()
     {
         $sourceFile = BOOTSTRAP_DIR . '/sample/shieldon_logo.png';
@@ -98,6 +98,10 @@ class UploadedFileTest extends TestCase
         $this->assertSame($uploadedFile->getClientFilename(), 'shieldon_logo.png');
         $this->assertSame($uploadedFile->getClientMediaType(), 'image/png');
         $this->assertSame($uploadedFile->getErrorMessage(), 'There is no error, the file uploaded with success.');
+
+        $stream = $uploadedFile->getStream();
+
+        $this->assertTrue(($stream instanceof StreamInterface));
     }
 
     function testGetErrorMessage()

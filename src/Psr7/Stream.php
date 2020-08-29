@@ -400,7 +400,6 @@ class Stream implements StreamInterface
         }
     }
 
-
     /**
      * Throw an exception if the property does not exist.
      *

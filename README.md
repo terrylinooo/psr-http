@@ -1,6 +1,6 @@
 # PSR 7, 15, 17 Implementation and Examples
 
-[![codecov](https://img.shields.io/codecov/c/github/terrylinooo/psr-http.svg)](https://codecov.io/gh/terrylinooo/psr-http) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/terrylinooo/psr-http/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/terrylinooo/psr-http/?branch=master) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+![build](https://github.com/terrylinooo/psr-http/workflows/build/badge.svg) [![codecov](https://img.shields.io/codecov/c/github/terrylinooo/psr-http.svg)](https://codecov.io/gh/terrylinooo/psr-http) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/terrylinooo/psr-http/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/terrylinooo/psr-http/?branch=master) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 This library is a PSR HTTP implementation created for [Shieldon firewall 2](https://github.com/terrylinooo/shieldon) , following up the PSR (PHP Standard Recommendation) documents by one hundred percent.
 

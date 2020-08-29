@@ -33,6 +33,8 @@ class SuperGlobalTest extends \PHPUnit\Framework\TestCase
             'SERVER_NAME' => 'localhost',
             'SERVER_PORT' => 80,
             'SERVER_PROTOCOL' => 'HTTP/1.1',
+            'CONTENT_TYPE' => 'text/html; charset=UTF-8',
+            'HTTP_CONTENT_TYPE' => 'text/html; charset=UTF-8', // This is added by line: 46
         ];
 
         unset($data['server']['REQUEST_TIME']);

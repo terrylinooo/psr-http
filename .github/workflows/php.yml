@@ -26,10 +26,10 @@ jobs:
             coverage: xdebug
        
         - name: Create a folder for testing.
-          run: sudo mkdir /home/runner/work/shieldon/psr-http/tmp
+          run: sudo mkdir /home/runner/work/psr-http/psr-http/tmp
         
         - name: Make folder writable.
-          run: sudo chmod 777 /home/runner/work/shieldon/psr-http/tmp
+          run: sudo chmod 777 /home/runner/work/psr-http/psr-http/tmp
 
         - name: Install dependencies
           run: composer install --prefer-dist --no-interaction --dev

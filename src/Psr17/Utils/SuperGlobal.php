@@ -105,6 +105,7 @@ class SuperGlobal
             'SERVER_NAME' => 'localhost',
             'SERVER_PORT' => 80,
             'SERVER_PROTOCOL' => 'HTTP/1.1',
+            'CONTENT_TYPE' => 'text/html; charset=UTF-8',
         ];
 
         if (defined('NO_MOCK_ENV')) {
