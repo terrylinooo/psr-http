@@ -36,8 +36,6 @@ function psr_http_autoload($className)
         $parts = explode('\\', substr($className, strlen($prefix)));
         $filepath = $dir . '/' . implode('/', $parts) . '.php';
 
-        echo $filepath . '<br >';
-
         if (is_file($filepath)) {
             require $filepath;
         }
