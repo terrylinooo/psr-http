@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace Shieldon\Psr7;
 
 use Psr\Http\Message\UriInterface;
-use Shieldon\Psr7\Utils\UriHelper;
 use InvalidArgumentException;
 
 use function filter_var;

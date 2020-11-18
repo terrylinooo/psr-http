@@ -66,7 +66,6 @@ class Message implements MessageInterface
      */
     protected $headers = [];
 
-
     /**
      * A map of header name for lower case and original case.
      * In `lower => original` format.
