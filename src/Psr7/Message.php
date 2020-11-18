@@ -81,6 +81,7 @@ class Message implements MessageInterface
      * @var array
      */
     protected $validProtocolVersions = [
+        '1.0',
         '1.1',
         '2.0',
         '3.0',
