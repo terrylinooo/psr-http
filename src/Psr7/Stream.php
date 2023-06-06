@@ -1,5 +1,5 @@
 <?php 
-/*
+/**
  * This file is part of the Shieldon package.
  *
  * (c) Terry L. <contact@terryl.in>
@@ -170,7 +170,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function getSize()
+    public function getSize(): ?int
     {
         if (!$this->isStream()) {
             return null;

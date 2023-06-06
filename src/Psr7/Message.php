@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of the Shieldon package.
  *
  * (c) Terry L. <contact@terryl.in>
@@ -97,7 +97,7 @@ class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function withProtocolVersion($version)
+    public function withProtocolVersion($version): MessageInterface
     {
         $clone = clone $this;
         $clone->protocolVersion = $version;
@@ -159,7 +159,7 @@ class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function withHeader($name, $value)
+    public function withHeader($name, $value): MessageInterface
     {
         $origName = $name;
 
@@ -176,7 +176,7 @@ class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function withAddedHeader($name, $value)
+    public function withAddedHeader($name, $value): MessageInterface
     {
         $origName = $name;
 
@@ -198,7 +198,7 @@ class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function withoutHeader($name)
+    public function withoutHeader($name): MessageInterface
     {
         $origName = $name;
         $name = strtolower($name);
@@ -221,7 +221,7 @@ class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function withBody(StreamInterface $body)
+    public function withBody(StreamInterface $body): MessageInterface
     {
         $clone = clone $this;
         $clone->body = $body;

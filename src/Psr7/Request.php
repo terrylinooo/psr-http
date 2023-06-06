@@ -1,5 +1,5 @@
-<?php 
-/*
+<?php
+/**
  * This file is part of the Shieldon package.
  *
  * (c) Terry L. <contact@terryl.in>
@@ -53,7 +53,9 @@ class Request extends Message implements RequestInterface
 
 
     /**
-     * https://tools.ietf.org/html/rfc7231
+     * Valid HTTP methods.
+     *
+     * @ref http://tools.ietf.org/html/rfc7231
      *
      * @var array
      */
@@ -107,8 +109,8 @@ class Request extends Message implements RequestInterface
      */
     public function __construct(
         string $method  = 'GET',
-               $uri     = ''   ,
-               $body    = ''   ,
+        $uri            = ''   ,
+        $body           = ''   ,
         array  $headers = []   ,
         string $version = '1.1'
     ) {
@@ -164,7 +166,7 @@ class Request extends Message implements RequestInterface
     /**
      * {@inheritdoc}
      */
-    public function withRequestTarget($requestTarget)
+    public function withRequestTarget($requestTarget): RequestInterface
     {
         if (!is_string($requestTarget)) {
             throw new InvalidArgumentException(
@@ -187,7 +189,7 @@ class Request extends Message implements RequestInterface
     /**
      * {@inheritdoc}
      */
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->method;
     }
@@ -195,7 +197,7 @@ class Request extends Message implements RequestInterface
     /**
      * {@inheritdoc}
      */
-    public function withMethod($method)
+    public function withMethod($method): RequestInterface
     {
         $this->assertMethod($method);
 
@@ -216,7 +218,7 @@ class Request extends Message implements RequestInterface
     /**
      * {@inheritdoc}
      */
-    public function withUri(UriInterface $uri, $preserveHost = false)
+    public function withUri(UriInterface $uri, $preserveHost = false): RequestInterface
     {
         $host = $uri->getHost();
 

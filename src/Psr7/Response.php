@@ -1,5 +1,5 @@
 <?php 
-/*
+/**
  * This file is part of the Shieldon package.
  *
  * (c) Terry L. <contact@terryl.in>
@@ -170,7 +170,7 @@ class Response extends Message implements ResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function withStatus($code, $reasonPhrase = '')
+    public function withStatus($code, $reasonPhrase = ''): ResponseInterface
     {
         $this->assertStatus($code);
         $this->assertReasonPhrase($reasonPhrase);

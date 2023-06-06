@@ -1,5 +1,5 @@
 <?php 
-/*
+/**
  * This file is part of the Shieldon package.
  *
  * (c) Terry L. <contact@terryl.in>
@@ -173,7 +173,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function getPort()
+    public function getPort(): ?int
     {
         return $this->port;
     }
@@ -205,7 +205,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withScheme($scheme)
+    public function withScheme($scheme): UriInterface
     {
         $this->assertScheme($scheme);
 
@@ -219,7 +219,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withUserInfo($user, $pass = null)
+    public function withUserInfo($user, $pass = null): UriInterface
     {
         $this->assertString($user, 'user');
         $user = $this->filter('user', ['user' => $user]);
@@ -239,7 +239,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withHost($host)
+    public function withHost($host): UriInterface
     {
         $this->assertHost($host);
 
@@ -254,7 +254,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withPort($port)
+    public function withPort($port): UriInterface
     {
         $this->assertPort($port);
 
@@ -269,7 +269,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withPath($path)
+    public function withPath($path): UriInterface
     {
         $this->assertString($path, 'path');
 
@@ -284,7 +284,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withQuery($query)
+    public function withQuery($query): UriInterface
     {
         $this->assertString($query, 'query');
 
@@ -302,7 +302,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withFragment($fragment)
+    public function withFragment($fragment): UriInterface
     {
         $this->assertString($fragment, 'fragment');
 

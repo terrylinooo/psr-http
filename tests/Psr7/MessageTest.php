@@ -188,9 +188,9 @@ EOF;
         $message = $message->withAddedHeader('content-type', ['foo' => 'text/plain', 'bar' => 'application/json']);
 
         $headerLine = $message->getHeaderLine('content-type');
-        $this->assertRegExp('|text/html|', $headerLine);
-        $this->assertRegExp('|text/plain|', $headerLine);
-        $this->assertRegExp('|application/json|', $headerLine);
+        $this->assertMatchesRegularExpression('|text/html|', $headerLine);
+        $this->assertMatchesRegularExpression('|text/plain|', $headerLine);
+        $this->assertMatchesRegularExpression('|application/json|', $headerLine);
 
         $message = $message->withAddedHeader('foo', '');
         $headerLine = $message->getHeaderLine('foo');
