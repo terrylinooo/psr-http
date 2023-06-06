@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of the Shieldon package.
  *
  * (c) Terry L. <contact@terryl.in>
@@ -120,8 +120,4 @@ class StreamFactory implements StreamFactoryInterface
             );
         }
     }
-
-
-
-
 }
