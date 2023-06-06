@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
  * This file is part of the Shieldon package.
  *
@@ -56,19 +56,19 @@ class UriTest extends TestCase
         $uri = new Uri('http://jack:1234@example.com:8080/demo/?test=5678&test2=90#section-1');
 
         $components = [
-            'scheme', 
-            'user', 
+            'scheme',
+            'user',
             'pass',
             'host',
             'port',
-            'path', 
-            'query', 
+            'path',
+            'query',
             'fragment',
         ];
 
         $reflection = new ReflectionObject($uri);
 
-        foreach($components as $v) {
+        foreach ($components as $v) {
             $tmp = $reflection->getProperty($v);
             $tmp->setAccessible(true);
             ${$v} = $tmp->getValue($uri);
@@ -180,7 +180,7 @@ class UriTest extends TestCase
         $assertScheme = $reflection->getMethod('assertScheme');
         $assertScheme->setAccessible(true);
 
-        // Exception: 
+        // Exception:
         // => The string "telnet" is not a valid scheme.
         $assertScheme->invokeArgs($uri, ['telnet']);
     }
@@ -195,7 +195,7 @@ class UriTest extends TestCase
         $assertString = $reflection->getMethod('assertString');
         $assertString->setAccessible(true);
 
-        // Exception: 
+        // Exception:
         // => It must be a string, but integer provided.
         $assertString->invokeArgs($uri, [1234]);
     }
@@ -210,7 +210,7 @@ class UriTest extends TestCase
         $assertHost = $reflection->getMethod('assertHost');
         $assertHost->setAccessible(true);
 
-        // Exception: 
+        // Exception:
         // => "example_test.com" is not a valid host
         $assertHost->invokeArgs($uri, ['example_test.com']);
     }
@@ -237,7 +237,7 @@ class UriTest extends TestCase
         $assertPort = $reflection->getMethod('assertPort');
         $assertPort->setAccessible(true);
 
-        // Exception: 
+        // Exception:
         // => Port must be an integer or a null value, but string provided.
         $assertPort->invokeArgs($uri, ['8080']);
     }
@@ -252,7 +252,7 @@ class UriTest extends TestCase
         $assertPort = $reflection->getMethod('assertPort');
         $assertPort->setAccessible(true);
 
-        // Exception: 
+        // Exception:
         // => Port number should be in a range of 0-65535, but 70000 provided.
         $assertPort->invokeArgs($uri, [70000]);
     }

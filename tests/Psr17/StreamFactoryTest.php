@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
  * This file is part of the Shieldon package.
  *
@@ -37,7 +37,7 @@ class StreamFactoryTest extends TestCase
         $sourceFile = BOOTSTRAP_DIR . '/sample/shieldon_logo.png';
 
         $streamFactory = new StreamFactory();
-        $stream =  $streamFactory->createStreamFromFile($sourceFile);
+        $stream = $streamFactory->createStreamFromFile($sourceFile);
         $this->assertTrue(($stream instanceof StreamInterface));
         $this->assertSame($stream->getSize(), 15166);
     }
@@ -45,7 +45,7 @@ class StreamFactoryTest extends TestCase
     public function test_createStreamFromResource()
     {
         $streamFactory = new StreamFactory();
-        $stream =  $streamFactory->createStreamFromResource('this is string, not resource');
+        $stream = $streamFactory->createStreamFromResource('this is string, not resource');
 
         $this->assertTrue(($stream instanceof StreamInterface));
     }
@@ -71,9 +71,9 @@ class StreamFactoryTest extends TestCase
 
         $streamFactory = new StreamFactory();
         
-        // Exception: 
+        // Exception:
         // => Invalid file opening mode "b"
-        $stream =  $streamFactory->createStreamFromFile($sourceFile, 'b');
+        $stream = $streamFactory->createStreamFromFile($sourceFile, 'b');
     }
 
     public function test_Exception_CreateStreamFromFile_UnableToOpen()
@@ -84,9 +84,9 @@ class StreamFactoryTest extends TestCase
 
         $streamFactory = new StreamFactory();
         
-        // Exception: 
+        // Exception:
         // => Invalid file opening mode "b"
-        $stream =  $streamFactory->createStreamFromFile($sourceFile);
+        $stream = $streamFactory->createStreamFromFile($sourceFile);
     }
 
     public function test_Exception_assertResource()
@@ -98,7 +98,7 @@ class StreamFactoryTest extends TestCase
         $assertParsedBody = $reflection->getMethod('assertResource');
         $assertParsedBody->setAccessible(true);
 
-        // Exception: 
+        // Exception:
         // => Unable to open "php://temp" resource.
         $assertParsedBody->invokeArgs($streamFactory, ['test string']);
     }

@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
  * This file is part of the Shieldon package.
  *
@@ -153,7 +153,7 @@ class StreamTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        // Exception: 
+        // Exception:
         // => Stream should be a resource, but string provided.
         $stream = new Stream('string');
     }
@@ -166,7 +166,7 @@ class StreamTest extends TestCase
 
         $stream->close();
 
-        // Exception: 
+        // Exception:
         // => Stream does not exist.
         $position = $stream->tell();
     }
@@ -179,7 +179,7 @@ class StreamTest extends TestCase
 
         $stream->close();
 
-        // Exception: 
+        // Exception:
         // => Stream does not exist.
         $stream->seek(10);
     }
@@ -195,7 +195,7 @@ class StreamTest extends TestCase
         $seekable->setAccessible(true);
         $seekable->setValue($stream, false);
 
-        // Exception: 
+        // Exception:
         // => Stream is not seekable.
         $stream->seek(10);
     }
@@ -206,7 +206,7 @@ class StreamTest extends TestCase
 
         $stream = new Stream(fopen('php://temp', 'r'));
 
-        // Exception: 
+        // Exception:
         // => Set position equal to offset bytes.. Unable to seek to stream at position 10
         $stream->seek(10);
     }
@@ -219,7 +219,7 @@ class StreamTest extends TestCase
 
         $stream->close();
 
-        // Exception: 
+        // Exception:
         // => Stream does not exist.
         $stream->write('Foo Bar');
     }
@@ -233,7 +233,7 @@ class StreamTest extends TestCase
         $stream->rewind();
         $stream->close();
 
-        // Exception: 
+        // Exception:
         // => Stream does not exist.
         $stream->read(2);
     }
@@ -247,7 +247,7 @@ class StreamTest extends TestCase
         $stream->rewind();
         $stream->close();
 
-        // Exception: 
+        // Exception:
         // => Stream does not exist.
         $result = $stream->getContents();
     }
@@ -265,7 +265,7 @@ class StreamTest extends TestCase
         $seekable->setAccessible(true);
         $seekable->setValue($stream, false);
 
-        // Exception: 
+        // Exception:
         // => Unable to read stream contents.
         $result = $stream->getContents();
     }

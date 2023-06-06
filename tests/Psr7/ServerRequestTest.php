@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
  * This file is part of the Shieldon package.
  *
@@ -36,8 +36,8 @@ class ServerRequestTest extends TestCase
         $serverRequest = self::getServerRequest();
 
         $properties = [
-            'serverParams', 
-            'cookieParams', 
+            'serverParams',
+            'cookieParams',
             'parsedBody',
             'queryParams',
             'uploadedFiles',
@@ -46,7 +46,7 @@ class ServerRequestTest extends TestCase
 
         $reflection = new ReflectionObject($serverRequest);
 
-        foreach($properties as $v) {
+        foreach ($properties as $v) {
             $tmp = $reflection->getProperty($v);
             $tmp->setAccessible(true);
             ${$v} = $tmp->getValue($serverRequest);
@@ -58,7 +58,7 @@ class ServerRequestTest extends TestCase
         $this->assertSame($parsedBody, null);
         $this->assertSame($queryParams, []);
         $this->assertSame($uploadedFiles, []);
-        $this->assertSame($attributes, []);;
+        $this->assertSame($attributes, []);
     }
 
     public function test_GetPrefixMethods()
@@ -72,11 +72,11 @@ class ServerRequestTest extends TestCase
         $this->assertSame($serverRequest->getParsedBody(), null);
         $this->assertSame($serverRequest->getQueryParams(), []);
         $this->assertSame($serverRequest->getUploadedFiles(), []);
-        $this->assertSame($serverRequest->getAttributes(), []);;
+        $this->assertSame($serverRequest->getAttributes(), []);
 
         // Test 2
         $serverRequest = self::getServerRequest(
-            'POST', 
+            'POST',
             ['foo' => 'bar'],
             ['foo' => 'bar'],
             ['foo' => 'bar'],
@@ -97,7 +97,7 @@ class ServerRequestTest extends TestCase
                 'image/jpeg',
                 100000,
                 0
-            )
+            ),
         ]);
     }
 
@@ -128,7 +128,7 @@ class ServerRequestTest extends TestCase
                 'image/png',
                 90996,
                 0
-            )
+            ),
         ]);
 
         $new2 = $new->withoutAttribute('foo8');
@@ -156,8 +156,8 @@ class ServerRequestTest extends TestCase
         // => Invalid PSR-7 array structure for handling UploadedFile.
         $assertUploadedFiles->invokeArgs($serverRequest, [
             [
-                ['files' => '']
-            ]
+                ['files' => ''],
+            ],
         ]);
     }
 
@@ -194,17 +194,18 @@ class ServerRequestTest extends TestCase
      * @param array  $post
      * @param array  $get
      * @param array  $files
-     * 
+     *
      * @return ServerRequest
      */
     private static function getServerRequest(
         $method = 'GET',
-        $server = []   ,
-        $cookie = []   ,
-        $post   = []   ,
-        $get    = []   ,
-        $files  = []
-    ) {
+        $server = [],
+        $cookie = [],
+        $post = [],
+        $get = [],
+        $files = []
+    )
+    {
         return new ServerRequest(
             $method,
             '',

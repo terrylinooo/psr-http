@@ -1,5 +1,5 @@
-<?php 
-/*
+<?php
+/**
  * This file is part of the Shieldon package.
  *
  * (c) Terry L. <contact@terryl.in>
@@ -104,7 +104,7 @@ class UploadedFileTest extends TestCase
         $this->assertTrue(($stream instanceof StreamInterface));
     }
 
-    function testGetErrorMessage()
+    public function testGetErrorMessage()
     {
         $uploadedFile = new UploadedFile(
             BOOTSTRAP_DIR . '/sample/shieldon_logo.png',
@@ -121,10 +121,16 @@ class UploadedFileTest extends TestCase
         $error->setAccessible(true);
 
         $error->setValue($uploadedFile, UPLOAD_ERR_INI_SIZE);
-        $this->assertSame($uploadedFile->getErrorMessage(), 'The uploaded file exceeds the upload_max_filesize directive in php.ini');
+        $this->assertSame(
+            $uploadedFile->getErrorMessage(),
+            'The uploaded file exceeds the upload_max_filesize directive in php.ini'
+        );
 
         $error->setValue($uploadedFile, UPLOAD_ERR_FORM_SIZE);
-        $this->assertSame($uploadedFile->getErrorMessage(), 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.');
+        $this->assertSame(
+            $uploadedFile->getErrorMessage(),
+            'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.'
+        );
 
         $error->setValue($uploadedFile, UPLOAD_ERR_PARTIAL);
         $this->assertSame($uploadedFile->getErrorMessage(), 'The uploaded file was only partially uploaded.');
@@ -223,7 +229,7 @@ class UploadedFileTest extends TestCase
 
         $targetPath = save_testing_file('shieldon_logo_moved_from_stream.png');
 
-        // Exception: 
+        // Exception:
         // => The uploaded file has been moved.
         $uploadedFile->moveTo($targetPath);
     }
@@ -240,7 +246,7 @@ class UploadedFileTest extends TestCase
             0
         );
 
-        // Exception: 
+        // Exception:
         // => The target path "/tmp/folder-not-exists/test.png" is not writable.
         $uploadedFile->moveTo(BOOTSTRAP_DIR . '/tmp/folder-not-exists/test.png');
     }
@@ -280,5 +286,4 @@ class UploadedFileTest extends TestCase
 
         $uploadedFile->moveTo($targetPath);
     }
-
 }

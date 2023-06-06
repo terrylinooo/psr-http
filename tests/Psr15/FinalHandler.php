@@ -27,7 +27,6 @@ class FinalHandler extends RequestHandler
         $response = new Response();
 
         if (!empty($request->getAttribute('string'))) {
- 
             $response = $response->withStatus(200, 'OK');
             $response->getBody()->write('e04su3su;6');
             $response->getBody()->rewind();

@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
  * This file is part of the Shieldon package.
  *
@@ -267,7 +267,7 @@ EOF;
         // An invalid type is inside the array.
         $testArr = [
             'test',
-            true
+            true,
         ];
 
         $message = new Message();
@@ -284,7 +284,7 @@ EOF;
         $message = new Message();
 
         // Exception:
-        // => "This string contains many invisible spaces." is not valid header 
+        // => "This string contains many invisible spaces." is not valid header
         //    value, it must contains visible ASCII characters only.
         $newMessage = $message->withHeader('hello-world', 'This string contains many invisible spaces.');
 

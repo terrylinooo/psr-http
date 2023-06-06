@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
  * This file is part of the Shieldon package.
  *
@@ -247,7 +247,7 @@ class UploadedFileHelperTest extends TestCase
                     'image/jpeg',
                     145000,
                     0
-                )
+                ),
             ],
             'files3' => [
                 0 => new UploadedFile(
@@ -263,8 +263,8 @@ class UploadedFileHelperTest extends TestCase
                     'image/jpeg',
                     300000,
                     0
-                )
-                ],
+                ),
+            ],
             'files4' => [
                 'details' => [
                     'avatar' => new UploadedFile(
@@ -273,7 +273,7 @@ class UploadedFileHelperTest extends TestCase
                         'image/png',
                         90996,
                         0
-                    )
+                    ),
                 ],
             ],
         ];

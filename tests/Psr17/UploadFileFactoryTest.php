@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
  * This file is part of the Shieldon package.
  *
@@ -34,7 +34,7 @@ class UploadFileFactoryTest extends TestCase
         }
 
         $streamFactory = new StreamFactory();
-        $stream =  $streamFactory->createStreamFromFile($cloneFile);
+        $stream = $streamFactory->createStreamFromFile($cloneFile);
 
         $uploadedFileFactory = new UploadedFileFactory();
 
@@ -171,7 +171,7 @@ class UploadFileFactoryTest extends TestCase
                     'image/jpeg',
                     145000,
                     0
-                )
+                ),
             ],
             'files3' => [
                 0 => new UploadedFile(
@@ -187,8 +187,8 @@ class UploadFileFactoryTest extends TestCase
                     'image/jpeg',
                     300000,
                     0
-                )
-                ],
+                ),
+            ],
             'files4' => [
                 'details' => [
                     'avatar' => new UploadedFile(
@@ -197,7 +197,7 @@ class UploadFileFactoryTest extends TestCase
                         'image/png',
                         90996,
                         0
-                    )
+                    ),
                 ],
             ],
         ];
@@ -214,7 +214,7 @@ class UploadFileFactoryTest extends TestCase
                 'tmp_name' => '/tmp/php200A.tmp',
                 'error' => 0,
                 'size' => 100000,
-            ]
+            ],
         ];
         
         $uploadFileArr = UploadedFileFactory::fromGlobal();
@@ -248,7 +248,7 @@ class UploadFileFactoryTest extends TestCase
 
         $uploadedFileFactory = new UploadedFileFactory();
 
-        // Exception: 
+        // Exception:
         // => File is not readable.
         $uploadedFile = $uploadedFileFactory->createUploadedFile($stream);
     }
